@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Free SMS Numbers</title>
+  <!-- Tailwind CSS CDN for quick styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for the app */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6; /* Light gray background */
+    }
+    .header-bg {
+      background-color: #1a73e8; /* Google Blue */
+    }
+    .nav-bg {
+      background-color: #333;
+    }
+    .number-box {
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .number-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    .receive-button {
+      background-color: #28a745; /* Green */
+      transition: background-color 0.2s ease-in-out;
+    }
+    .receive-button:hover {
+      background-color: #218838;
+    }
+    .pagination-button {
+      background-color: #4a5568; /* Dark gray */
+      transition: background-color 0.2s ease-in-out;
+    }
+    .pagination-button:hover {
+      background-color: #2d3748;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header Section -->
+  <header class="header-bg text-white p-6 text-center text-3xl font-bold rounded-b-lg shadow-md">
+    UK Free SMS Box
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bg p-4 text-center shadow-sm">
+    <a href="index.html" class="text-white mx-4 text-lg font-semibold hover:text-blue-200 transition-colors">Home</a>
+    <a href="#" class="text-white mx-4 text-lg font-semibold hover:text-blue-200 transition-colors">About Us</a>
+    <a href="#" class="text-white mx-4 text-lg font-semibold hover:text-blue-200 transition-colors">Contact</a>
+  </nav>
+
+  <main class="flex-grow container mx-auto p-6">
+    <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">📱 Choose a Temporary Number for UK</h3>
+
+    <!-- Numbers Container -->
+    <div id="numbers-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10">
+      <!-- Numbers will be rendered here by JavaScript -->
+    </div>
+
+    <!-- Pagination Buttons -->
+    <div class="flex justify-center space-x-4">
+      <button onclick="prevPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Previous</button>
+      <button onclick="nextPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Next</button>
+    </div>
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="bg-gray-800 text-white p-6 text-center text-sm mt-10 rounded-t-lg shadow-md">
+    &copy; 2025 Free SMS Box. All rights reserved.
+  </footer>
+
+  <script>
+    const numbers = [];
+    // Generate 30 dummy UK numbers
+    for (let i = 1; i <= 30; i++) {
+      numbers.push({ num: `+44 7537-150-${100 + i}`, flagUrl: 'https://flagcdn.com/gb.svg', country: 'UK' });
+    }
+
+    let currentPage = 1;
+    const numbersPerPage = 12; // Display 12 numbers per page
+
+    function renderNumbers() {
+      const start = (currentPage - 1) * numbersPerPage;
+      const end = start + numbersPerPage;
+      const currentNumbers = numbers.slice(start, end);
+
+      const numbersContainer = document.getElementById('numbers-container');
+      numbersContainer.innerHTML = currentNumbers.map(item => `
+        <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
+          <div class="flex items-center mb-4">
+            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
+            <span class="text-xl font-bold text-gray-800">${item.country}</span>
+          </div>
+          <div class="text-lg text-gray-600 mb-6">${item.num}</div>
+          <button class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Receive SMS</button>
+        </div>
+      `).join('');
+    }
+
+    function nextPage() {
+      if (currentPage < Math.ceil(numbers.length / numbersPerPage)) {
+        currentPage++;
+        renderNumbers();
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderNumbers();
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
+      }
+    }
+
+    // Initial render when the page loads
+    document.addEventListener('DOMContentLoaded', renderNumbers);
+  </script>
+
+</body>
+</html>
+
