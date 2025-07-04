@@ -23,7 +23,7 @@
     }
     .number-box:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     }
     .receive-button {
       background-color: #28a745; /* Green */
@@ -39,7 +39,7 @@
     .pagination-button:hover {
       background-color: #2d3748;
     }
-    /* Ad containers for better layout - Removed placeholder styles */
+    /* Ad containers - no visual placeholder when ads are blocked */
     .ad-slot {
       display: flex;
       justify-content: center;
@@ -47,7 +47,6 @@
       text-align: center;
       margin-top: 20px;
       margin-bottom: 20px;
-      /* Removed min-width, min-height, width, height to prevent empty space */
     }
     .direct-link-container {
       margin-top: 15px;
@@ -151,7 +150,7 @@
       numbersContainer.innerHTML = currentNumbers.map(item => `
         <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
           <div class="flex items-center mb-4">
-            <img src="${item.flagUrl}" alt="Flag of ${item.country}">
+            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
             <span class="text-xl font-bold text-gray-800">${item.country}</span>
           </div>
           <div class="text-lg text-gray-600 mb-6">${item.num}</div>
