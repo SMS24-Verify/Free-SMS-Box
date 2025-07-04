@@ -226,6 +226,8 @@
   <!-- End Social Bar Adsterra Code -->
 
   <script>
+    var currentNumber = ''; // Store the currently displayed number
+
     // Define ad configurations
     const adConfigs = {
       native: {
@@ -243,7 +245,6 @@
         height: 90,
         width: 728
       }
-      // Note: The 300x250 banner is no longer explicitly defined here as it was removed from the HTML structure.
     };
 
     /**
@@ -306,7 +307,7 @@
           }
         });
       } else {
-        // Generic handling for other banner ads (like 728x90)
+        // Generic handling for other banner ads
         const iframe = document.createElement('iframe');
         iframe.style.width = '1px';
         iframe.style.height = '1px';
@@ -359,27 +360,27 @@
         let anyAdLoaded = false;
         iframes.forEach(iframe => {
           try {
-            // Check if the iframe content has loaded and has a significant height
+            // Check if iframe content has loaded and has significant height
             if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body.scrollHeight > 50) {
               iframe.style.width = `${adConfig.width}px`;
               iframe.style.height = `${adConfig.height}px`;
               iframe.style.opacity = '1';
               anyAdLoaded = true;
             } else {
-              // If ad doesn't load, collapse the iframe
+              // If ad failed to load, collapse the iframe
               iframe.style.width = '0px';
               iframe.style.height = '0px';
               iframe.style.opacity = '0';
             }
           } catch (e) {
-            // Catch cross-origin errors if content is not accessible
+            // Catch cross-origin errors if content is inaccessible
             iframe.style.width = '0px';
             iframe.style.height = '0px';
             iframe.style.opacity = '0';
           }
         });
 
-        // Collapse the parent container if no ad loaded
+        // If no ads loaded, collapse the parent container
         if (!anyAdLoaded) {
           container.classList.add('collapsed');
         } else {
@@ -408,103 +409,48 @@
     }
 
     // Pre-set UK numbers with platform-specific dummy messages
-    const ukNumbersData = {
-      "+44 7537-150-101": [
-        { from: "YouTube", content: "Your YouTube verification code is 123456. Do not share this code.", time: "2 minutes ago" },
-        { from: "TikTok", content: "New message from a follower on TikTok: 'Check out my latest video!'", time: "1 hour ago" },
-        { from: "Instagram", content: "Someone liked your photo on Instagram. View it now!", time: "3 hours ago" },
-        { from: "Facebook", content: "New friend request from John Doe on Facebook.", time: "5 hours ago" },
-        { from: "Google", content: "Your Google verification code is G-987654. Use it to sign in.", time: "1 day ago" },
-        { from: "WhatsApp", content: "You have 1 new message in your WhatsApp chat.", time: "2 days ago" },
-        { from: "Amazon", content: "Your Amazon order #123-4567890-1234567 has shipped.", time: "3 days ago" },
-        { from: "Twitter", content: "You have a new notification on Twitter.", time: "4 days ago" }
-      ],
-      "+44 7537-150-102": [
-        { from: "WhatsApp", content: "You have a new message from Sarah: 'Hi, are you free later?'", time: "5 minutes ago" },
-        { from: "Facebook", content: "New friend suggestion: Jane Smith. Add her now!", time: "30 minutes ago" },
-        { from: "YouTube", content: "Your favorite creator uploaded a new video!", time: "1 hour ago" },
-        { from: "Instagram", content: "Your story received a reply.", time: "2 hours ago" },
-        { from: "Google", content: "Security alert: New sign-in on your Google account.", time: "6 hours ago" },
-        { from: "TikTok", content: "Someone mentioned you in a comment on TikTok.", time: "1 day ago" },
-        { from: "Amazon", content: "Your Amazon delivery is scheduled for tomorrow.", time: "2 days ago" },
-        { from: "Twitter", content: "Someone retweeted your tweet.", time: "3 days ago" }
-      ],
-      "+44 7537-150-103": [
-        { from: "Google", content: "Your 2-step verification code is 112233.", time: "10 minutes ago" },
-        { from: "Amazon", content: "Your password has been reset. If this wasn't you, contact support.", time: "45 minutes ago" },
-        { from: "Twitter", content: "Trending topic: #AIInnovation.", time: "2 hours ago" },
-        { from: "YouTube", content: "New comment on your video: 'Great content!'", time: "4 hours ago" },
-        { from: "TikTok", content: "Your video is going viral! 100k views!", time: "1 day ago" },
-        { from: "Instagram", content: "Direct message from a new follower.", time: "2 days ago" },
-        { from: "Facebook", content: "You have new notifications in your groups.", time: "3 days ago" },
-        { from: "WhatsApp", content: "Reminder: Group call at 3 PM.", time: "4 days ago" }
-      ],
-      "+44 7537-150-104": [
-        { from: "Facebook", content: "You've been tagged in a photo on Facebook.", time: "15 minutes ago" },
-        { from: "Twitter", content: "Elon Musk just tweeted!", time: "1 hour ago" },
-        { from: "Amazon", content: "Your return has been processed.", time: "3 hours ago" },
-        { from: "Google", content: "Your Google Drive storage is almost full.", time: "5 hours ago" },
-        { from: "WhatsApp", content: "Voice message from Mom.", time: "1 day ago" },
-        { from: "YouTube", content: "Subscription update: New video from Tech Review.", time: "2 days ago" },
-        { from: "TikTok", content: "Discover new trends on TikTok.", time: "3 days ago" },
-        { from: "Instagram", content: "New post from a friend.", time: "4 days ago" }
-      ],
-      "+44 7537-150-105": [
-        { from: "Twitter", content: "A new person is following you.", time: "20 minutes ago" },
-        { from: "Google", content: "Your calendar event 'Meeting' starts in 30 minutes.", time: "40 minutes ago" },
-        { from: "WhatsApp", content: "You missed a call from Dad.", time: "1 hour ago" },
-        { from: "Amazon", content: "Your wish list has new items on sale!", time: "3 hours ago" },
-        { from: "YouTube", content: "Your channel reached 1000 subscribers!", time: "1 day ago" },
-        { from: "TikTok", content: "Your draft video is ready to be posted.", time: "2 days ago" },
-        { from: "Instagram", content: "Explore new reels on Instagram.", time: "3 days ago" },
-        { from: "Facebook", content: "Birthday reminder: It's Sarah's birthday soon!", time: "4 days ago" }
-      ],
-      "+44 7537-150-106": [
-        { from: "Amazon", content: "Your payment method needs to be updated.", time: "25 minutes ago" },
-        { from: "WhatsApp", content: "New group message: 'Weekend Trip Plans'", time: "50 minutes ago" },
-        { from: "Facebook", content: "Your Marketplace listing has new interest.", time: "2 hours ago" },
-        { from: "Twitter", content: "Someone replied to your thread.", time: "4 hours ago" },
-        { from: "Google", content: "Your Google Photos memory for today.", time: "1 day ago" },
-        { from: "YouTube", content: "Live stream starting soon!", time: "2 days ago" },
-        { from: "TikTok", content: "Trending sound: Add it to your video!", time: "3 days ago" },
-        { from: "Instagram", content: "New message from a business account.", time: "4 days ago" }
-      ],
-      "+44 7537-150-107": [
-        { from: "Instagram", content: "You have new notifications.", time: "30 minutes ago" },
-        { from: "YouTube", content: "Your comment on 'Funny Cats' video received a reply.", time: "1 hour 15 minutes ago" },
-        { from: "TikTok", content: "New challenge alert!", time: "3 hours ago" },
-        { from: "Amazon", content: "Your subscription renewal is due.", time: "6 hours ago" },
-        { from: "Facebook", content: "Memories: You shared a post 2 years ago.", time: "1 day ago" },
-        { from: "Google", content: "Your Google Meet call starts in 10 minutes.", time: "2 days ago" },
-        { from: "WhatsApp", content: "You have an unread message from a new contact.", time: "3 days ago" },
-        { from: "Twitter", content: "Your tweet gained 50 likes!", time: "4 days ago" }
-      ],
-      "+44 7537-150-108": [
-        { from: "WhatsApp", content: "New voice note from Alex.", time: "35 minutes ago" },
-        { from: "Google", content: "Important security update for your account.", time: "1 hour 30 minutes ago" },
-        { from: "Amazon", content: "Your recent purchase is eligible for a review.", time: "4 hours ago" },
-        { from: "YouTube", content: "Recommended video for you: 'Top 10 Gadgets'.", time: "7 hours ago" },
-        { from: "TikTok", content: "Your video has been reviewed and is live!", time: "1 day ago" },
-        { from: "Instagram", content: "Someone viewed your profile.", time: "2 days ago" },
-        { from: "Facebook", content: "You have a new notification from a page you follow.", time: "3 days ago" },
-        { from: "Twitter", content: "Check out what's happening in your network.", time: "4 days ago" }
-      ]
-    };
-
-    let currentNumber = ''; // Store the currently displayed number
+    // এই অবজেক্টটি এখন ডাইনামিকভাবে পপুলেট হবে বা একটি ডিফল্ট সেট ব্যবহার করবে যদি একটি নম্বর নতুন হয়।
+    const ukNumbersData = {};
 
     /**
-     * Renders messages for the given number.
-     * @param {string} number - The phone number for which to display messages.
+     * একটি প্রদত্ত নম্বরের জন্য ডামি মেসেজের একটি ডিফল্ট সেট তৈরি করে।
+     * @param {string} number - যে ফোন নম্বরের জন্য মেসেজ তৈরি করতে হবে।
+     * @returns {Array<Object>} ডামি মেসেজ অবজেক্টের একটি অ্যারে।
+     */
+    function generateDummyMessages(number) {
+        const platforms = ["YouTube", "TikTok", "Instagram", "Facebook", "Twitter", "Google", "WhatsApp", "Amazon"];
+        const messages = [];
+        for (let i = 0; i < 8; i++) { // 8টি মেসেজ তৈরি করুন
+            const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+            const timeAgo = `${Math.floor(Math.random() * 24) + 1} hours ago`;
+            messages.push({
+                from: randomPlatform,
+                content: `Your verification code for ${randomPlatform} is ${Math.floor(100000 + Math.random() * 900000)}. Do not share this code.`,
+                time: timeAgo
+            });
+        }
+        return messages;
+    }
+
+    // var currentNumber = ''; // বর্তমানে প্রদর্শিত নম্বরের জন্য স্টোর করুন - এটি গ্লোবালি উপরে একবারই ঘোষিত হয়েছে।
+
+    /**
+     * প্রদত্ত নম্বরের জন্য মেসেজ রেন্ডার করে।
+     * @param {string} number - যে ফোন নম্বরের জন্য মেসেজ প্রদর্শন করতে হবে।
      */
     function displayMessages(number) {
       const messagesList = document.getElementById('messages-list');
-      messagesList.innerHTML = ''; // Clear existing messages
+      messagesList.innerHTML = ''; // বিদ্যমান মেসেজগুলি সাফ করুন
 
-      const messages = ukNumbersData[number] || []; // Get messages for the number, or an empty array
+      // যদি এই নম্বরের জন্য মেসেজ বিদ্যমান না থাকে, তাহলে সেগুলো তৈরি করুন
+      if (!ukNumbersData[number]) {
+          ukNumbersData[number] = generateDummyMessages(number);
+      }
+
+      const messages = ukNumbersData[number]; // নম্বরের জন্য মেসেজ পান
 
       if (messages.length === 0) {
-        messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">No messages found for this number.</p>';
+        messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">এই নম্বরের জন্য কোনো মেসেজ পাওয়া যায়নি।</p>';
         return;
       }
 
@@ -519,30 +465,29 @@
         messagesList.insertAdjacentHTML('beforeend', messageHtml);
       });
 
-      // Scroll to the bottom to show latest messages
+      // সর্বশেষ মেসেজগুলি দেখানোর জন্য নিচে স্ক্রোল করুন
       messagesList.scrollTop = messagesList.scrollHeight;
     }
 
     /**
-     * Simulates fetching and displaying new messages for the current number.
-     * In a real application, this would involve an API call to fetch messages for the specific number.
+     * বর্তমান নম্বরের জন্য নতুন মেসেজগুলি আনা এবং প্রদর্শন করার অনুকরণ করে।
+     * একটি বাস্তব অ্যাপ্লিকেশনে, এতে নির্দিষ্ট নম্বরের জন্য মেসেজ আনার জন্য একটি API কল জড়িত থাকবে।
      */
     async function refreshMessages() {
       const messagesList = document.getElementById('messages-list');
       const refreshButtonText = document.getElementById('refreshButtonText');
       const loadingSpinner = document.getElementById('loadingSpinner');
 
-      refreshButtonText.textContent = 'Refreshing...';
+      refreshButtonText.textContent = 'রিফ্রেশ হচ্ছে...';
       loadingSpinner.classList.remove('hidden');
 
-      // Simulate API call delay
+      // API কল বিলম্ব অনুকরণ করুন
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       const platforms = ["YouTube", "TikTok", "Instagram", "Facebook", "Twitter", "Google", "WhatsApp", "Amazon"];
       const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
-      // const randomSender = `+44 7${Math.floor(Math.random() * 900000000) + 100000000}`; // Removed as per request
 
-      // Dummy new message based on a random platform
+      // একটি র্যান্ডম প্ল্যাটফর্মের উপর ভিত্তি করে ডামি নতুন মেসেজ
       const newMessage = {
         from: randomPlatform,
         content: `New message from ${randomPlatform}: Your code is ${Math.floor(Math.random() * 900000) + 100000}.`,
@@ -557,24 +502,24 @@
         </div>
       `;
 
-      // Add new message to the top of the list
+      // তালিকার শীর্ষে নতুন মেসেজ যোগ করুন
       messagesList.insertAdjacentHTML('afterbegin', messageHtml);
 
-      refreshButtonText.textContent = 'Refresh Messages';
+      refreshButtonText.textContent = 'মেসেজ রিফ্রেশ করুন';
       loadingSpinner.classList.add('hidden');
     }
 
     /**
-     * Copies the currently displayed phone number to the clipboard.
+     * বর্তমানে প্রদর্শিত ফোন নম্বর ক্লিপবোর্ডে কপি করে।
      */
     function copyNumber() {
       const numberToCopy = document.getElementById('current-number-display').textContent;
       const copyButton = document.getElementById('copy-number-button');
 
-      // Use document.execCommand('copy') as it is more reliable in various iframe/sandbox environments
+      // বিভিন্ন আইফ্রেম/স্যান্ডবক্স পরিবেশে এটি আরও নির্ভরযোগ্য হওয়ায় document.execCommand('copy') ব্যবহার করুন
       const textArea = document.createElement("textarea");
       textArea.value = numberToCopy;
-      // Make the textarea out of viewport to avoid visual disruption
+      // ভিজ্যুয়াল ব্যাঘাত এড়াতে টেক্সট এরিয়াকে ভিউপোর্ট থেকে বাইরে রাখুন
       textArea.style.position = "fixed";
       textArea.style.left = "-999999px";
       textArea.style.top = "-999999px";
@@ -587,34 +532,33 @@
           copyButton.classList.add('copied');
           setTimeout(() => {
             copyButton.classList.remove('copied');
-          }, 1500); // Remove 'copied' class after 1.5 seconds
+          }, 1500); // 1.5 সেকেন্ড পরে 'copied' ক্লাস সরান
         } else {
-          console.error('Failed to copy text using execCommand.');
-          // Optionally, inform the user that copying failed
+          console.error('execCommand ব্যবহার করে টেক্সট কপি করতে ব্যর্থ হয়েছে।');
+          // ঐচ্ছিকভাবে, ব্যবহারকারীকে কপি করতে ব্যর্থ হওয়ার কথা জানান
         }
       } catch (err) {
-        console.error('Error attempting to copy text:', err);
-        // Optionally, inform the user that copying failed
+        console.error('টেক্সট কপি করার চেষ্টা করতে ত্রুটি:', err);
+        // ঐচ্ছিকভাবে, ব্যবহারকারীকে কপি করতে ব্যর্থ হওয়ার কথা জানান
       }
       document.body.removeChild(textArea);
     }
 
 
-    // When the page loads, set the number and display messages
+    // পৃষ্ঠা লোড হওয়ার সময়, নম্বর সেট করুন এবং মেসেজ প্রদর্শন করুন
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      // Get the number from URL, default to the first number if not found
-      const initialNumber = urlParams.get('number') || Object.keys(ukNumbersData)[0];
-
-      currentNumber = initialNumber; // Set the global currentNumber
+      // URL থেকে নম্বর পান, না পাওয়া গেলে প্রথম নম্বরে ডিফল্ট করুন
+      // currentNumber = urlParams.get('number') || '+44 7537-150-101'; // এটি গ্লোবালি var দিয়ে ঘোষিত হয়েছে, তাই এখানে const বা let ব্যবহার করা যাবে না।
+      currentNumber = urlParams.get('number') || '+44 7537-150-101'; // এখানে শুধু অ্যাসাইনমেন্ট
 
       document.getElementById('current-number-display').textContent = currentNumber;
 
-      // Attach event listener for the copy button
+      // কপি বাটনের জন্য ইভেন্ট লিসেনার সংযুক্ত করুন
       document.getElementById('copy-number-button').addEventListener('click', copyNumber);
 
-      displayMessages(currentNumber); // Display messages for the initial number
-      loadAds(); // Load ads on this page as well
+      displayMessages(currentNumber); // প্রাথমিক নম্বরের জন্য মেসেজ প্রদর্শন করুন
+      loadAds(); // এই পৃষ্ঠাতেও বিজ্ঞাপন লোড করুন
     });
   </script>
 
