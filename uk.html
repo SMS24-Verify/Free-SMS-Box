@@ -91,7 +91,7 @@
 
     <!-- Adsterra Native Banner (Above the numbers container) -->
     <div id="native-ad-slot" class="ad-slot mx-auto">
-      <!-- Iframe for Native Banner Ad Code will be inserted here by JavaScript -->
+      <!-- Ad Code will be inserted here by JavaScript -->
     </div>
     <!-- End Adsterra Native Banner -->
 
@@ -139,7 +139,6 @@
     // Define ad configurations
     const adConfigs = {
       native: {
-        id: 'container-36c71a4fca369dbf689c31baada8259d',
         scripts: [
           { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' }
         ],
@@ -148,16 +147,6 @@
         ],
         height: 250, // Approximate height for native banner
         width: 300 // Approximate width for native banner
-      },
-      banner320x50: {
-        key: 'e3e3696258d007a31d545486101e5406',
-        height: 50,
-        width: 320
-      },
-      banner468x60: {
-        key: 'c27fe934cdd274516e14f7e26821c75b',
-        height: 60,
-        width: 468
       },
       banner728x90: { // Consolidated 728x90 banner
         key: 'dba9c0c7da688537036a970dd8eb8984',
@@ -254,20 +243,10 @@
     function loadAds() {
       // Load ads for nativeAdSlot based on current page
       let currentAdConfigForNativeSlot;
-      switch (currentPage) {
-        case 1:
-          currentAdConfigForNativeSlot = adConfigs.native;
-          break;
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-          // For pages 2-5, use the single 728x90 banner
-          currentAdConfigForNativeSlot = adConfigs.banner728x90;
-          break;
-        default:
-          currentAdConfigForNativeSlot = null; // No ad for pages beyond 5
-          break;
+      if (currentPage === 1) {
+        currentAdConfigForNativeSlot = adConfigs.native;
+      } else {
+        currentAdConfigForNativeSlot = adConfigs.banner728x90;
       }
 
       if (currentAdConfigForNativeSlot) {
