@@ -225,8 +225,16 @@
   <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
   <!-- End Social Bar Adsterra Code -->
 
-  <script>
-    var currentNumber = ''; // Store the currently displayed number
+  <script type="module">
+    // Firebase SDK Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, query, where, addDoc, onSnapshot, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    let currentNumber = ''; // Store the currently displayed number
+    let db; // Firestore instance
+    let auth; // Auth instance
+    let userId; // User ID for Firestore paths
 
     // Define ad configurations
     const adConfigs = {
@@ -408,21 +416,43 @@
       }
     }
 
-    // Pre-set Canada numbers with platform-specific dummy messages
-    const canadaNumbersData = {}; // This will store dummy messages for each Canada number
+    /**
+     * Function to format time difference from a Firestore Timestamp.
+     * @param {object} timestamp - Firestore Timestamp object.
+     * @returns {string} Formatted time string (e.g., "Just now", "5 minutes ago", "2 hours ago", "3 days ago").
+     */
+    function formatTimeAgo(timestamp) {
+        if (!timestamp || !timestamp.toDate) {
+            return "Unknown time";
+        }
+        const now = new Date();
+        const messageDate = timestamp.toDate(); // Convert Firestore Timestamp to Date object
+        const diffSeconds = Math.floor((now - messageDate) / 1000);
+
+        if (diffSeconds < 60) {
+            return "Just now";
+        } else if (diffSeconds < 3600) {
+            const minutes = Math.floor(diffSeconds / 60);
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        } else if (diffSeconds < 86400) {
+            const hours = Math.floor(diffSeconds / 3600);
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        } else {
+            const days = Math.floor(diffSeconds / 86400);
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        }
+    }
 
     /**
-     * Generates a default set of dummy messages for a given number.
-     * @param {string} number - The phone number for which to generate messages.
-     * @returns {Array<Object>} An array of dummy message objects.
+     * Generates a single dummy message object (without time, as Firestore will add timestamp).
+     * @returns {object} A dummy message object.
      */
-    function generateDummyMessages(number) {
+    function generateSingleDummyMessage() {
         const platforms = [
             "Google", "Facebook", "Amazon", "Netflix", "Spotify", "PayPal", "eBay", "LinkedIn",
             "WhatsApp", "Instagram", "TikTok", "Twitter", "Banking App", "Your Bank", "Online Store", "Service Provider"
         ];
 
-        const messages = [];
         const messageTemplates = [
             "Your verification code is {code}. Do not share this code.",
             "OTP for your transaction is {code}. Valid for 5 mins.",
@@ -436,86 +466,107 @@
             "Special offer from {platform}: Get {discount}% off your next purchase! Use code {promoCode}."
         ];
 
-        for (let i = 0; i < 8; i++) { // Generate 8 messages
-            const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
-            const randomTemplate = messageTemplates[Math.floor(Math.random() * messageTemplates.length)];
-            const code = Math.floor(100000 + Math.random() * 900000); // 6-digit code
-            const orderId = Math.floor(10000 + Math.random() * 90000); // 5-digit order ID
-            const amount = (Math.random() * 100 + 10).toFixed(2); // Random amount
-            const discount = Math.floor(Math.random() * 20) + 10; // 10-30%
-            const promoCode = `SAVE${Math.floor(Math.random() * 900) + 100}`; // Random promo code
-            const link = `https://example.com/link${Math.floor(Math.random() * 1000)}`;
+        const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+        const randomTemplate = messageTemplates[Math.floor(Math.random() * messageTemplates.length)];
+        const code = Math.floor(100000 + Math.random() * 900000); // 6-digit code
+        const orderId = Math.floor(10000 + Math.random() * 90000); // 5-digit order ID
+        const amount = (Math.random() * 100 + 10).toFixed(2); // Random amount
+        const discount = Math.floor(Math.random() * 20) + 10; // 10-30%
+        const promoCode = `SAVE${Math.floor(Math.random() * 900) + 100}`; // Random promo code
+        const link = `https://example.com/link${Math.floor(Math.random() * 1000)}`;
 
-            let content = randomTemplate;
-            content = content.replace("{code}", code);
-            content = content.replace("{platform}", randomPlatform);
-            content = content.replace("{orderId}", orderId);
-            content = content.replace("{amount}", amount);
-            content = content.replace("{discount}", discount);
-            content = content.replace("{promoCode}", promoCode);
-            content = content.replace("{link}", link);
+        let content = randomTemplate;
+        content = content.replace("{code}", code);
+        content = content.replace("{platform}", randomPlatform);
+        content = content.replace("{orderId}", orderId);
+        content = content.replace("{amount}", amount);
+        content = content.replace("{discount}", discount);
+        content = content.replace("{promoCode}", promoCode);
+        content = content.replace("{link}", link);
 
-            // Generic content for templates that don't have specific placeholders
-            if (content.includes("{content}")) {
-                const genericContents = [
-                    "Your account has been updated.",
-                    "New activity detected on your account.",
-                    "Your appointment is confirmed.",
-                    "You have a new friend request.",
-                    "New trending topic: #DailyNews",
-                    "Important security notification."
-                ];
-                content = content.replace("{content}", genericContents[Math.floor(Math.random() * genericContents.length)]);
-            }
-
-            const timeAgoOptions = [
-                "Just now", "1 minute ago", "5 minutes ago", "15 minutes ago", "30 minutes ago",
-                "1 hour ago", "2 hours ago", "5 hours ago", "1 day ago", "2 days ago", "3 days ago"
+        if (content.includes("{content}")) {
+            const genericContents = [
+                "Your account has been updated.",
+                "New activity detected on your account.",
+                "Your appointment is confirmed.",
+                "You have a new friend request.",
+                "New trending topic: #DailyNews",
+                "Important security notification."
             ];
-            const randomTimeAgo = timeAgoOptions[Math.floor(Math.random() * timeAgoOptions.length)];
-
-            messages.push({
-                from: randomPlatform,
-                content: content,
-                time: randomTimeAgo
-            });
+            content = content.replace("{content}", genericContents[Math.floor(Math.random() * genericContents.length)]);
         }
-        return messages;
+
+        return {
+            from: randomPlatform,
+            content: content
+        };
     }
 
     /**
-     * Renders messages for the given number.
-     * @param {string} number - The phone number for which to display messages.
+     * Fetches and displays messages for the current number from Firestore.
+     * Sets up a real-time listener using onSnapshot.
      */
-    function displayMessages(number) {
-      const messagesList = document.getElementById('messages-list');
-      messagesList.innerHTML = ''; // Clear existing messages
-
-      // If messages for this number don't exist, generate them
-      if (!canadaNumbersData[number]) {
-          canadaNumbersData[number] = generateDummyMessages(number);
-      }
-
-      const messages = canadaNumbersData[number]; // Get messages for the number
-
-      if (messages.length === 0) {
-        messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">No messages found for this number.</p>';
+    function displayMessages() {
+      if (!db || !userId || !currentNumber) {
+        console.warn("Firestore not initialized or current number not set.");
         return;
       }
 
-      messages.forEach(msg => {
-        const messageHtml = `
-          <div class="message-bubble incoming">
-            <p class="text-sm font-semibold text-gray-700">From: ${msg.from}</p>
-            <p class="text-gray-800 mt-1">${msg.content}</p>
-            <p class="text-xs text-gray-500 text-right mt-1">${msg.time}</p>
-          </div>
-        `;
-        messagesList.insertAdjacentHTML('beforeend', messageHtml);
-      });
+      const messagesList = document.getElementById('messages-list');
+      messagesList.innerHTML = ''; // Clear existing messages
 
-      // Scroll to the bottom to show the latest messages
-      messagesList.scrollTop = messagesList.scrollHeight;
+      const messagesCollectionRef = collection(db, `artifacts/${__app_id}/public/data/sms_messages_canada`);
+      // Removed orderBy from query to avoid index issues. Sorting will be done client-side.
+      const q = query(messagesCollectionRef, where("number", "==", currentNumber));
+
+      onSnapshot(q, async (snapshot) => {
+        if (snapshot.empty) {
+          console.log("No messages found in Firestore for this number. Adding initial dummy messages.");
+          const initialMessages = [];
+          for (let i = 0; i < 8; i++) {
+              initialMessages.push(generateSingleDummyMessage());
+          }
+
+          for (const msg of initialMessages) {
+              await addDoc(messagesCollectionRef, {
+                  number: currentNumber,
+                  from: msg.from,
+                  content: msg.content,
+                  timestamp: serverTimestamp()
+              });
+          }
+        } else {
+          messagesList.innerHTML = ''; // Clear again to re-render all messages
+          const fetchedMessages = [];
+          snapshot.docs.forEach(doc => {
+            fetchedMessages.push(doc.data());
+          });
+
+          // Sort messages by timestamp in descending order (latest first)
+          fetchedMessages.sort((a, b) => {
+              if (a.timestamp && b.timestamp) {
+                  return b.timestamp.toDate() - a.timestamp.toDate();
+              }
+              return 0;
+          });
+
+          fetchedMessages.forEach(msg => {
+            const timeAgo = formatTimeAgo(msg.timestamp); // Use Firestore timestamp
+            const messageHtml = `
+              <div class="message-bubble incoming">
+                <p class="text-sm font-semibold text-gray-700">From: ${msg.from}</p>
+                <p class="text-gray-800 mt-1">${msg.content}</p>
+                <p class="text-xs text-gray-500 text-right mt-1">${timeAgo}</p>
+              </div>
+            `;
+            messagesList.insertAdjacentHTML('beforeend', messageHtml);
+          });
+          messagesList.scrollTop = messagesList.scrollHeight; // Scroll to bottom
+        }
+      }, (error) => {
+        console.error("Error fetching messages:", error);
+        messagesList.innerHTML = '<p class="text-center text-red-500 mt-4">Error loading messages. Please try again.</p>';
+      });
     }
 
     /**
@@ -523,33 +574,32 @@
      * In a real application, this would involve an API call to fetch messages for the specific number.
      */
     async function refreshMessages() {
-      const messagesList = document.getElementById('messages-list');
       const refreshButtonText = document.getElementById('refreshButtonText');
       const loadingSpinner = document.getElementById('loadingSpinner');
 
-      refreshButtonText.textContent = 'Refreshing...'; // Stays in English
+      if (!db || !currentNumber) {
+          console.error("Firestore not initialized or current number not set.");
+          return;
+      }
+
+      refreshButtonText.textContent = 'Refreshing...';
       loadingSpinner.classList.remove('hidden');
 
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Generate a new dummy message
-      const newMessages = generateDummyMessages(currentNumber);
-      const newMessage = newMessages[Math.floor(Math.random() * newMessages.length)]; // Pick one random message
-
-      const messageHtml = `
-        <div class="message-bubble incoming">
-          <p class="text-sm font-semibold text-gray-700">From: ${newMessage.from}</p>
-          <p class="text-gray-800 mt-1">${newMessage.content}</p>
-          <p class="text-xs text-gray-500 text-right mt-1">${newMessage.time}</p>
-        </div>
-      `;
-
-      // Add the new message to the top of the list
-      messagesList.insertAdjacentHTML('afterbegin', messageHtml);
-
-      refreshButtonText.textContent = 'Refresh Messages'; // Stays in English
-      loadingSpinner.classList.add('hidden');
+      try {
+          const newMessageData = generateSingleDummyMessage();
+          const messagesCollectionRef = collection(db, `artifacts/${__app_id}/public/data/sms_messages_canada`);
+          await addDoc(messagesCollectionRef, {
+              number: currentNumber,
+              from: newMessageData.from,
+              content: newMessageData.content,
+              timestamp: serverTimestamp() // Firestore will set the server timestamp
+          });
+      } catch (error) {
+          console.error("Error adding new message:", error);
+      } finally {
+          refreshButtonText.textContent = 'Refresh Messages';
+          loadingSpinner.classList.add('hidden');
+      }
     }
 
     /**
@@ -559,10 +609,8 @@
       const numberToCopy = document.getElementById('current-number-display').textContent;
       const copyButton = document.getElementById('copy-number-button');
 
-      // Use document.execCommand('copy') as it's more reliable in various iframe/sandbox environments
       const textArea = document.createElement("textarea");
       textArea.value = numberToCopy;
-      // Position textarea off-screen to avoid visual disruption
       textArea.style.position = "fixed";
       textArea.style.left = "-999999px";
       textArea.style.top = "-999999px";
@@ -575,32 +623,49 @@
           copyButton.classList.add('copied');
           setTimeout(() => {
             copyButton.classList.remove('copied');
-          }, 1500); // Remove 'copied' class after 1.5 seconds
+          }, 1500);
         } else {
           console.error('Failed to copy text using execCommand.');
-          // Optionally, inform the user that copying failed
         }
       } catch (err) {
         console.error('Error attempting to copy text:', err);
-        // Optionally, inform the user that copying failed
       }
       document.body.removeChild(textArea);
     }
 
 
     // When the page loads, set the number and display messages
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+      console.log("Firebase Config:", firebaseConfig);
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      auth = getAuth(app);
+      console.log("Firebase App, DB, Auth initialized.");
+
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+          console.log("Signed in with custom token.");
+        } else {
+          await signInAnonymously(auth);
+          console.log("Signed in anonymously.");
+        }
+        userId = auth.currentUser?.uid || crypto.randomUUID();
+        console.log("Firebase authenticated. User ID:", userId);
+      } catch (error) {
+        console.error("Firebase authentication failed:", error);
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
-      // Get the number from URL, default to the first number if not found
-      currentNumber = urlParams.get('number') || '+1 416 123 4567'; // Default Canada number
+      currentNumber = urlParams.get('number') || '+1 416 123 4567';
 
       document.getElementById('current-number-display').textContent = currentNumber;
 
-      // Attach event listener for the copy button
       document.getElementById('copy-number-button').addEventListener('click', copyNumber);
 
-      displayMessages(currentNumber); // Display messages for the initial number
-      loadAds(); // Load ads on this page as well
+      displayMessages();
+      loadAds();
     });
   </script>
 
