@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receive SMS - UK Number</title>
+  <!-- Tailwind CSS CDN for quick styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for the app */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6; /* Light gray background */
+    }
+    .header-bg {
+      background-color: #1a73e8; /* Google Blue */
+    }
+    .message-container {
+      background-color: #ffffff;
+      border-radius: 0.75rem; /* rounded-xl */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+      padding: 1.5rem; /* p-6 */
+    }
+    .message-bubble {
+      background-color: #e2e8f0; /* Light gray for message bubbles */
+      border-radius: 0.75rem; /* rounded-lg */
+      padding: 0.75rem 1rem; /* p-3 px-4 */
+      margin-bottom: 0.75rem; /* mb-3 */
+      word-wrap: break-word; /* Ensure long words break */
+    }
+    .message-bubble.incoming {
+      background-color: #d1fae5; /* Light green for incoming messages */
+      align-self: flex-start;
+    }
+    .message-bubble.outgoing {
+      background-color: #bfdbfe; /* Light blue for outgoing messages (if applicable) */
+      align-self: flex-end;
+    }
+    .refresh-button {
+      background-color: #28a745; /* Green */
+      transition: background-color 0.2s ease-in-out;
+    }
+    .refresh-button:hover {
+      background-color: #218838;
+    }
+    .back-button {
+      background-color: #4a5568; /* Dark gray */
+      transition: background-color 0.2s ease-in-out;
+    }
+    .back-button:hover {
+      background-color: #2d3748;
+    }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+
+  <!-- Popunder Adsterra Code -->
+  <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
+  <!-- End Popunder Adsterra Code -->
+
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header Section -->
+  <header class="header-bg text-white p-6 text-center text-3xl font-bold rounded-b-lg shadow-md">
+    <div class="flex items-center justify-center">
+      <a href="uk.html" class="absolute left-4 text-white text-xl hover:text-blue-200 transition-colors">
+        &larr; Back
+      </a>
+      <span>Receive SMS</span>
+    </div>
+    <div class="text-xl mt-2">
+      <span id="display-number">+44 7537-150-101</span> <!-- Placeholder, will be updated by JS -->
+    </div>
+  </header>
+
+  <main class="flex-grow container mx-auto p-6">
+    <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">Messages for <span id="current-number-display">+44 7537-150-101</span></h3>
+
+    <!-- Adsterra Native Banner (Above messages) -->
+    <div id="native-ad-slot" class="ad-slot mx-auto grid-container">
+      <!-- Ad Code will be inserted here by JavaScript -->
+    </div>
+    <!-- End Adsterra Native Banner -->
+
+    <!-- Message List Container -->
+    <div id="messages-list" class="message-container flex flex-col space-y-4 max-h-[60vh] overflow-y-auto">
+      <!-- Messages will be loaded here by JavaScript -->
+      <div class="message-bubble incoming">
+        <p class="text-sm font-semibold text-gray-700">From: +44 7900 123456</p>
+        <p class="text-gray-800 mt-1">Your verification code is 123456. Do not share this code.</p>
+        <p class="text-xs text-gray-500 text-right mt-1">2 minutes ago</p>
+      </div>
+      <div class="message-bubble incoming">
+        <p class="text-sm font-semibold text-gray-700">From: +44 7800 987654</p>
+        <p class="text-gray-800 mt-1">Hi, your order #XYZ123 has been shipped!</p>
+        <p class="text-xs text-gray-500 text-right mt-1">1 hour ago</p>
+      </div>
+      <div class="message-bubble incoming">
+        <p class="text-sm font-semibold text-gray-700">From: +44 7700 112233</p>
+        <p class="text-gray-800 mt-1">Reminder: Your appointment is tomorrow at 10 AM.</p>
+        <p class="text-xs text-gray-500 text-right mt-1">3 hours ago</p>
+      </div>
+    </div>
+
+    <!-- Refresh Button -->
+    <div class="flex justify-center mt-6">
+      <button onclick="refreshMessages()" class="refresh-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+        <span id="refreshButtonText">Refresh Messages</span>
+        <span id="loadingSpinner" class="loading-spinner hidden"></span>
+      </button>
+    </div>
+
+    <!-- Adsterra Banner 300x250 (Below messages) -->
+    <div id="banner-300x250-ad-slot" class="ad-slot mx-auto mt-6">
+      <!-- Iframe for Banner 300x250 Ad Code will be inserted here by JavaScript -->
+    </div>
+    <!-- End Adsterra Banner -->
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="bg-gray-800 text-white p-6 text-center text-sm mt-10 rounded-t-lg shadow-md">
+    &copy; 2025 Free SMS Box. All rights reserved.
+  </footer>
+
+  <script>
+    // Define ad configurations
+    const adConfigs = {
+      native: {
+        scripts: [
+          { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' }
+        ],
+        divs: [
+          { id: 'container-36c71a4fca369dbf689c31baada8259d' }
+        ],
+        height: 250,
+        width: 300
+      },
+      banner300x250: {
+        key: 'a9e0e31759b1f80164727452baf12b70',
+        height: 250,
+        width: 300
+      }
+    };
+
+    /**
+     * Loads an advertisement within an iframe to isolate its scripts and prevent layout shifts.
+     * @param {string} containerId - The ID of the HTML element where the iframe will be appended.
+     * @param {object} adConfig - Configuration object for the ad.
+     */
+    function loadAdInIframe(containerId, adConfig) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      container.classList.remove('collapsed');
+      container.innerHTML = '';
+
+      const iframes = [];
+
+      if (adConfig.scripts && adConfig.divs && containerId === 'native-ad-slot') {
+        adConfig.divs.forEach((divData, index) => {
+          const iframe = document.createElement('iframe');
+          iframe.style.width = '1px';
+          iframe.style.height = '1px';
+          iframe.style.opacity = '0';
+          iframe.style.border = 'none';
+          iframe.style.overflow = 'hidden';
+          iframe.scrolling = 'no';
+          iframe.setAttribute('loading', 'lazy');
+          iframe.classList.add('native-ad-iframe');
+
+          container.appendChild(iframe);
+          iframes.push(iframe);
+
+          const iframeDoc = iframe.contentWindow.document;
+          iframeDoc.open();
+          iframeDoc.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>body { margin: 0; overflow: hidden; }</style>
+            </head>
+            <body>
+              <div id="${divData.id}"></div>
+            </body>
+            </html>
+          `);
+          iframeDoc.close();
+
+          const scriptData = adConfig.scripts[index];
+          if (scriptData) {
+            const script = iframeDoc.createElement('script');
+            script.type = 'text/javascript';
+            if (scriptData.src) {
+              script.src = scriptData.src;
+              if (scriptData.async !== undefined) script.async = scriptData.async;
+              if (scriptData['data-cfasync'] !== undefined) script.dataset.cfasync = scriptData['data-cfasync'];
+            } else if (scriptData.textContent) {
+              script.textContent = scriptData.textContent;
+            }
+            iframeDoc.body.appendChild(script);
+          }
+        });
+      } else {
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.style.opacity = '0';
+        iframe.style.border = 'none';
+        iframe.style.overflow = 'hidden';
+        iframe.scrolling = 'no';
+        iframe.setAttribute('loading', 'lazy');
+
+        container.appendChild(iframe);
+        iframes.push(iframe);
+
+        const iframeDoc = iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>body { margin: 0; overflow: hidden; }</style>
+          </head>
+          <body>
+            <div id="ad-content-wrapper"></div>
+          </body>
+          </html>
+        `);
+        iframeDoc.close();
+
+        const adContentWrapper = iframeDoc.getElementById('ad-content-wrapper');
+
+        if (adConfig.key) {
+          const scriptOptions = iframeDoc.createElement('script');
+          scriptOptions.type = 'text/javascript';
+          scriptOptions.textContent = "atOptions = {" +
+            "'key' : '" + adConfig.key + "'," +
+            "'format' : 'iframe'," +
+            "'height' : " + adConfig.height + "," +
+            "'width' : " + adConfig.width + "," +
+            "'params' : {}" +
+            "};";
+          adContentWrapper.appendChild(scriptOptions);
+
+          const scriptInvoke = iframeDoc.createElement('script');
+          scriptInvoke.type = 'text/javascript';
+          scriptInvoke.src = `//www.highperformanceformat.com/${adConfig.key}/invoke.js`;
+          adContentWrapper.appendChild(scriptInvoke);
+        }
+      }
+
+      setTimeout(() => {
+        let anyAdLoaded = false;
+        iframes.forEach(iframe => {
+          try {
+            if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body.scrollHeight > 50) {
+              iframe.style.width = `${adConfig.width}px`;
+              iframe.style.height = `${adConfig.height}px`;
+              iframe.style.opacity = '1';
+              anyAdLoaded = true;
+            } else {
+              iframe.style.width = '0px';
+              iframe.style.height = '0px';
+              iframe.style.opacity = '0';
+            }
+          } catch (e) {
+            iframe.style.width = '0px';
+            iframe.style.height = '0px';
+            iframe.style.opacity = '0';
+          }
+        });
+
+        if (!anyAdLoaded) {
+          container.classList.add('collapsed');
+        } else {
+          container.classList.remove('collapsed');
+        }
+      }, 1500);
+    }
+
+    /**
+     * Loads advertisements into their respective containers.
+     */
+    function loadAds() {
+      const nativeAdSlotContainer = document.getElementById('native-ad-slot');
+      const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
+
+      if (nativeAdSlotContainer) {
+        nativeAdSlotContainer.innerHTML = '';
+        nativeAdSlotContainer.classList.add('collapsed');
+        loadAdInIframe('native-ad-slot', adConfigs.native);
+      }
+      if (banner300x250AdSlotContainer) {
+        banner300x250AdSlotContainer.innerHTML = '';
+        banner300x250AdSlotContainer.classList.add('collapsed');
+        loadAdInIframe('banner-300x250-ad-slot', adConfigs.banner300x250);
+      }
+    }
+
+    /**
+     * Simulates fetching and displaying new messages.
+     * In a real application, this would involve an API call to fetch messages for the specific number.
+     */
+    async function refreshMessages() {
+      const messagesList = document.getElementById('messages-list');
+      const refreshButtonText = document.getElementById('refreshButtonText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+
+      refreshButtonText.textContent = 'Refreshing...';
+      loadingSpinner.classList.remove('hidden');
+
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Dummy new message
+      const newMessage = {
+        sender: `+44 7${Math.floor(Math.random() * 900000000) + 100000000}`,
+        content: `This is a new message received at ${new Date().toLocaleTimeString()}.`,
+        time: 'Just now'
+      };
+
+      const newMessageHtml = `
+        <div class="message-bubble incoming">
+          <p class="text-sm font-semibold text-gray-700">From: ${newMessage.sender}</p>
+          <p class="text-gray-800 mt-1">${newMessage.content}</p>
+          <p class="text-xs text-gray-500 text-right mt-1">${newMessage.time}</p>
+        </div>
+      `;
+
+      // Add new message to the top of the list
+      messagesList.insertAdjacentHTML('afterbegin', newMessageHtml);
+
+      refreshButtonText.textContent = 'Refresh Messages';
+      loadingSpinner.classList.add('hidden');
+    }
+
+    // When the page loads, set the number (can be passed via URL parameters in a real app)
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const number = urlParams.get('number') || '+44 7537-150-101'; // Default to the first number if not specified
+      document.getElementById('display-number').textContent = number;
+      document.getElementById('current-number-display').textContent = number;
+      loadAds(); // Load ads on this page as well
+    });
+  </script>
+
+  <!-- Social Bar Adsterra Code -->
+  <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
+  <!-- End Social Bar Adsterra Code -->
+
+</body>
+</html>
