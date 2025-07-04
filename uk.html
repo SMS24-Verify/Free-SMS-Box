@@ -47,6 +47,14 @@
       text-align: center;
       margin-top: 20px;
       margin-bottom: 20px;
+      /* Ensure iframes fill the ad slot */
+      width: 100%; /* Make ad slot flexible */
+      height: auto; /* Height will be determined by iframe content or min-height */
+    }
+    .ad-slot iframe {
+      border: none;
+      width: 100%; /* Make iframe flexible within its container */
+      height: 250px; /* Default height for the main ad slot, will be overridden by specific ad sizes */
     }
     .direct-link-container {
       margin-top: 15px;
@@ -84,7 +92,7 @@
 
     <!-- Adsterra Native Banner (Above the numbers container) -->
     <div id="native-ad-slot" class="ad-slot mx-auto">
-      <!-- Native Banner Ad Code will be inserted here by JavaScript -->
+      <!-- Iframe for Native Banner Ad Code will be inserted here by JavaScript -->
     </div>
     <!-- End Adsterra Native Banner -->
 
@@ -95,7 +103,7 @@
 
     <!-- Adsterra Banner 300x250 (Below the numbers) -->
     <div id="banner-300x250-ad-slot" class="ad-slot mx-auto">
-      <!-- Banner 300x250 Ad Code will be inserted here by JavaScript -->
+      <!-- Iframe for Banner 300x250 Ad Code will be inserted here by JavaScript -->
     </div>
 
     <!-- Direct Link Text Below Banner -->
@@ -133,7 +141,14 @@
     const adConfigs = {
       native: {
         id: 'container-36c71a4fca369dbf689c31baada8259d',
-        src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js'
+        scripts: [
+          { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' }
+        ],
+        divs: [
+          { id: 'container-36c71a4fca369dbf689c31baada8259d' }
+        ],
+        height: 250, // Approximate height for native banner
+        width: 300 // Approximate width for native banner
       },
       banner320x50: {
         key: 'e3e3696258d007a31d545486101e5406',
@@ -162,97 +177,123 @@
       }
     };
 
-    // Function to load ads into their respective containers
-    function loadAds() {
-      const nativeAdSlotContainer = document.getElementById('native-ad-slot');
-      const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
+    // Function to create and load an ad within an iframe
+    function loadAdInIframe(containerId, adConfig) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
 
-      // Clear existing ads in both slots to ensure a fresh load
-      if (nativeAdSlotContainer) {
-        nativeAdSlotContainer.innerHTML = '';
-      }
-      if (banner300x250AdSlotContainer) {
-        banner300x250AdSlotContainer.innerHTML = '';
-      }
+      // Clear existing iframe if any
+      container.innerHTML = '';
 
-      // Load ads for nativeAdSlot based on current page
-      if (nativeAdSlotContainer) {
-        let currentAdConfig;
-        switch (currentPage) {
-          case 1:
-            currentAdConfig = adConfigs.native;
-            break;
-          case 2:
-            currentAdConfig = adConfigs.banner320x50;
-            break;
-          case 3:
-            currentAdConfig = adConfigs.banner160x600;
-            break;
-          case 4:
-            currentAdConfig = adConfigs.banner160x300;
-            break;
-          case 5:
-            currentAdConfig = adConfigs.banner468x60;
-            break;
-          default:
-            // For pages beyond 5 or if no specific ad is defined, keep it empty
-            currentAdConfig = null;
-            break;
-        }
+      const iframe = document.createElement('iframe');
+      iframe.style.width = '100%'; // Make iframe responsive to its container
+      iframe.style.height = `${adConfig.height}px`; // Set specific height
+      iframe.style.border = 'none';
+      iframe.style.overflow = 'hidden';
+      iframe.scrolling = 'no';
+      iframe.setAttribute('loading', 'lazy'); // Add lazy loading for better performance
 
-        if (currentAdConfig) {
-          if (currentAdConfig.src) { // This is for the native banner (Adsterra specific)
-            const script = document.createElement('script');
-            script.async = true;
-            script.dataset.cfasync = false;
-            script.src = currentAdConfig.src;
-            nativeAdSlotContainer.appendChild(script);
+      container.appendChild(iframe);
 
-            const div = document.createElement('div');
-            div.id = currentAdConfig.id;
-            nativeAdSlotContainer.appendChild(div);
-          } else if (currentAdConfig.key) { // This is for other banners (HighPerformanceFormat specific)
-            const scriptOptions = document.createElement('script');
-            scriptOptions.type = 'text/javascript';
-            scriptOptions.textContent = `
-              atOptions = {
-                'key' : '${currentAdConfig.key}',
-                'format' : 'iframe',
-                'height' : ${currentAdConfig.height},
-                'width' : ${currentAdConfig.width},
-                'params' : {}
-              };
-            `;
-            nativeAdSlotContainer.appendChild(scriptOptions);
+      // Write content to iframe's document
+      const iframeDoc = iframe.contentWindow.document;
+      iframeDoc.open();
+      iframeDoc.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>body { margin: 0; overflow: hidden; }</style>
+        </head>
+        <body>
+          <div id="ad-content-wrapper"></div>
+        </body>
+        </html>
+      `);
+      iframeDoc.close();
 
-            const scriptInvoke = document.createElement('script');
-            scriptInvoke.type = 'text/javascript';
-            scriptInvoke.src = `//www.highperformanceformat.com/${currentAdConfig.key}/invoke.js`;
-            nativeAdSlotContainer.appendChild(scriptInvoke);
+      const adContentWrapper = iframeDoc.getElementById('ad-content-wrapper');
+
+      if (adConfig.scripts) { // For native banner with direct scripts and divs
+        adConfig.scripts.forEach(scriptData => {
+          const script = iframeDoc.createElement('script');
+          script.type = 'text/javascript'; // Default type
+          if (scriptData.src) {
+            script.src = scriptData.src;
+            if (scriptData.async !== undefined) script.async = scriptData.async;
+            if (scriptData['data-cfasync'] !== undefined) script.dataset.cfasync = scriptData['data-cfasync'];
+          } else if (scriptData.textContent) {
+            script.textContent = scriptData.textContent;
           }
-        }
-      }
+          adContentWrapper.appendChild(script);
+        });
 
-      // Load the consistent 300x250 banner ad
-      if (banner300x250AdSlotContainer) {
-        const scriptOptions = document.createElement('script');
+        if (adConfig.divs) {
+          adConfig.divs.forEach(divData => {
+            const div = iframeDoc.createElement('div');
+            if (divData.id) div.id = divData.id;
+            // Add any other attributes if necessary
+            adContentWrapper.appendChild(div);
+          });
+        }
+
+      } else if (adConfig.key) { // For other banners with key-based script
+        const scriptOptions = iframeDoc.createElement('script');
         scriptOptions.type = 'text/javascript';
         scriptOptions.textContent = `
           atOptions = {
-            'key' : '${adConfigs.banner300x250.key}',
+            'key' : '${adConfig.key}',
             'format' : 'iframe',
-            'height' : ${adConfigs.banner300x250.height},
-            'width' : ${adConfigs.banner300x250.width},
+            'height' : ${adConfig.height},
+            'width' : ${adConfig.width},
             'params' : {}
           };
         `;
-        banner300x250AdSlotContainer.appendChild(scriptOptions);
+        adContentWrapper.appendChild(scriptOptions);
 
-        const scriptInvoke = document.createElement('script');
+        const scriptInvoke = iframeDoc.createElement('script');
         scriptInvoke.type = 'text/javascript';
-        scriptInvoke.src = `//www.highperformanceformat.com/${adConfigs.banner300x250.key}/invoke.js`;
-        banner300x250AdSlotContainer.appendChild(scriptInvoke);
+        scriptInvoke.src = `//www.highperformanceformat.com/${adConfig.key}/invoke.js`;
+        adContentWrapper.appendChild(scriptInvoke);
       }
+    }
+
+    // Function to load ads into their respective containers based on current page
+    function loadAds() {
+      // Load ads for nativeAdSlot based on current page
+      let currentAdConfigForNativeSlot;
+      switch (currentPage) {
+        case 1:
+          currentAdConfigForNativeSlot = adConfigs.native;
+          break;
+        case 2:
+          currentAdConfigForNativeSlot = adConfigs.banner320x50;
+          break;
+        case 3:
+          currentAdConfigForNativeSlot = adConfigs.banner160x600;
+          break;
+        case 4:
+          currentAdConfigForNativeSlot = adConfigs.banner160x300;
+          break;
+        case 5:
+          currentAdConfigForNativeSlot = adConfigs.banner468x60;
+          break;
+        default:
+          currentAdConfigForNativeSlot = null;
+          break;
+      }
+
+      if (currentAdConfigForNativeSlot) {
+        loadAdInIframe('native-ad-slot', currentAdConfigForNativeSlot);
+      } else {
+        // Clear the native ad slot if no ad is defined for the page
+        const nativeAdSlotContainer = document.getElementById('native-ad-slot');
+        if (nativeAdSlotContainer) {
+          nativeAdSlotContainer.innerHTML = '';
+        }
+      }
+
+      // Load the consistent 300x250 banner ad in its slot
+      loadAdInIframe('banner-300x250-ad-slot', adConfigs.banner300x250);
     }
 
     // Function to render numbers on the current page
