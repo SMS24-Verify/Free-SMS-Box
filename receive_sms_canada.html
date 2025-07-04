@@ -409,38 +409,79 @@
     }
 
     // Pre-set Canada numbers with platform-specific dummy messages
-    const canadaNumbersData = {
-      "+1 416 123 4567": [
-        { from: "Google", content: "Your verification code is 123456. Do not share this code.", time: "2 minutes ago" },
-        { from: "Netflix", content: "Welcome to Netflix! Your subscription is active.", time: "1 hour ago" },
-        { from: "Uber", content: "Your Uber ride is confirmed for tomorrow at 10 AM.", time: "3 hours ago" },
-        { from: "Amazon", content: "Your order #7890 has been shipped.", time: "1 day ago" },
-        { from: "Spotify", content: "Reminder: Your Spotify Premium bill is due in 2 days.", time: "2 days ago" },
-        { from: "Facebook", content: "You have a new friend request from John Doe.", time: "4 days ago" },
-        { from: "WhatsApp", content: "You have 1 new message from Sarah.", time: "5 days ago" },
-        { from: "Twitter", content: "Someone liked your tweet: 'Great post!'", time: "6 days ago" }
-      ],
-      "+1 604 987 6543": [
-        { from: "TikTok", content: "Your temporary access code is 9876.", time: "5 minutes ago" },
-        { from: "Instagram", content: "New direct message from Jane_D.", time: "30 minutes ago" },
-        { from: "PayPal", content: "Your payment of $50 to ABC Corp. is complete.", time: "4 hours ago" },
-        { from: "eBay", content: "Your eBay item #1234 has been sold!", time: "1 day ago" },
-        { from: "LinkedIn", content: "John Smith viewed your profile.", time: "2 days ago" },
-        { from: "Snapchat", content: "New snap from your friend!", time: "3 days ago" },
-        { from: "Pinterest", content: "New pins from boards you follow.", time: "4 days ago" },
-        { from: "Reddit", content: "Your post received 10 upvotes.", time: "5 days ago" }
-      ],
-      "+1 514 112 2334": [
-        { from: "Discord", content: "Registration confirmation. Thank you for joining!", time: "10 minutes ago" },
-        { from: "Telegram", content: "Your password has been successfully reset.", time: "2 hours ago" },
-        { from: "Viber", content: "New sticker pack available!", time: "1 day ago" },
-        { from: "Skype", content: "You have a missed call from Emily.", time: "2 days ago" },
-        { from: "Zoom", content: "Your meeting is scheduled for 3 PM today.", time: "3 days ago" },
-        { from: "Microsoft", content: "Security alert: Unusual sign-in activity.", time: "4 days ago" },
-        { from: "Apple", content: "Your Apple ID was used to sign in to iCloud.", time: "5 days ago" },
-        { from: "Lyft", content: "Your Lyft ride is arriving in 2 minutes.", time: "6 days ago" }
-      ]
-    };
+    const canadaNumbersData = {}; // This will store dummy messages for each Canada number
+
+    /**
+     * Generates a default set of dummy messages for a given number.
+     * @param {string} number - The phone number for which to generate messages.
+     * @returns {Array<Object>} An array of dummy message objects.
+     */
+    function generateDummyMessages(number) {
+        const platforms = [
+            "Google", "Facebook", "Amazon", "Netflix", "Spotify", "PayPal", "eBay", "LinkedIn",
+            "WhatsApp", "Instagram", "TikTok", "Twitter", "Banking App", "Your Bank", "Online Store", "Service Provider"
+        ];
+
+        const messages = [];
+        const messageTemplates = [
+            "Your verification code is {code}. Do not share this code.",
+            "OTP for your transaction is {code}. Valid for 5 mins.",
+            "New notification from {platform}: '{content}'. Tap to view.",
+            "Your {platform} account security alert: Unusual login detected. If this wasn't you, reset password.",
+            "Reminder: Your bill from {platform} is due in 2 days. Amount: ${amount}.",
+            "Your order #{orderId} from {platform} has been shipped. Track here: {link}",
+            "Welcome to {platform}! Your account is now active.",
+            "You have a new message from {platform}. Check your inbox.",
+            "Your password reset link: {link}. Valid for 15 minutes.",
+            "Special offer from {platform}: Get {discount}% off your next purchase! Use code {promoCode}."
+        ];
+
+        for (let i = 0; i < 8; i++) { // Generate 8 messages
+            const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+            const randomTemplate = messageTemplates[Math.floor(Math.random() * messageTemplates.length)];
+            const code = Math.floor(100000 + Math.random() * 900000); // 6-digit code
+            const orderId = Math.floor(10000 + Math.random() * 90000); // 5-digit order ID
+            const amount = (Math.random() * 100 + 10).toFixed(2); // Random amount
+            const discount = Math.floor(Math.random() * 20) + 10; // 10-30%
+            const promoCode = `SAVE${Math.floor(Math.random() * 900) + 100}`; // Random promo code
+            const link = `https://example.com/link${Math.floor(Math.random() * 1000)}`;
+
+            let content = randomTemplate;
+            content = content.replace("{code}", code);
+            content = content.replace("{platform}", randomPlatform);
+            content = content.replace("{orderId}", orderId);
+            content = content.replace("{amount}", amount);
+            content = content.replace("{discount}", discount);
+            content = content.replace("{promoCode}", promoCode);
+            content = content.replace("{link}", link);
+
+            // Generic content for templates that don't have specific placeholders
+            if (content.includes("{content}")) {
+                const genericContents = [
+                    "Your account has been updated.",
+                    "New activity detected on your account.",
+                    "Your appointment is confirmed.",
+                    "You have a new friend request.",
+                    "New trending topic: #DailyNews",
+                    "Important security notification."
+                ];
+                content = content.replace("{content}", genericContents[Math.floor(Math.random() * genericContents.length)]);
+            }
+
+            const timeAgoOptions = [
+                "Just now", "1 minute ago", "5 minutes ago", "15 minutes ago", "30 minutes ago",
+                "1 hour ago", "2 hours ago", "5 hours ago", "1 day ago", "2 days ago", "3 days ago"
+            ];
+            const randomTimeAgo = timeAgoOptions[Math.floor(Math.random() * timeAgoOptions.length)];
+
+            messages.push({
+                from: randomPlatform,
+                content: content,
+                time: randomTimeAgo
+            });
+        }
+        return messages;
+    }
 
     /**
      * Renders messages for the given number.
@@ -450,7 +491,12 @@
       const messagesList = document.getElementById('messages-list');
       messagesList.innerHTML = ''; // Clear existing messages
 
-      const messages = canadaNumbersData[number] || [];
+      // If messages for this number don't exist, generate them
+      if (!canadaNumbersData[number]) {
+          canadaNumbersData[number] = generateDummyMessages(number);
+      }
+
+      const messages = canadaNumbersData[number]; // Get messages for the number
 
       if (messages.length === 0) {
         messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">No messages found for this number.</p>';
@@ -487,24 +533,9 @@
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // List of 50+ different platforms
-      const platforms = [
-            "YouTube", "TikTok", "Instagram", "Facebook", "Twitter", "Google", "WhatsApp", "Amazon",
-            "Netflix", "Spotify", "PayPal", "eBay", "LinkedIn", "Snapchat", "Pinterest", "Reddit",
-            "Discord", "Telegram", "Viber", "Skype", "Zoom", "Microsoft", "Apple", "Uber",
-            "Lyft", "Airbnb", "Booking.com", "TripAdvisor", "Deliveroo", "Just Eat", "Revolut", "Monzo",
-            "Barclays", "HSBC", "Lloyds Bank", "NatWest", "Santander", "Nationwide", "Tesco Mobile", "EE",
-            "Vodafone", "O2", "Three", "BT", "Sky", "Virgin Media", "NHS", "Gov.uk",
-            "Royal Mail", "DPD", "Hermes", "Evri", "Asda", "Tesco", "Sainsbury's", "Morrisons"
-        ];
-      const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
-
-      // Dummy new message based on a random platform
-      const newMessage = {
-        from: randomPlatform,
-        content: `New message from ${randomPlatform}: Your code is ${Math.floor(Math.random() * 900000) + 100000}.`,
-        time: 'Just now'
-      };
+      // Generate a new dummy message
+      const newMessages = generateDummyMessages(currentNumber);
+      const newMessage = newMessages[Math.floor(Math.random() * newMessages.length)]; // Pick one random message
 
       const messageHtml = `
         <div class="message-bubble incoming">
@@ -561,7 +592,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       // Get the number from URL, default to the first number if not found
-      currentNumber = urlParams.get('number') || Object.keys(canadaNumbersData)[0];
+      currentNumber = urlParams.get('number') || '+1 416 123 4567'; // Default Canada number
 
       document.getElementById('current-number-display').textContent = currentNumber;
 
