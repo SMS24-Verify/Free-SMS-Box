@@ -131,27 +131,33 @@
 
     // Function to load ads into their respective containers
     function loadAds() {
-      const nativeAdSlot = document.getElementById('native-ad-slot');
-      const banner300x250AdSlot = document.getElementById('banner-300x250-ad-slot');
+      // Native Banner Ad Reload
+      const oldNativeAdSlot = document.getElementById('native-ad-slot');
+      if (oldNativeAdSlot) {
+        const newNativeAdSlot = document.createElement('div');
+        newNativeAdSlot.id = 'native-ad-slot';
+        newNativeAdSlot.className = 'ad-slot mx-auto'; // Keep Tailwind classes
 
-      // Clear existing ads to allow new ones to load
-      if (nativeAdSlot) {
-        nativeAdSlot.innerHTML = ''; // Clear content
-        // Create script for Native Banner
         const script1 = document.createElement('script');
         script1.async = true;
         script1.dataset.cfasync = false;
         script1.src = "//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js";
-        nativeAdSlot.appendChild(script1);
+        newNativeAdSlot.appendChild(script1);
 
         const div1 = document.createElement('div');
         div1.id = "container-36c71a4fca369dbf689c31baada8259d";
-        nativeAdSlot.appendChild(div1);
+        newNativeAdSlot.appendChild(div1);
+
+        oldNativeAdSlot.parentNode.replaceChild(newNativeAdSlot, oldNativeAdSlot);
       }
 
-      if (banner300x250AdSlot) {
-        banner300x250AdSlot.innerHTML = ''; // Clear content
-        // Create script for Banner 300x250 - part 1 (atOptions)
+      // Banner 300x250 Ad Reload
+      const oldBanner300x250AdSlot = document.getElementById('banner-300x250-ad-slot');
+      if (oldBanner300x250AdSlot) {
+        const newBanner300x250AdSlot = document.createElement('div');
+        newBanner300x250AdSlot.id = 'banner-300x250-ad-slot';
+        newBanner300x250AdSlot.className = 'ad-slot mx-auto'; // Keep Tailwind classes
+
         const script2 = document.createElement('script');
         script2.type = "text/javascript";
         script2.innerHTML = `
@@ -163,13 +169,14 @@
             'params' : {}
           };
         `;
-        banner300x250AdSlot.appendChild(script2);
+        newBanner300x250AdSlot.appendChild(script2);
 
-        // Create script for Banner 300x250 - part 2 (invoke.js)
         const script3 = document.createElement('script');
         script3.type = "text/javascript";
         script3.src = "//www.highperformanceformat.com/a9e0e31759b1f80164727452baf12b70/invoke.js";
-        banner300x250AdSlot.appendChild(script3);
+        newBanner300x250AdSlot.appendChild(script3);
+
+        oldBanner300x250AdSlot.parentNode.replaceChild(newBanner300x250AdSlot, oldBanner300x250AdSlot);
       }
     }
 
