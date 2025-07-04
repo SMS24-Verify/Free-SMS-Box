@@ -194,11 +194,50 @@
 
   <script>
     const numbers = [];
-    // Generate 60 dummy USA numbers to ensure 5 pages (60 / 12 = 5)
-    for (let i = 1; i <= 60; i++) {
-      // Updated to USA numbers and flag
-      numbers.push({ num: `+1 202-555-${1000 + i}`, flagUrl: 'https://flagcdn.com/us.svg', country: 'USA' });
+
+    // Function to generate a random number of specified length
+    function getRandomNumber(length) {
+      let result = '';
+      const characters = '0123456789';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        // Ensure first digit of area code and prefix is not 0 or 1 for realism
+        if (i === 0 && length === 3) { // For area code and prefix
+          result += characters.charAt(Math.floor(Math.random() * (charactersLength - 2)) + 2); // Starts from 2 (for '2' to '9')
+        } else {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+      }
+      return result;
     }
+
+    // Generate 60 unique dummy USA numbers
+    const generatedNumbers = new Set();
+    while (generatedNumbers.size < 60) {
+      const areaCode = getRandomNumber(3);
+      const prefix = getRandomNumber(3);
+      const lineNumber = getRandomNumber(4);
+      const fullNumber = `+1 (${areaCode}) ${prefix}-${lineNumber}`;
+      generatedNumbers.add(fullNumber);
+    }
+
+    // Convert Set to Array and populate the 'numbers' array
+    numbers.push(...Array.from(generatedNumbers).map(num => ({
+      num: num,
+      flagUrl: 'https://flagcdn.com/us.svg',
+      country: 'USA'
+    })));
+
+    // Function to shuffle an array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+      }
+    }
+
+    // Shuffle the numbers array initially
+    shuffleArray(numbers);
 
     let currentPage = 1;
     const numbersPerPage = 12; // Display 12 numbers per page
@@ -243,7 +282,7 @@
       const iframes = []; // Keep track of created iframes
 
       // For native ads, we need to create multiple iframes, one for each ad
-      // This loop will now run only once for the 'native' adConfig as it has only one script/div.
+      // This loop will now run only only once for the 'native' adConfig as it has only one script/div.
       if (adConfig.scripts && adConfig.divs && containerId === 'native-ad-slot') {
         adConfig.divs.forEach((divData, index) => {
           const iframe = document.createElement('iframe');
@@ -560,8 +599,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderNumbers();
       loadAds(); // Load ads initially
-      // Removed the addEventListener for 'generate-sms-button' as it's not present in uk.html
-      // The generateSmsDraft function is called via onclick attribute directly on the button.
     });
   </script>
 
