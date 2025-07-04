@@ -217,7 +217,8 @@
       const areaCode = getRandomNumber(3);
       const prefix = getRandomNumber(3);
       const lineNumber = getRandomNumber(4);
-      const fullNumber = `+1 (${areaCode}) ${prefix}-${lineNumber}`;
+      // Changed format to remove brackets and hyphen
+      const fullNumber = `+1 ${areaCode} ${prefix} ${lineNumber}`;
       generatedNumbers.add(fullNumber);
     }
 
