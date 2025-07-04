@@ -65,6 +65,21 @@
       font-weight: bold;
       text-decoration: underline;
     }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 
   <!-- Popunder Adsterra Code (Moved to head for quicker loading) -->
@@ -98,6 +113,22 @@
     <!-- Numbers Container -->
     <div id="numbers-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 my-10">
       <!-- Numbers will be rendered here by JavaScript -->
+    </div>
+
+    <!-- Gemini API Feature: SMS Content Suggestion -->
+    <div class="bg-white p-6 rounded-xl shadow-lg my-10">
+      <h4 class="text-2xl font-bold text-gray-800 mb-4 text-center">✨ SMS ড্রাফট করুন (AI-Powered)</h4>
+      <p class="text-gray-600 mb-4 text-center">আপনার SMS বার্তার জন্য একটি ধারণা লিখুন এবং AI কে একটি ড্রাফট তৈরি করতে দিন।</p>
+      <textarea id="smsPrompt" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" rows="3" placeholder="যেমন: 'ভেরিফিকেশন কোড চাই', 'মিটিং রিমাইন্ডার', 'দ্রুত উত্তর'"></textarea>
+      <button onclick="generateSmsDraft()" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition-colors flex items-center justify-center">
+        <span id="generateButtonText">✨ SMS ড্রাফট করুন</span>
+        <span id="loadingSpinner" class="loading-spinner hidden"></span>
+      </button>
+      <div id="smsOutput" class="mt-6 p-4 bg-gray-100 rounded-md text-gray-800 border border-gray-200 hidden">
+        <p class="font-semibold mb-2">জেনারেটেড SMS:</p>
+        <p id="smsContent"></p>
+      </div>
+      <div id="errorMessage" class="mt-4 p-3 bg-red-100 text-red-700 rounded-md hidden"></div>
     </div>
 
     <!-- Adsterra Banner 300x250 (Below the numbers) -->
@@ -178,8 +209,10 @@
 
       container.appendChild(iframe);
 
-      // Write content to iframe's document
+      // Get the iframe's document
       const iframeDoc = iframe.contentWindow.document;
+
+      // Write basic HTML structure
       iframeDoc.open();
       iframeDoc.write(`
         <!DOCTYPE html>
@@ -192,24 +225,12 @@
         </body>
         </html>
       `);
-      iframeDoc.close();
+      iframeDoc.close(); // Close the document stream
 
       const adContentWrapper = iframeDoc.getElementById('ad-content-wrapper');
 
       if (adConfig.scripts) { // For native banner with direct scripts and divs
-        adConfig.scripts.forEach(scriptData => {
-          const script = iframeDoc.createElement('script');
-          script.type = 'text/javascript'; // Default type
-          if (scriptData.src) {
-            script.src = scriptData.src;
-            if (scriptData.async !== undefined) script.async = scriptData.async;
-            if (scriptData['data-cfasync'] !== undefined) script.dataset.cfasync = scriptData['data-cfasync'];
-          } else if (scriptData.textContent) {
-            script.textContent = scriptData.textContent;
-          }
-          adContentWrapper.appendChild(script);
-        });
-
+        // Append divs first
         if (adConfig.divs) {
           adConfig.divs.forEach(divData => {
             const div = iframeDoc.createElement('div');
@@ -217,6 +238,21 @@
             adContentWrapper.appendChild(div);
           });
         }
+
+        // Load scripts dynamically to ensure execution
+        adConfig.scripts.forEach(scriptData => {
+          const script = iframeDoc.createElement('script');
+          script.type = 'text/javascript';
+          if (scriptData.src) {
+            script.src = scriptData.src;
+            if (scriptData.async !== undefined) script.async = scriptData.async;
+            if (scriptData['data-cfasync'] !== undefined) script.dataset.cfasync = scriptData['data-cfasync'];
+          } else if (scriptData.textContent) {
+            script.textContent = scriptData.textContent;
+          }
+          // Append to body for execution
+          iframeDoc.body.appendChild(script);
+        });
 
       } else if (adConfig.key) { // For other banners with key-based script
         const scriptOptions = iframeDoc.createElement('script');
@@ -303,6 +339,68 @@
         renderNumbers();
         loadAds(); // Reload ads on page change
         window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
+      }
+    }
+
+    // Gemini API Integration for SMS Drafting
+    async function generateSmsDraft() {
+      const smsPrompt = document.getElementById('smsPrompt').value;
+      const smsOutputDiv = document.getElementById('smsOutput');
+      const smsContentP = document.getElementById('smsContent');
+      const errorMessageDiv = document.getElementById('errorMessage');
+      const generateButtonText = document.getElementById('generateButtonText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+
+      // Clear previous output and errors
+      smsOutputDiv.classList.add('hidden');
+      smsContentP.textContent = '';
+      errorMessageDiv.classList.add('hidden');
+      errorMessageDiv.textContent = '';
+
+      if (!smsPrompt.trim()) {
+        errorMessageDiv.textContent = 'অনুগ্রহ করে SMS বার্তার জন্য একটি ধারণা লিখুন।';
+        errorMessageDiv.classList.remove('hidden');
+        return;
+      }
+
+      // Show loading indicator
+      generateButtonText.textContent = 'জেনারেট হচ্ছে...';
+      loadingSpinner.classList.remove('hidden');
+
+      try {
+        let chatHistory = [];
+        chatHistory.push({ role: "user", parts: [{ text: `একটি সংক্ষিপ্ত SMS বার্তা ড্রাফট করুন যা নিম্নলিখিত ধারণার উপর ভিত্তি করে: "${smsPrompt}"। শুধুমাত্র SMS বার্তাটি দিন, কোনো অতিরিক্ত ব্যাখ্যা বা ভূমিকা নয়।` }] });
+        const payload = { contents: chatHistory };
+        const apiKey = ""; // Canvas will automatically provide the API key
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.candidates && result.candidates.length > 0 &&
+            result.candidates[0].content && result.candidates[0].content.parts &&
+            result.candidates[0].content.parts.length > 0) {
+          const text = result.candidates[0].content.parts[0].text;
+          smsContentP.textContent = text;
+          smsOutputDiv.classList.remove('hidden');
+        } else {
+          errorMessageDiv.textContent = 'SMS ড্রাফট তৈরি করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
+          errorMessageDiv.classList.remove('hidden');
+          console.error("Gemini API response structure unexpected:", result);
+        }
+      } catch (error) {
+        errorMessageDiv.textContent = 'API কল করতে সমস্যা হয়েছে: ' + error.message;
+        errorMessageDiv.classList.remove('hidden');
+        console.error("Error calling Gemini API:", error);
+      } finally {
+        // Hide loading indicator
+        generateButtonText.textContent = '✨ SMS ড্রাফট করুন';
+        loadingSpinner.classList.add('hidden');
       }
     }
 
