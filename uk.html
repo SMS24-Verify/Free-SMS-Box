@@ -39,6 +39,20 @@
     .pagination-button:hover {
       background-color: #2d3748;
     }
+    /* Ad containers for better layout */
+    .ad-slot {
+      background-color: #e0e0e0;
+      border: 1px dashed #a0a0a0;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -58,13 +72,36 @@
   <main class="flex-grow container mx-auto p-6">
     <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">📱 Choose a Temporary Number for UK</h3>
 
+    <!-- Adsterra Native Banner (Moved to be above the numbers container) -->
+    <div class="ad-slot mx-auto" style="min-width: 300px; min-height: 250px;">
+      <script async="async" data-cfasync="false" src="//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js"></script>
+      <div id="container-36c71a4fca369dbf689c31baada8259d"></div>
+    </div>
+    <!-- End Adsterra Native Banner -->
+
     <!-- Numbers Container -->
-    <div id="numbers-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10">
+    <div id="numbers-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 my-10">
       <!-- Numbers will be rendered here by JavaScript -->
     </div>
 
+    <!-- Adsterra Banner 300x250 (Placed below the numbers) -->
+    <div class="ad-slot mx-auto" style="width: 300px; height: 250px;">
+      <!-- Banner 300x250 Ad Code -->
+      <script type="text/javascript">
+        atOptions = {
+          'key' : 'a9e0e31759b1f80164727452baf12b70',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/a9e0e31759b1f80164727452baf12b70/invoke.js"></script>
+      <!-- End Banner 300x250 Ad Code -->
+    </div>
+
     <!-- Pagination Buttons -->
-    <div class="flex justify-center space-x-4">
+    <div class="flex justify-center space-x-4 mt-10">
       <button onclick="prevPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Previous</button>
       <button onclick="nextPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Next</button>
     </div>
@@ -86,8 +123,8 @@
     const numbersPerPage = 12; // Display 12 numbers per page
 
     function renderNumbers() {
-      const start = (currentPage - 1) * numbersPerPage;
-      const end = start + numbersPerPage;
+      const start = (currentPage - 1) * numbersPerPage; // Starting index for slice
+      const end = start + numbersPerPage; // Ending index for slice
       const currentNumbers = numbers.slice(start, end);
 
       const numbersContainer = document.getElementById('numbers-container');
@@ -98,7 +135,8 @@
             <span class="text-xl font-bold text-gray-800">${item.country}</span>
           </div>
           <div class="text-lg text-gray-600 mb-6">${item.num}</div>
-          <button class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Receive SMS</button>
+          <!-- Link to the new receive SMS page -->
+          <a href="receive_sms_uk.html" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Receive SMS</a>
         </div>
       `).join('');
     }
@@ -122,6 +160,29 @@
     // Initial render when the page loads
     document.addEventListener('DOMContentLoaded', renderNumbers);
   </script>
+
+  <!-- Banner 320x50 (Moved to the very bottom of the page) -->
+  <div class="ad-slot mx-auto" style="width: 320px; height: 50px;">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : 'e3e3696258d007a31d545486101e5406',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/e3e3696258d007a31d545486101e5406/invoke.js"></script>
+  </div>
+  <!-- End Banner 320x50 Ad Code -->
+
+  <!-- Popunder Adsterra Code (usually placed at the end of body) -->
+  <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
+  <!-- End Popunder Adsterra Code -->
+
+  <!-- Social Bar Adsterra Code (usually placed at the end of body) -->
+  <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
+  <!-- End Social Bar Adsterra Code -->
 
 </body>
 </html>
