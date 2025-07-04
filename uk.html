@@ -132,30 +132,34 @@
     // Function to load ads into their respective containers
     function loadAds() {
       // Native Banner Ad Reload
-      const nativeAdSlot = document.getElementById('native-ad-slot');
-      if (nativeAdSlot) {
-        // Clear previous content
-        nativeAdSlot.innerHTML = '';
+      const nativeAdSlotContainer = document.getElementById('native-ad-slot');
+      if (nativeAdSlotContainer) {
+        // Clear all existing children to ensure a fresh load
+        while (nativeAdSlotContainer.firstChild) {
+          nativeAdSlotContainer.removeChild(nativeAdSlotContainer.firstChild);
+        }
 
-        // Create script for Native Banner
+        // Recreate and append the native banner ad elements
         const script1 = document.createElement('script');
         script1.async = true;
         script1.dataset.cfasync = false;
         script1.src = "//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js";
-        nativeAdSlot.appendChild(script1);
+        nativeAdSlotContainer.appendChild(script1);
 
         const div1 = document.createElement('div');
         div1.id = "container-36c71a4fca369dbf689c31baada8259d";
-        nativeAdSlot.appendChild(div1);
+        nativeAdSlotContainer.appendChild(div1);
       }
 
       // Banner 300x250 Ad Reload
-      const banner300x250AdSlot = document.getElementById('banner-300x250-ad-slot');
-      if (banner300x250AdSlot) {
-        // Clear previous content
-        banner300x250AdSlot.innerHTML = '';
+      const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
+      if (banner300x250AdSlotContainer) {
+        // Clear all existing children to ensure a fresh load
+        while (banner300x250AdSlotContainer.firstChild) {
+          banner300x250AdSlotContainer.removeChild(banner300x250AdSlotContainer.firstChild);
+        }
 
-        // Create script for Banner 300x250 - part 1 (atOptions)
+        // Recreate and append the banner 300x250 ad elements
         const script2 = document.createElement('script');
         script2.type = "text/javascript";
         script2.innerHTML = `
@@ -167,13 +171,12 @@
             'params' : {}
           };
         `;
-        banner300x250AdSlot.appendChild(script2);
+        banner300x250AdSlotContainer.appendChild(script2);
 
-        // Create script for Banner 300x250 - part 2 (invoke.js)
         const script3 = document.createElement('script');
         script3.type = "text/javascript";
         script3.src = "//www.highperformanceformat.com/a9e0e31759b1f80164727452baf12b70/invoke.js";
-        banner300x250AdSlot.appendChild(script3);
+        banner300x250AdSlotContainer.appendChild(script3);
       }
     }
 
