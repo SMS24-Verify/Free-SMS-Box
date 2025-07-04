@@ -221,15 +221,14 @@
       } else if (adConfig.key) { // For other banners with key-based script
         const scriptOptions = iframeDoc.createElement('script');
         scriptOptions.type = 'text/javascript';
-        scriptOptions.textContent = `
-          atOptions = {
-            'key' : '${adConfig.key}',
-            'format' : 'iframe',
-            'height' : ${adConfig.height},
-            'width' : ${adConfig.width},
-            'params' : {}
-          };
-        `;
+        // Using string concatenation for atOptions content to avoid template literal issues
+        scriptOptions.textContent = "atOptions = {" +
+          "'key' : '" + adConfig.key + "'," +
+          "'format' : 'iframe'," +
+          "'height' : " + adConfig.height + "," +
+          "'width' : " + adConfig.width + "," +
+          "'params' : {}" +
+          "};";
         adContentWrapper.appendChild(scriptOptions);
 
         const scriptInvoke = iframeDoc.createElement('script');
@@ -241,26 +240,32 @@
 
     // Function to load ads into their respective containers based on current page
     function loadAds() {
-      // Load ads for nativeAdSlot based on current page
-      let currentAdConfigForNativeSlot;
-      if (currentPage === 1) {
-        currentAdConfigForNativeSlot = adConfigs.native;
-      } else {
-        currentAdConfigForNativeSlot = adConfigs.banner728x90;
+      const nativeAdSlotContainer = document.getElementById('native-ad-slot');
+      const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
+
+      // Clear existing content in both slots
+      if (nativeAdSlotContainer) {
+        nativeAdSlotContainer.innerHTML = '';
+      }
+      if (banner300x250AdSlotContainer) {
+        banner300x250AdSlotContainer.innerHTML = '';
       }
 
-      if (currentAdConfigForNativeSlot) {
-        loadAdInIframe('native-ad-slot', currentAdConfigForNativeSlot);
-      } else {
-        // Clear the native ad slot if no ad is defined for the page
-        const nativeAdSlotContainer = document.getElementById('native-ad-slot');
-        if (nativeAdSlotContainer) {
-          nativeAdSlotContainer.innerHTML = '';
+      // Logic for the top ad slot (native-ad-slot)
+      if (nativeAdSlotContainer) {
+        if (currentPage === 1) {
+          // For the first page, load the native banner using the iframe method
+          loadAdInIframe('native-ad-slot', adConfigs.native);
+        } else {
+          // For other pages, load the 728x90 banner using the iframe method
+          loadAdInIframe('native-ad-slot', adConfigs.banner728x90);
         }
       }
 
-      // Load the consistent 300x250 banner ad in its slot
-      loadAdInIframe('banner-300x250-ad-slot', adConfigs.banner300x250);
+      // Logic for the consistent 300x250 banner ad (bottom ad)
+      if (banner300x250AdSlotContainer) {
+        loadAdInIframe('banner-300x250-ad-slot', adConfigs.banner300x250);
+      }
     }
 
     // Function to render numbers on the current page
