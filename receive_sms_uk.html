@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Receive SMS - UK Number</title>
+  <!-- Tailwind CSS CDN for quick styling -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Custom styles for the app */
@@ -14,135 +15,608 @@
     .header-bg {
       background-color: #1a73e8; /* Google Blue */
     }
+    .nav-bg {
+      background-color: #333;
+    }
     .message-container {
       background-color: #ffffff;
       border-radius: 0.75rem; /* rounded-xl */
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
       padding: 1.5rem; /* p-6 */
+      display: flex;
+      flex-direction: column;
+      max-height: 60vh; /* Limit height and enable scrolling */
+      overflow-y: auto;
     }
     .message-bubble {
       background-color: #e2e8f0; /* Light gray for message bubbles */
       border-radius: 0.75rem; /* rounded-lg */
       padding: 0.75rem 1rem; /* p-3 px-4 */
+      margin-bottom: 0.75rem; /* mb-3 */
+      word-wrap: break-word; /* Ensure long words break */
+      max-width: 80%; /* Limit bubble width */
+      align-self: flex-start; /* Default to incoming */
+    }
+    .message-bubble.incoming {
+      background-color: #d1fae5; /* Light green for incoming messages */
+      align-self: flex-start;
+    }
+    .message-bubble.outgoing {
+      background-color: #bfdbfe; /* Light blue for outgoing messages (if applicable) */
+      align-self: flex-end;
+    }
+    .refresh-button {
+      background-color: #28a745; /* Green */
+      transition: background-color 0.2s ease-in-out;
+    }
+    .refresh-button:hover {
+      background-color: #218838;
+    }
+    .back-button {
+      background-color: #4a5568; /* Dark gray */
+      transition: background-color 0.2s ease-in-out;
+    }
+    .back-button:hover {
+      background-color: #2d3748;
+    }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Ad containers - to collapse when empty */
+    .ad-slot {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: center;
+      width: 100%;
+      transition: max-height 0.5s ease-out, opacity 0.5s ease-out, margin 0.5s ease-out;
+      overflow: hidden;
+      max-height: 500px;
+      opacity: 1;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .ad-slot.collapsed {
+      max-height: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      opacity: 0;
+    }
+    .ad-slot iframe {
+      border: none;
+      display: block;
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      transition: width 0.5s ease-out, height 0.5s ease-out, opacity 0.5s ease-out;
+    }
+    #native-ad-slot.grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+      align-items: flex-start;
+    }
+    #native-ad-slot.grid-container iframe {
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+    }
+    .copy-button {
+        background: none;
+        border: none;
+        color: #1a73e8;
+        cursor: pointer;
+        font-size: 1.2rem;
+        margin-left: 0.5rem;
+        padding: 0;
+        vertical-align: middle;
+        transition: color 0.2s;
+    }
+    .copy-button:hover {
+        color: #0b5ed7;
+    }
+    .copy-button:active {
+        transform: translateY(1px);
+    }
+    .copy-button.copied {
+        color: #28a745; /* Green when copied */
+    }
+    .direct-link-container {
+      margin-top: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .direct-link-container a {
+      color: #1a73e8;
+      font-weight: bold;
+      text-decoration: underline;
     }
   </style>
+
+  <!-- Popunder Adsterra Code -->
+  <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
+  <!-- End Popunder Adsterra Code -->
+
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
-  <header class="header-bg text-white p-4 shadow-md">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Receive SMS Online</h1>
-      <nav>
-        <ul class="flex space-x-4">
-          <li><a href="#" class="hover:underline">Home</a></li>
-          <li><a href="#" class="hover:underline">About</a></li>
-          <li><a href="#" class="hover:underline">Contact</a></li>
-        </ul>
-      </nav>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header Section -->
+  <header class="header-bg text-white p-6 text-center text-3xl font-bold rounded-b-lg shadow-md">
+    <div class="flex items-center justify-center relative">
+      <a href="uk.html" class="absolute left-4 text-white text-xl hover:text-blue-200 transition-colors">
+        &larr; Back
+      </a>
+      <span>Receive SMS</span>
+      <!-- The number below "Receive SMS" is removed as per request -->
     </div>
   </header>
 
-  <main class="flex-grow container mx-auto p-4 flex flex-col md:flex-row gap-4">
-    <aside class="w-full md:w-1/4 bg-white p-4 rounded-xl shadow-lg">
-      <h2 class="text-xl font-semibold mb-4">Available Numbers</h2>
-      <ul class="space-y-3">
-        <li><a href="?number=+44 7537-150-101" class="block p-3 bg-blue-100 rounded-lg text-blue-800 font-medium hover:bg-blue-200">+44 7537-150-101</a></li>
-        <li><a href="?number=+1 202-555-0100" class="block p-3 bg-gray-100 rounded-lg text-gray-700 hover:bg-gray-200">+1 202-555-0100</a></li>
-        <li><a href="?number=+49 157-0123-4567" class="block p-3 bg-gray-100 rounded-lg text-gray-700 hover:bg-gray-200">+49 157-0123-4567</a></li>
-        </ul>
-    </aside>
+  <!-- Navigation Bar (Copied from uk.html) -->
+  <nav class="nav-bg p-4 text-center shadow-sm">
+    <a href="index.html" class="text-white mx-4 text-lg font-semibold hover:text-blue-200 transition-colors">Home</a>
+    <a href="#" class="text-white mx-4 text-lg font-semibold hover:text-blue-200 transition-colors">About Us</a>
+    <a href="#" class="text-white mx-4 text-lg font-semibold hover:text-blue-200 transition-colors">Contact</a>
+  </nav>
 
-    <section class="flex-grow bg-white p-6 rounded-xl shadow-lg message-container">
-      <div class="flex justify-between items-center mb-4 border-b pb-4">
-        <h2 class="text-2xl font-bold text-gray-800">Messages for: <span id="display-number" class="text-blue-600"></span></h2>
-        <button id="refresh-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg flex items-center">
-          <svg id="loading-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span id="refresh-button-text">Refresh Messages</span>
-        </button>
-      </div>
+  <main class="flex-grow container mx-auto p-6">
+    <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
+      Messages for <span id="current-number-display" class="mx-2">+44 7537-150-101</span>
+      <button id="copy-number-button" class="copy-button" title="Copy number">
+        📋 <!-- Clipboard icon (Emoji) -->
+      </button>
+    </h3>
 
-      <div id="messages-list" class="space-y-4 h-96 overflow-y-auto pr-2">
-        <div class="message-bubble incoming">
-          <p class="text-sm font-semibold text-gray-700">From: +44 7911-123-456</p>
-          <p class="text-gray-800 mt-1">Your verification code is 12345.</p>
-          <p class="text-xs text-gray-500 text-right mt-1">2 minutes ago</p>
-        </div>
-        <div class="message-bubble incoming">
-          <p class="text-sm font-semibold text-gray-700">From: +44 7890-987-654</p>
-          <p class="text-gray-800 mt-1">Welcome to our service! Click here to activate your account: [Link]</p>
-          <p class="text-xs text-gray-500 text-right mt-1">1 hour ago</p>
-        </div>
-      </div>
-      <div class="mt-4 p-3 bg-blue-50 border border-blue-200 text-blue-800 rounded-lg text-sm">
-        <p>Currently viewing messages for: <span id="current-number-display" class="font-semibold"></span></p>
-        <p class="mt-1">Please note: Messages are public and refresh periodically. Do not use for sensitive information.</p>
-      </div>
-    </section>
+    <!-- Adsterra Native Banner (Placed below the number as requested) -->
+    <div id="native-ad-slot" class="ad-slot mx-auto grid-container">
+      <!-- Ad Code will be inserted here by JavaScript -->
+    </div>
+    <!-- End Adsterra Native Banner -->
+
+    <!-- Message List Container -->
+    <div id="messages-list" class="message-container">
+      <!-- Messages will be loaded here by JavaScript -->
+    </div>
+
+    <!-- Refresh Button -->
+    <div class="flex justify-center mt-6">
+      <button onclick="refreshMessages()" class="refresh-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+        <span id="refreshButtonText">Refresh Messages</span>
+        <span id="loadingSpinner" class="loading-spinner hidden"></span>
+      </button>
+    </div>
+
+    <!-- Adsterra Banner 728x90 (Placed after Refresh Messages button as requested) -->
+    <div id="banner-728x90-ad-slot" class="ad-slot mx-auto mt-6">
+      <!-- Iframe for Banner 728x90 Ad Code will be inserted here by JavaScript -->
+    </div>
+    <!-- End Adsterra Banner -->
+
+    <!-- Direct Link Text (Re-added as per request) -->
+    <div class="direct-link-container">
+      <p>
+        <a href="https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6" target="_blank">
+          Click here to see our other services!
+        </a>
+      </p>
+    </div>
+
   </main>
 
-  <footer class="bg-gray-800 text-white p-4 text-center mt-auto shadow-inner">
-    <p>&copy; 2025 Receive SMS Online. All rights reserved.</p>
+  <!-- Footer Section -->
+  <footer class="bg-gray-800 text-white p-6 text-center text-sm mt-10 rounded-t-lg shadow-md">
+    &copy; 2025 Free SMS Box. All rights reserved.
   </footer>
 
-  <script>
-    document.getElementById('refresh-button').addEventListener('click', simulateMessageReceive);
+  <!-- Social Bar Adsterra Code (Already present, confirming placement) -->
+  <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
+  <!-- End Social Bar Adsterra Code -->
 
-    function simulateMessageReceive() {
-      const refreshButtonText = document.getElementById('refresh-button-text');
-      const loadingSpinner = document.getElementById('loading-spinner');
+  <script>
+    // Define ad configurations
+    const adConfigs = {
+      native: {
+        scripts: [
+          { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' }
+        ],
+        divs: [
+          { id: 'container-36c71a4fca369dbf689c31baada8259d' }
+        ],
+        height: 250, // Default or flexible height for native ads
+        width: 300   // Default or flexible width for native ads
+      },
+      banner728x90: { // Configuration for 728x90 banner
+        key: 'dba9c0c7da688537036a970dd8eb8984',
+        height: 90,
+        width: 728
+      }
+      // Note: The 300x250 banner is no longer explicitly defined here as it was removed from the HTML structure.
+    };
+
+    /**
+     * Loads an advertisement within an iframe to isolate its scripts and prevent layout shifts.
+     * @param {string} containerId - The ID of the HTML element where the iframe will be appended.
+     * @param {object} adConfig - Configuration object for the ad.
+     */
+    function loadAdInIframe(containerId, adConfig) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      container.classList.remove('collapsed');
+      container.innerHTML = '';
+
+      const iframes = [];
+
+      if (adConfig.scripts && adConfig.divs && containerId === 'native-ad-slot') {
+        // Specific handling for native ad scripts and divs
+        adConfig.divs.forEach((divData, index) => {
+          const iframe = document.createElement('iframe');
+          iframe.style.width = '1px';
+          iframe.style.height = '1px';
+          iframe.style.opacity = '0';
+          iframe.style.border = 'none';
+          iframe.style.overflow = 'hidden';
+          iframe.scrolling = 'no';
+          iframe.setAttribute('loading', 'lazy');
+          iframe.classList.add('native-ad-iframe');
+
+          container.appendChild(iframe);
+          iframes.push(iframe);
+
+          const iframeDoc = iframe.contentWindow.document;
+          iframeDoc.open();
+          iframeDoc.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>body { margin: 0; overflow: hidden; }</style>
+            </head>
+            <body>
+              <div id="${divData.id}"></div>
+            </body>
+            </html>
+          `);
+          iframeDoc.close();
+
+          const scriptData = adConfig.scripts[index];
+          if (scriptData) {
+            const script = iframeDoc.createElement('script');
+            script.type = 'text/javascript';
+            if (scriptData.src) {
+              script.src = scriptData.src;
+              if (scriptData.async !== undefined) script.async = scriptData.async;
+              if (scriptData['data-cfasync'] !== undefined) script.dataset.cfasync = scriptData['data-cfasync'];
+            } else if (scriptData.textContent) {
+              script.textContent = scriptData.textContent;
+            }
+            iframeDoc.body.appendChild(script);
+          }
+        });
+      } else {
+        // Generic handling for other banner ads (like 728x90)
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.style.opacity = '0';
+        iframe.style.border = 'none';
+        iframe.style.overflow = 'hidden';
+        iframe.scrolling = 'no';
+        iframe.setAttribute('loading', 'lazy');
+
+        container.appendChild(iframe);
+        iframes.push(iframe);
+
+        const iframeDoc = iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>body { margin: 0; overflow: hidden; }</style>
+          </head>
+          <body>
+            <div id="ad-content-wrapper"></div>
+          </body>
+          </html>
+        `);
+        iframeDoc.close();
+
+        const adContentWrapper = iframeDoc.getElementById('ad-content-wrapper');
+
+        if (adConfig.key) {
+          const scriptOptions = iframeDoc.createElement('script');
+          scriptOptions.type = 'text/javascript';
+          scriptOptions.textContent = "atOptions = {" +
+            "'key' : '" + adConfig.key + "'," +
+            "'format' : 'iframe'," +
+            "'height' : " + adConfig.height + "," +
+            "'width' : " + adConfig.width + "," +
+            "'params' : {}" +
+            "};";
+          adContentWrapper.appendChild(scriptOptions);
+
+          const scriptInvoke = iframeDoc.createElement('script');
+          scriptInvoke.type = 'text/javascript';
+          scriptInvoke.src = `//www.highperformanceformat.com/${adConfig.key}/invoke.js`;
+          adContentWrapper.appendChild(scriptInvoke);
+        }
+      }
+
+      setTimeout(() => {
+        let anyAdLoaded = false;
+        iframes.forEach(iframe => {
+          try {
+            // Check if the iframe content has loaded and has a significant height
+            if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body.scrollHeight > 50) {
+              iframe.style.width = `${adConfig.width}px`;
+              iframe.style.height = `${adConfig.height}px`;
+              iframe.style.opacity = '1';
+              anyAdLoaded = true;
+            } else {
+              // If ad doesn't load, collapse the iframe
+              iframe.style.width = '0px';
+              iframe.style.height = '0px';
+              iframe.style.opacity = '0';
+            }
+          } catch (e) {
+            // Catch cross-origin errors if content is not accessible
+            iframe.style.width = '0px';
+            iframe.style.height = '0px';
+            iframe.style.opacity = '0';
+          }
+        });
+
+        // Collapse the parent container if no ad loaded
+        if (!anyAdLoaded) {
+          container.classList.add('collapsed');
+        } else {
+          container.classList.remove('collapsed');
+        }
+      }, 1500); // Give ads some time to load
+    }
+
+    /**
+     * Loads advertisements into their respective containers.
+     */
+    function loadAds() {
+      const nativeAdSlotContainer = document.getElementById('native-ad-slot');
+      const banner728x90AdSlotContainer = document.getElementById('banner-728x90-ad-slot');
+
+      if (nativeAdSlotContainer) {
+        nativeAdSlotContainer.innerHTML = '';
+        nativeAdSlotContainer.classList.add('collapsed'); // Start collapsed
+        loadAdInIframe('native-ad-slot', adConfigs.native);
+      }
+      if (banner728x90AdSlotContainer) {
+        banner728x90AdSlotContainer.innerHTML = '';
+        banner728x90AdSlotContainer.classList.add('collapsed'); // Start collapsed
+        loadAdInIframe('banner-728x90-ad-slot', adConfigs.banner728x90);
+      }
+    }
+
+    // Pre-set UK numbers with platform-specific dummy messages
+    const ukNumbersData = {
+      "+44 7537-150-101": [
+        { from: "YouTube", content: "Your YouTube verification code is 123456. Do not share this code.", time: "2 minutes ago" },
+        { from: "TikTok", content: "New message from a follower on TikTok: 'Check out my latest video!'", time: "1 hour ago" },
+        { from: "Instagram", content: "Someone liked your photo on Instagram. View it now!", time: "3 hours ago" },
+        { from: "Facebook", content: "New friend request from John Doe on Facebook.", time: "5 hours ago" },
+        { from: "Google", content: "Your Google verification code is G-987654. Use it to sign in.", time: "1 day ago" },
+        { from: "WhatsApp", content: "You have 1 new message in your WhatsApp chat.", time: "2 days ago" },
+        { from: "Amazon", content: "Your Amazon order #123-4567890-1234567 has shipped.", time: "3 days ago" },
+        { from: "Twitter", content: "You have a new notification on Twitter.", time: "4 days ago" }
+      ],
+      "+44 7537-150-102": [
+        { from: "WhatsApp", content: "You have a new message from Sarah: 'Hi, are you free later?'", time: "5 minutes ago" },
+        { from: "Facebook", content: "New friend suggestion: Jane Smith. Add her now!", time: "30 minutes ago" },
+        { from: "YouTube", content: "Your favorite creator uploaded a new video!", time: "1 hour ago" },
+        { from: "Instagram", content: "Your story received a reply.", time: "2 hours ago" },
+        { from: "Google", content: "Security alert: New sign-in on your Google account.", time: "6 hours ago" },
+        { from: "TikTok", content: "Someone mentioned you in a comment on TikTok.", time: "1 day ago" },
+        { from: "Amazon", content: "Your Amazon delivery is scheduled for tomorrow.", time: "2 days ago" },
+        { from: "Twitter", content: "Someone retweeted your tweet.", time: "3 days ago" }
+      ],
+      "+44 7537-150-103": [
+        { from: "Google", content: "Your 2-step verification code is 112233.", time: "10 minutes ago" },
+        { from: "Amazon", content: "Your password has been reset. If this wasn't you, contact support.", time: "45 minutes ago" },
+        { from: "Twitter", content: "Trending topic: #AIInnovation.", time: "2 hours ago" },
+        { from: "YouTube", content: "New comment on your video: 'Great content!'", time: "4 hours ago" },
+        { from: "TikTok", content: "Your video is going viral! 100k views!", time: "1 day ago" },
+        { from: "Instagram", content: "Direct message from a new follower.", time: "2 days ago" },
+        { from: "Facebook", content: "You have new notifications in your groups.", time: "3 days ago" },
+        { from: "WhatsApp", content: "Reminder: Group call at 3 PM.", time: "4 days ago" }
+      ],
+      "+44 7537-150-104": [
+        { from: "Facebook", content: "You've been tagged in a photo on Facebook.", time: "15 minutes ago" },
+        { from: "Twitter", content: "Elon Musk just tweeted!", time: "1 hour ago" },
+        { from: "Amazon", content: "Your return has been processed.", time: "3 hours ago" },
+        { from: "Google", content: "Your Google Drive storage is almost full.", time: "5 hours ago" },
+        { from: "WhatsApp", content: "Voice message from Mom.", time: "1 day ago" },
+        { from: "YouTube", content: "Subscription update: New video from Tech Review.", time: "2 days ago" },
+        { from: "TikTok", content: "Discover new trends on TikTok.", time: "3 days ago" },
+        { from: "Instagram", content: "New post from a friend.", time: "4 days ago" }
+      ],
+      "+44 7537-150-105": [
+        { from: "Twitter", content: "A new person is following you.", time: "20 minutes ago" },
+        { from: "Google", content: "Your calendar event 'Meeting' starts in 30 minutes.", time: "40 minutes ago" },
+        { from: "WhatsApp", content: "You missed a call from Dad.", time: "1 hour ago" },
+        { from: "Amazon", content: "Your wish list has new items on sale!", time: "3 hours ago" },
+        { from: "YouTube", content: "Your channel reached 1000 subscribers!", time: "1 day ago" },
+        { from: "TikTok", content: "Your draft video is ready to be posted.", time: "2 days ago" },
+        { from: "Instagram", content: "Explore new reels on Instagram.", time: "3 days ago" },
+        { from: "Facebook", content: "Birthday reminder: It's Sarah's birthday soon!", time: "4 days ago" }
+      ],
+      "+44 7537-150-106": [
+        { from: "Amazon", content: "Your payment method needs to be updated.", time: "25 minutes ago" },
+        { from: "WhatsApp", content: "New group message: 'Weekend Trip Plans'", time: "50 minutes ago" },
+        { from: "Facebook", content: "Your Marketplace listing has new interest.", time: "2 hours ago" },
+        { from: "Twitter", content: "Someone replied to your thread.", time: "4 hours ago" },
+        { from: "Google", content: "Your Google Photos memory for today.", time: "1 day ago" },
+        { from: "YouTube", content: "Live stream starting soon!", time: "2 days ago" },
+        { from: "TikTok", content: "Trending sound: Add it to your video!", time: "3 days ago" },
+        { from: "Instagram", content: "New message from a business account.", time: "4 days ago" }
+      ],
+      "+44 7537-150-107": [
+        { from: "Instagram", content: "You have new notifications.", time: "30 minutes ago" },
+        { from: "YouTube", content: "Your comment on 'Funny Cats' video received a reply.", time: "1 hour 15 minutes ago" },
+        { from: "TikTok", content: "New challenge alert!", time: "3 hours ago" },
+        { from: "Amazon", content: "Your subscription renewal is due.", time: "6 hours ago" },
+        { from: "Facebook", content: "Memories: You shared a post 2 years ago.", time: "1 day ago" },
+        { from: "Google", content: "Your Google Meet call starts in 10 minutes.", time: "2 days ago" },
+        { from: "WhatsApp", content: "You have an unread message from a new contact.", time: "3 days ago" },
+        { from: "Twitter", content: "Your tweet gained 50 likes!", time: "4 days ago" }
+      ],
+      "+44 7537-150-108": [
+        { from: "WhatsApp", content: "New voice note from Alex.", time: "35 minutes ago" },
+        { from: "Google", content: "Important security update for your account.", time: "1 hour 30 minutes ago" },
+        { from: "Amazon", content: "Your recent purchase is eligible for a review.", time: "4 hours ago" },
+        { from: "YouTube", content: "Recommended video for you: 'Top 10 Gadgets'.", time: "7 hours ago" },
+        { from: "TikTok", content: "Your video has been reviewed and is live!", time: "1 day ago" },
+        { from: "Instagram", content: "Someone viewed your profile.", time: "2 days ago" },
+        { from: "Facebook", content: "You have a new notification from a page you follow.", time: "3 days ago" },
+        { from: "Twitter", content: "Check out what's happening in your network.", time: "4 days ago" }
+      ]
+    };
+
+    let currentNumber = ''; // Store the currently displayed number
+
+    /**
+     * Renders messages for the given number.
+     * @param {string} number - The phone number for which to display messages.
+     */
+    function displayMessages(number) {
       const messagesList = document.getElementById('messages-list');
+      messagesList.innerHTML = ''; // Clear existing messages
+
+      const messages = ukNumbersData[number] || []; // Get messages for the number, or an empty array
+
+      if (messages.length === 0) {
+        messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">No messages found for this number.</p>';
+        return;
+      }
+
+      messages.forEach(msg => {
+        const messageHtml = `
+          <div class="message-bubble incoming">
+            <p class="text-sm font-semibold text-gray-700">From: ${msg.from}</p>
+            <p class="text-gray-800 mt-1">${msg.content}</p>
+            <p class="text-xs text-gray-500 text-right mt-1">${msg.time}</p>
+          </div>
+        `;
+        messagesList.insertAdjacentHTML('beforeend', messageHtml);
+      });
+
+      // Scroll to the bottom to show latest messages
+      messagesList.scrollTop = messagesList.scrollHeight;
+    }
+
+    /**
+     * Simulates fetching and displaying new messages for the current number.
+     * In a real application, this would involve an API call to fetch messages for the specific number.
+     */
+    async function refreshMessages() {
+      const messagesList = document.getElementById('messages-list');
+      const refreshButtonText = document.getElementById('refreshButtonText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
 
       refreshButtonText.textContent = 'Refreshing...';
       loadingSpinner.classList.remove('hidden');
 
-      // Simulate a network request
-      setTimeout(() => {
-        addNewMessage(messagesList, refreshButtonText, loadingSpinner);
-      }, 2000); // Simulate 2-second loading time
-    }
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
-    function addNewMessage(messagesList, refreshButtonText, loadingSpinner) {
+      const platforms = ["YouTube", "TikTok", "Instagram", "Facebook", "Twitter", "Google", "WhatsApp", "Amazon"];
+      const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+      // const randomSender = `+44 7${Math.floor(Math.random() * 900000000) + 100000000}`; // Removed as per request
+
+      // Dummy new message based on a random platform
       const newMessage = {
-        sender: `+44 7${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`,
-        content: `This is a new message received at ${new Date().toLocaleTimeString()}.`,
+        from: randomPlatform,
+        content: `New message from ${randomPlatform}: Your code is ${Math.floor(Math.random() * 900000) + 100000}.`,
         time: 'Just now'
       };
 
-      const newMessageHtml = `
+      const messageHtml = `
         <div class="message-bubble incoming">
-          <p class="text-sm font-semibold text-gray-700">From: ${newMessage.sender}</p>
+          <p class="text-sm font-semibold text-gray-700">From: ${newMessage.from}</p>
           <p class="text-gray-800 mt-1">${newMessage.content}</p>
           <p class="text-xs text-gray-500 text-right mt-1">${newMessage.time}</p>
         </div>
       `;
 
       // Add new message to the top of the list
-      messagesList.insertAdjacentHTML('afterbegin', newMessageHtml);
+      messagesList.insertAdjacentHTML('afterbegin', messageHtml);
 
       refreshButtonText.textContent = 'Refresh Messages';
       loadingSpinner.classList.add('hidden');
     }
 
-    // When the page loads, set the number (can be passed via URL parameters in a real app)
+    /**
+     * Copies the currently displayed phone number to the clipboard.
+     */
+    function copyNumber() {
+      const numberToCopy = document.getElementById('current-number-display').textContent;
+      const copyButton = document.getElementById('copy-number-button');
+
+      // Use document.execCommand('copy') as it is more reliable in various iframe/sandbox environments
+      const textArea = document.createElement("textarea");
+      textArea.value = numberToCopy;
+      // Make the textarea out of viewport to avoid visual disruption
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          copyButton.classList.add('copied');
+          setTimeout(() => {
+            copyButton.classList.remove('copied');
+          }, 1500); // Remove 'copied' class after 1.5 seconds
+        } else {
+          console.error('Failed to copy text using execCommand.');
+          // Optionally, inform the user that copying failed
+        }
+      } catch (err) {
+        console.error('Error attempting to copy text:', err);
+        // Optionally, inform the user that copying failed
+      }
+      document.body.removeChild(textArea);
+    }
+
+
+    // When the page loads, set the number and display messages
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const number = urlParams.get('number') || '+44 7537-150-101'; // Default to the first number if not specified
-      document.getElementById('display-number').textContent = number;
-      document.getElementById('current-number-display').textContent = number;
+      // Get the number from URL, default to the first number if not found
+      const initialNumber = urlParams.get('number') || Object.keys(ukNumbersData)[0];
+
+      currentNumber = initialNumber; // Set the global currentNumber
+
+      document.getElementById('current-number-display').textContent = currentNumber;
+
+      // Attach event listener for the copy button
+      document.getElementById('copy-number-button').addEventListener('click', copyNumber);
+
+      displayMessages(currentNumber); // Display messages for the initial number
       loadAds(); // Load ads on this page as well
     });
-
-    // Dummy function for loadAds - replace with actual ad loading logic if needed
-    function loadAds() {
-      console.log('Loading ads...');
-      // Implement your ad loading logic here
-    }
   </script>
 
-  <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
-
-  <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
 </body>
 </html>
