@@ -47,14 +47,13 @@
       text-align: center;
       margin-top: 20px;
       margin-bottom: 20px;
-      /* Ensure iframes fill the ad slot */
       width: 100%; /* Make ad slot flexible */
       height: auto; /* Height will be determined by iframe content or min-height */
     }
     .ad-slot iframe {
       border: none;
-      width: 100%; /* Make iframe flexible within its container */
-      height: 250px; /* Default height for the main ad slot, will be overridden by specific ad sizes */
+      /* Width and height will be set dynamically by JS based on adConfig */
+      /* Default height for the main ad slot, will be overridden by specific ad sizes */
     }
     .direct-link-container {
       margin-top: 15px;
@@ -155,20 +154,20 @@
         height: 50,
         width: 320
       },
-      banner160x600: {
-        key: '27984c69bad5cf21d1390d0c64807283',
-        height: 600,
-        width: 160
-      },
-      banner160x300: {
-        key: 'ac0cfbcdbe9cd63c0799c71d4f173135',
-        height: 300,
-        width: 160
-      },
       banner468x60: {
         key: 'c27fe934cdd274516e14f7e26821c75b',
         height: 60,
         width: 468
+      },
+      banner728x90_1: { // First 728x90 banner
+        key: 'dba9c0c7da688537036a970dd8eb8984',
+        height: 90,
+        width: 728
+      },
+      banner728x90_2: { // Second 728x90 banner (same key, different instance)
+        key: 'dba9c0c7da688537036a970dd8eb8984',
+        height: 90,
+        width: 728
       },
       banner300x250: {
         key: 'a9e0e31759b1f80164727452baf12b70',
@@ -186,8 +185,8 @@
       container.innerHTML = '';
 
       const iframe = document.createElement('iframe');
-      iframe.style.width = '100%'; // Make iframe responsive to its container
-      iframe.style.height = `${adConfig.height}px`; // Set specific height
+      iframe.style.width = `${adConfig.width}px`; // Set specific width for the iframe
+      iframe.style.height = `${adConfig.height}px`; // Set specific height for the iframe
       iframe.style.border = 'none';
       iframe.style.overflow = 'hidden';
       iframe.scrolling = 'no';
@@ -231,7 +230,6 @@
           adConfig.divs.forEach(divData => {
             const div = iframeDoc.createElement('div');
             if (divData.id) div.id = divData.id;
-            // Add any other attributes if necessary
             adContentWrapper.appendChild(div);
           });
         }
@@ -269,13 +267,13 @@
           currentAdConfigForNativeSlot = adConfigs.banner320x50;
           break;
         case 3:
-          currentAdConfigForNativeSlot = adConfigs.banner160x600;
+          currentAdConfigForNativeSlot = adConfigs.banner468x60;
           break;
         case 4:
-          currentAdConfigForNativeSlot = adConfigs.banner160x300;
+          currentAdConfigForNativeSlot = adConfigs.banner728x90_1; // First 728x90 banner
           break;
         case 5:
-          currentAdConfigForNativeSlot = adConfigs.banner468x60;
+          currentAdConfigForNativeSlot = adConfigs.banner728x90_2; // Second 728x90 banner
           break;
         default:
           currentAdConfigForNativeSlot = null;
@@ -306,7 +304,7 @@
       numbersContainer.innerHTML = currentNumbers.map(item => `
         <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
           <div class="flex items-center mb-4">
-            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-8 h-5 rounded-md mr-2 shadow-sm">
+            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
             <span class="text-lg font-bold text-gray-800">${item.country}</span>
           </div>
           <div class="text-lg text-gray-600 mb-6">${item.num}</div>
