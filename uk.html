@@ -83,9 +83,8 @@
     <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">📱 Choose a Temporary Number for UK</h3>
 
     <!-- Adsterra Native Banner (Above the numbers container) -->
-    <div class="ad-slot mx-auto">
-      <script async="async" data-cfasync="false" src="//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js"></script>
-      <div id="container-36c71a4fca369dbf689c31baada8259d"></div>
+    <div id="native-ad-slot" class="ad-slot mx-auto">
+      <!-- Native Banner Ad Code will be inserted here by JavaScript -->
     </div>
     <!-- End Adsterra Native Banner -->
 
@@ -95,19 +94,8 @@
     </div>
 
     <!-- Adsterra Banner 300x250 (Below the numbers) -->
-    <div class="ad-slot mx-auto">
-      <!-- Banner 300x250 Ad Code -->
-      <script type="text/javascript">
-        atOptions = {
-          'key' : 'a9e0e31759b1f80164727452baf12b70',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/a9e0e31759b1f80164727452baf12b70/invoke.js"></script>
-      <!-- End Banner 300x250 Ad Code -->
+    <div id="banner-300x250-ad-slot" class="ad-slot mx-auto">
+      <!-- Banner 300x250 Ad Code will be inserted here by JavaScript -->
     </div>
 
     <!-- Direct Link Text Below Banner -->
@@ -133,14 +121,59 @@
 
   <script>
     const numbers = [];
-    // Generate 30 dummy UK numbers
-    for (let i = 1; i <= 30; i++) {
+    // Generate 60 dummy UK numbers to ensure 5 pages (60 / 12 = 5)
+    for (let i = 1; i <= 60; i++) {
       numbers.push({ num: `+44 7537-150-${100 + i}`, flagUrl: 'https://flagcdn.com/gb.svg', country: 'UK' });
     }
 
     let currentPage = 1;
     const numbersPerPage = 12; // Display 12 numbers per page
 
+    // Function to load ads into their respective containers
+    function loadAds() {
+      const nativeAdSlot = document.getElementById('native-ad-slot');
+      const banner300x250AdSlot = document.getElementById('banner-300x250-ad-slot');
+
+      // Clear existing ads to allow new ones to load
+      if (nativeAdSlot) {
+        nativeAdSlot.innerHTML = ''; // Clear content
+        // Create script for Native Banner
+        const script1 = document.createElement('script');
+        script1.async = true;
+        script1.dataset.cfasync = false;
+        script1.src = "//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js";
+        nativeAdSlot.appendChild(script1);
+
+        const div1 = document.createElement('div');
+        div1.id = "container-36c71a4fca369dbf689c31baada8259d";
+        nativeAdSlot.appendChild(div1);
+      }
+
+      if (banner300x250AdSlot) {
+        banner300x250AdSlot.innerHTML = ''; // Clear content
+        // Create script for Banner 300x250 - part 1 (atOptions)
+        const script2 = document.createElement('script');
+        script2.type = "text/javascript";
+        script2.innerHTML = `
+          atOptions = {
+            'key' : 'a9e0e31759b1f80164727452baf12b70',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        `;
+        banner300x250AdSlot.appendChild(script2);
+
+        // Create script for Banner 300x250 - part 2 (invoke.js)
+        const script3 = document.createElement('script');
+        script3.type = "text/javascript";
+        script3.src = "//www.highperformanceformat.com/a9e0e31759b1f80164727452baf12b70/invoke.js";
+        banner300x250AdSlot.appendChild(script3);
+      }
+    }
+
+    // Function to render numbers on the current page
     function renderNumbers() {
       const start = (currentPage - 1) * numbersPerPage; // Starting index for slice
       const end = start + numbersPerPage; // Ending index for slice
@@ -150,8 +183,8 @@
       numbersContainer.innerHTML = currentNumbers.map(item => `
         <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
           <div class="flex items-center mb-4">
-            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-            <span class="text-xl font-bold text-gray-800">${item.country}</span>
+            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-8 h-5 rounded-md mr-2 shadow-sm">
+            <span class="text-lg font-bold text-gray-800">${item.country}</span>
           </div>
           <div class="text-lg text-gray-600 mb-6">${item.num}</div>
           <!-- Link to the new receive SMS page -->
@@ -164,6 +197,7 @@
       if (currentPage < Math.ceil(numbers.length / numbersPerPage)) {
         currentPage++;
         renderNumbers();
+        loadAds(); // Reload ads on page change
         window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
       }
     }
@@ -172,12 +206,16 @@
       if (currentPage > 1) {
         currentPage--;
         renderNumbers();
+        loadAds(); // Reload ads on page change
         window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
       }
     }
 
     // Initial render when the page loads
-    document.addEventListener('DOMContentLoaded', renderNumbers);
+    document.addEventListener('DOMContentLoaded', () => {
+      renderNumbers();
+      loadAds(); // Load ads initially
+    });
   </script>
 
   <!-- Social Bar Adsterra Code (usually placed at the end of body) -->
