@@ -418,21 +418,61 @@
      * @returns {Array<Object>} ডামি মেসেজ অবজেক্টের একটি অ্যারে।
      */
     function generateDummyMessages(number) {
-        const platforms = ["YouTube", "TikTok", "Instagram", "Facebook", "Twitter", "Google", "WhatsApp", "Amazon"];
+        // ৫০টি ভিন্ন প্ল্যাটফর্মের তালিকা
+        const platforms = [
+            "YouTube", "TikTok", "Instagram", "Facebook", "Twitter", "Google", "WhatsApp", "Amazon",
+            "Netflix", "Spotify", "PayPal", "eBay", "LinkedIn", "Snapchat", "Pinterest", "Reddit",
+            "Discord", "Telegram", "Viber", "Skype", "Zoom", "Microsoft", "Apple", "Uber",
+            "Lyft", "Airbnb", "Booking.com", "TripAdvisor", "Deliveroo", "Just Eat", "Revolut", "Monzo",
+            "Barclays", "HSBC", "Lloyds Bank", "NatWest", "Santander", "Nationwide", "Tesco Mobile", "EE",
+            "Vodafone", "O2", "Three", "BT", "Sky", "Virgin Media", "NHS", "Gov.uk",
+            "Royal Mail", "DPD", "Hermes", "Evri", "Asda", "Tesco", "Sainsbury's", "Morrisons"
+        ];
+
         const messages = [];
+        const messageTemplates = [
+            "Your verification code is {code}. Do not share this code.",
+            "New notification from {platform}: {content}. Check it now!",
+            "Your {platform} account security code is {code}. Use it to log in.",
+            "A new message from {platform}: '{content}'.",
+            "Important update from {platform}: {content}.",
+            "Your {platform} password reset code is {code}.",
+            "You have a new alert from {platform}: {content}.",
+            "Reminder from {platform}: {content}."
+        ];
+
         for (let i = 0; i < 8; i++) { // 8টি মেসেজ তৈরি করুন
             const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+            const randomTemplate = messageTemplates[Math.floor(Math.random() * messageTemplates.length)];
+            const code = Math.floor(100000 + Math.random() * 900000);
             const timeAgo = `${Math.floor(Math.random() * 24) + 1} hours ago`;
+            
+            let content = "";
+            if (randomTemplate.includes("{code}")) {
+                content = randomTemplate.replace("{code}", code);
+            } else {
+                const genericContents = [
+                    "Your order has shipped.",
+                    "You have a new friend request.",
+                    "Someone liked your post.",
+                    "New trending topic.",
+                    "Your bill is due soon.",
+                    "Security alert: unusual activity detected.",
+                    "Your appointment is confirmed.",
+                    "New video uploaded by your favorite creator."
+                ];
+                content = randomTemplate.replace("{content}", genericContents[Math.floor(Math.random() * genericContents.length)]);
+            }
+            content = content.replace("{platform}", randomPlatform); // প্ল্যাটফর্ম প্রতিস্থাপন করুন
+
             messages.push({
                 from: randomPlatform,
-                content: `Your verification code for ${randomPlatform} is ${Math.floor(100000 + Math.random() * 900000)}. Do not share this code.`,
+                content: content,
                 time: timeAgo
             });
         }
         return messages;
     }
-
-    // var currentNumber = ''; // বর্তমানে প্রদর্শিত নম্বরের জন্য স্টোর করুন - এটি গ্লোবালি উপরে একবারই ঘোষিত হয়েছে।
 
     /**
      * প্রদত্ত নম্বরের জন্য মেসেজ রেন্ডার করে।
@@ -450,7 +490,7 @@
       const messages = ukNumbersData[number]; // নম্বরের জন্য মেসেজ পান
 
       if (messages.length === 0) {
-        messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">এই নম্বরের জন্য কোনো মেসেজ পাওয়া যায়নি।</p>';
+        messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">No messages found for this number.</p>';
         return;
       }
 
@@ -478,13 +518,22 @@
       const refreshButtonText = document.getElementById('refreshButtonText');
       const loadingSpinner = document.getElementById('loadingSpinner');
 
-      refreshButtonText.textContent = 'রিফ্রেশ হচ্ছে...';
+      refreshButtonText.textContent = 'Refreshing...'; // Changed to English
       loadingSpinner.classList.remove('hidden');
 
       // API কল বিলম্ব অনুকরণ করুন
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      const platforms = ["YouTube", "TikTok", "Instagram", "Facebook", "Twitter", "Google", "WhatsApp", "Amazon"];
+      // ৫০টি ভিন্ন প্ল্যাটফর্মের তালিকা
+      const platforms = [
+            "YouTube", "TikTok", "Instagram", "Facebook", "Twitter", "Google", "WhatsApp", "Amazon",
+            "Netflix", "Spotify", "PayPal", "eBay", "LinkedIn", "Snapchat", "Pinterest", "Reddit",
+            "Discord", "Telegram", "Viber", "Skype", "Zoom", "Microsoft", "Apple", "Uber",
+            "Lyft", "Airbnb", "Booking.com", "TripAdvisor", "Deliveroo", "Just Eat", "Revolut", "Monzo",
+            "Barclays", "HSBC", "Lloyds Bank", "NatWest", "Santander", "Nationwide", "Tesco Mobile", "EE",
+            "Vodafone", "O2", "Three", "BT", "Sky", "Virgin Media", "NHS", "Gov.uk",
+            "Royal Mail", "DPD", "Hermes", "Evri", "Asda", "Tesco", "Sainsbury's", "Morrisons"
+        ];
       const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
 
       // একটি র্যান্ডম প্ল্যাটফর্মের উপর ভিত্তি করে ডামি নতুন মেসেজ
@@ -505,7 +554,7 @@
       // তালিকার শীর্ষে নতুন মেসেজ যোগ করুন
       messagesList.insertAdjacentHTML('afterbegin', messageHtml);
 
-      refreshButtonText.textContent = 'মেসেজ রিফ্রেশ করুন';
+      refreshButtonText.textContent = 'Refresh Messages'; // Changed to English
       loadingSpinner.classList.add('hidden');
     }
 
@@ -534,12 +583,12 @@
             copyButton.classList.remove('copied');
           }, 1500); // 1.5 সেকেন্ড পরে 'copied' ক্লাস সরান
         } else {
-          console.error('execCommand ব্যবহার করে টেক্সট কপি করতে ব্যর্থ হয়েছে।');
-          // ঐচ্ছিকভাবে, ব্যবহারকারীকে কপি করতে ব্যর্থ হওয়ার কথা জানান
+          console.error('Failed to copy text using execCommand.');
+          // Optionally, inform the user that copying failed
         }
       } catch (err) {
-        console.error('টেক্সট কপি করার চেষ্টা করতে ত্রুটি:', err);
-        // ঐচ্ছিকভাবে, ব্যবহারকারীকে কপি করতে ব্যর্থ হওয়ার কথা জানান
+        console.error('Error attempting to copy text:', err);
+        // Optionally, inform the user that copying failed
       }
       document.body.removeChild(textArea);
     }
@@ -549,7 +598,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       // URL থেকে নম্বর পান, না পাওয়া গেলে প্রথম নম্বরে ডিফল্ট করুন
-      // currentNumber = urlParams.get('number') || '+44 7537-150-101'; // এটি গ্লোবালি var দিয়ে ঘোষিত হয়েছে, তাই এখানে const বা let ব্যবহার করা যাবে না।
       currentNumber = urlParams.get('number') || '+44 7537-150-101'; // এখানে শুধু অ্যাসাইনমেন্ট
 
       document.getElementById('current-number-display').textContent = currentNumber;
