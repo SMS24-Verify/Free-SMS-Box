@@ -162,7 +162,7 @@
       }
     };
 
-    // Function to load ads into their respective containers based on current page
+    // Function to load ads into their respective containers
     function loadAds() {
       const nativeAdSlotContainer = document.getElementById('native-ad-slot');
       const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
@@ -195,6 +195,7 @@
             currentAdConfig = adConfigs.banner468x60;
             break;
           default:
+            // For pages beyond 5 or if no specific ad is defined, keep it empty
             currentAdConfig = null;
             break;
         }
