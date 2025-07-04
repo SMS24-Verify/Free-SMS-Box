@@ -117,15 +117,15 @@
 
     <!-- Gemini API Feature: SMS Content Suggestion -->
     <div class="bg-white p-6 rounded-xl shadow-lg my-10">
-      <h4 class="text-2xl font-bold text-gray-800 mb-4 text-center">✨ SMS ড্রাফট করুন (AI-Powered)</h4>
-      <p class="text-gray-600 mb-4 text-center">আপনার SMS বার্তার জন্য একটি ধারণা লিখুন এবং AI কে একটি ড্রাফট তৈরি করতে দিন।</p>
-      <textarea id="smsPrompt" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" rows="3" placeholder="যেমন: 'ভেরিফিকেশন কোড চাই', 'মিটিং রিমাইন্ডার', 'দ্রুত উত্তর'"></textarea>
+      <h4 class="text-2xl font-bold text-gray-800 mb-4 text-center">✨ Draft SMS (AI-Powered)</h4>
+      <p class="text-gray-600 mb-4 text-center">Write an idea for your SMS message and let AI draft it.</p>
+      <textarea id="smsPrompt" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" rows="3" placeholder="e.g., 'Need verification code', 'Meeting reminder', 'Quick reply'"></textarea>
       <button onclick="generateSmsDraft()" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition-colors flex items-center justify-center">
-        <span id="generateButtonText">✨ SMS ড্রাফট করুন</span>
+        <span id="generateButtonText">✨ Draft SMS</span>
         <span id="loadingSpinner" class="loading-spinner hidden"></span>
       </button>
       <div id="smsOutput" class="mt-6 p-4 bg-gray-100 rounded-md text-gray-800 border border-gray-200 hidden">
-        <p class="font-semibold mb-2">জেনারেটেড SMS:</p>
+        <p class="font-semibold mb-2">Generated SMS:</p>
         <p id="smsContent"></p>
       </div>
       <div id="errorMessage" class="mt-4 p-3 bg-red-100 text-red-700 rounded-md hidden"></div>
@@ -191,12 +191,16 @@
       }
     };
 
-    // Function to create and load an ad within an iframe
+    /**
+     * Loads an advertisement within an iframe to isolate its scripts and prevent layout shifts.
+     * @param {string} containerId - The ID of the HTML element where the iframe will be appended.
+     * @param {object} adConfig - Configuration object for the ad (contains scripts/divs for native, or key/dimensions for others).
+     */
     function loadAdInIframe(containerId, adConfig) {
       const container = document.getElementById(containerId);
       if (!container) return;
 
-      // Clear existing iframe if any
+      // Clear existing iframe if any to ensure a fresh load
       container.innerHTML = '';
 
       const iframe = document.createElement('iframe');
@@ -204,15 +208,16 @@
       iframe.style.height = `${adConfig.height}px`; // Set specific height for the iframe
       iframe.style.border = 'none';
       iframe.style.overflow = 'hidden';
-      iframe.scrolling = 'no';
+      iframe.scrolling = 'no'; // Disable scrolling inside iframe
       iframe.setAttribute('loading', 'lazy'); // Add lazy loading for better performance
 
       container.appendChild(iframe);
 
-      // Get the iframe's document
+      // Get the iframe's document to write content into it
       const iframeDoc = iframe.contentWindow.document;
 
-      // Write basic HTML structure
+      // Write basic HTML structure to the iframe's document
+      // This ensures a clean environment for ad scripts
       iframeDoc.open();
       iframeDoc.write(`
         <!DOCTYPE html>
@@ -225,11 +230,13 @@
         </body>
         </html>
       `);
-      iframeDoc.close(); // Close the document stream
+      iframeDoc.close(); // Close the document stream to allow scripts to execute
 
       const adContentWrapper = iframeDoc.getElementById('ad-content-wrapper');
 
-      if (adConfig.scripts) { // For native banner with direct scripts and divs
+      // Dynamically append scripts and divs to the iframe's document
+      // This method is more reliable for executing ad scripts within an iframe
+      if (adConfig.scripts) { // For native banner with direct scripts and divs arrays
         // Append divs first
         if (adConfig.divs) {
           adConfig.divs.forEach(divData => {
@@ -242,7 +249,7 @@
         // Load scripts dynamically to ensure execution
         adConfig.scripts.forEach(scriptData => {
           const script = iframeDoc.createElement('script');
-          script.type = 'text/javascript';
+          script.type = 'text/javascript'; // Default type for ad scripts
           if (scriptData.src) {
             script.src = scriptData.src;
             if (scriptData.async !== undefined) script.async = scriptData.async;
@@ -250,14 +257,14 @@
           } else if (scriptData.textContent) {
             script.textContent = scriptData.textContent;
           }
-          // Append to body for execution
+          // Append script to the iframe's body to ensure it gets parsed and executed
           iframeDoc.body.appendChild(script);
         });
 
-      } else if (adConfig.key) { // For other banners with key-based script
+      } else if (adConfig.key) { // For other banners with key-based script (e.g., HighPerformanceFormat)
         const scriptOptions = iframeDoc.createElement('script');
         scriptOptions.type = 'text/javascript';
-        // Using string concatenation for atOptions content to avoid template literal issues
+        // Constructing atOptions content using string concatenation to avoid parsing issues
         scriptOptions.textContent = "atOptions = {" +
           "'key' : '" + adConfig.key + "'," +
           "'format' : 'iframe'," +
@@ -274,12 +281,14 @@
       }
     }
 
-    // Function to load ads into their respective containers based on current page
+    /**
+     * Loads advertisements into their respective containers based on the current page.
+     */
     function loadAds() {
       const nativeAdSlotContainer = document.getElementById('native-ad-slot');
       const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
 
-      // Clear existing content in both slots
+      // Clear existing content in both slots to prepare for new ads
       if (nativeAdSlotContainer) {
         nativeAdSlotContainer.innerHTML = '';
       }
@@ -290,10 +299,10 @@
       // Logic for the top ad slot (native-ad-slot)
       if (nativeAdSlotContainer) {
         if (currentPage === 1) {
-          // For the first page, load the native banner using the iframe method
+          // For the first page, load the Native Banner
           loadAdInIframe('native-ad-slot', adConfigs.native);
         } else {
-          // For other pages, load the 728x90 banner using the iframe method
+          // For all other pages, load the 728x90 banner
           loadAdInIframe('native-ad-slot', adConfigs.banner728x90);
         }
       }
@@ -304,13 +313,16 @@
       }
     }
 
-    // Function to render numbers on the current page
+    /**
+     * Renders the numbers for the current page in the numbers container.
+     */
     function renderNumbers() {
-      const start = (currentPage - 1) * numbersPerPage; // Starting index for slice
-      const end = start + numbersPerPage; // Ending index for slice
+      const start = (currentPage - 1) * numbersPerPage; // Starting index for slicing the numbers array
+      const end = start + numbersPerPage; // Ending index for slicing
       const currentNumbers = numbers.slice(start, end);
 
       const numbersContainer = document.getElementById('numbers-container');
+      // Generate HTML for each number box and join them
       numbersContainer.innerHTML = currentNumbers.map(item => `
         <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
           <div class="flex items-center mb-4">
@@ -324,6 +336,9 @@
       `).join('');
     }
 
+    /**
+     * Navigates to the next page of numbers and reloads ads.
+     */
     function nextPage() {
       if (currentPage < Math.ceil(numbers.length / numbersPerPage)) {
         currentPage++;
@@ -333,6 +348,9 @@
       }
     }
 
+    /**
+     * Navigates to the previous page of numbers and reloads ads.
+     */
     function prevPage() {
       if (currentPage > 1) {
         currentPage--;
@@ -342,7 +360,10 @@
       }
     }
 
-    // Gemini API Integration for SMS Drafting
+    /**
+     * Gemini API Integration for SMS Drafting.
+     * Generates an SMS draft based on user prompt using Google's Gemini API.
+     */
     async function generateSmsDraft() {
       const smsPrompt = document.getElementById('smsPrompt').value;
       const smsOutputDiv = document.getElementById('smsOutput');
@@ -358,18 +379,18 @@
       errorMessageDiv.textContent = '';
 
       if (!smsPrompt.trim()) {
-        errorMessageDiv.textContent = 'অনুগ্রহ করে SMS বার্তার জন্য একটি ধারণা লিখুন।';
+        errorMessageDiv.textContent = 'Please enter an idea for the SMS message.';
         errorMessageDiv.classList.remove('hidden');
         return;
       }
 
       // Show loading indicator
-      generateButtonText.textContent = 'জেনারেট হচ্ছে...';
+      generateButtonText.textContent = 'Generating...';
       loadingSpinner.classList.remove('hidden');
 
       try {
         let chatHistory = [];
-        chatHistory.push({ role: "user", parts: [{ text: `একটি সংক্ষিপ্ত SMS বার্তা ড্রাফট করুন যা নিম্নলিখিত ধারণার উপর ভিত্তি করে: "${smsPrompt}"। শুধুমাত্র SMS বার্তাটি দিন, কোনো অতিরিক্ত ব্যাখ্যা বা ভূমিকা নয়।` }] });
+        chatHistory.push({ role: "user", parts: [{ text: `Draft a concise SMS message based on the following idea: "${smsPrompt}". Provide only the SMS message, no additional explanations or introductions.` }] });
         const payload = { contents: chatHistory };
         const apiKey = ""; // Canvas will automatically provide the API key
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -389,17 +410,17 @@
           smsContentP.textContent = text;
           smsOutputDiv.classList.remove('hidden');
         } else {
-          errorMessageDiv.textContent = 'SMS ড্রাফট তৈরি করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
+          errorMessageDiv.textContent = 'Failed to generate SMS draft. Please try again.';
           errorMessageDiv.classList.remove('hidden');
           console.error("Gemini API response structure unexpected:", result);
         }
       } catch (error) {
-        errorMessageDiv.textContent = 'API কল করতে সমস্যা হয়েছে: ' + error.message;
+        errorMessageDiv.textContent = 'Error calling API: ' + error.message;
         errorMessageDiv.classList.remove('hidden');
         console.error("Error calling Gemini API:", error);
       } finally {
         // Hide loading indicator
-        generateButtonText.textContent = '✨ SMS ড্রাফট করুন';
+        generateButtonText.textContent = '✨ Draft SMS';
         loadingSpinner.classList.add('hidden');
       }
     }
