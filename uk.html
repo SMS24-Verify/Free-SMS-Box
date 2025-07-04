@@ -159,12 +159,7 @@
         height: 60,
         width: 468
       },
-      banner728x90_1: { // First 728x90 banner
-        key: 'dba9c0c7da688537036a970dd8eb8984',
-        height: 90,
-        width: 728
-      },
-      banner728x90_2: { // Second 728x90 banner (same key, different instance)
+      banner728x90: { // Consolidated 728x90 banner
         key: 'dba9c0c7da688537036a970dd8eb8984',
         height: 90,
         width: 728
@@ -264,19 +259,14 @@
           currentAdConfigForNativeSlot = adConfigs.native;
           break;
         case 2:
-          currentAdConfigForNativeSlot = adConfigs.banner320x50;
-          break;
         case 3:
-          currentAdConfigForNativeSlot = adConfigs.banner468x60;
-          break;
         case 4:
-          currentAdConfigForNativeSlot = adConfigs.banner728x90_1; // First 728x90 banner
-          break;
         case 5:
-          currentAdConfigForNativeSlot = adConfigs.banner728x90_2; // Second 728x90 banner
+          // For pages 2-5, use the single 728x90 banner
+          currentAdConfigForNativeSlot = adConfigs.banner728x90;
           break;
         default:
-          currentAdConfigForNativeSlot = null;
+          currentAdConfigForNativeSlot = null; // No ad for pages beyond 5
           break;
       }
 
