@@ -194,10 +194,51 @@
 
   <script>
     const numbers = [];
-    // Generate 60 dummy UK numbers to ensure 5 pages (60 / 12 = 5)
-    for (let i = 1; i <= 60; i++) {
-      numbers.push({ num: `+44 7537-150-${100 + i}`, flagUrl: 'https://flagcdn.com/gb.svg', country: 'UK' });
+
+    // Function to generate a random number of specified length
+    function getRandomNumber(length) {
+      let result = '';
+      const characters = '0123456789';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        // Ensure first digit is not 0 or 1 for realism in UK numbers (e.g., 07XXX)
+        if (i === 0 && length === 3) { // For the first part of the number
+          result += characters.charAt(Math.floor(Math.random() * (charactersLength - 2)) + 2); // Starts from 2 (for '2' to '9')
+        } else {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+      }
+      return result;
     }
+
+    // Generate 60 unique dummy UK numbers
+    const generatedNumbers = new Set();
+    while (generatedNumbers.size < 60) {
+      const part1 = getRandomNumber(3); // e.g., 7XX
+      const part2 = getRandomNumber(3); // e.g., XXX
+      const part3 = getRandomNumber(4); // e.g., XXXX
+      // Changed format to remove brackets and hyphen
+      const fullNumber = `+44 ${part1} ${part2} ${part3}`;
+      generatedNumbers.add(fullNumber);
+    }
+
+    // Convert Set to Array and populate the 'numbers' array
+    numbers.push(...Array.from(generatedNumbers).map(num => ({
+      num: num,
+      flagUrl: 'https://flagcdn.com/gb.svg', // UK flag
+      country: 'UK'
+    })));
+
+    // Function to shuffle an array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+      }
+    }
+
+    // Shuffle the numbers array initially
+    shuffleArray(numbers);
 
     let currentPage = 1;
     const numbersPerPage = 12; // Display 12 numbers per page
@@ -242,7 +283,7 @@
       const iframes = []; // Keep track of created iframes
 
       // For native ads, we need to create multiple iframes, one for each ad
-      // This loop will now run only once for the 'native' adConfig as it has only one script/div.
+      // This loop will now run only only once for the 'native' adConfig as it has only one script/div.
       if (adConfig.scripts && adConfig.divs && containerId === 'native-ad-slot') {
         adConfig.divs.forEach((divData, index) => {
           const iframe = document.createElement('iframe');
