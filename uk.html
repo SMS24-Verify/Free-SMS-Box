@@ -10,10 +10,10 @@
     /* Custom styles for the app */
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f3f4f6; /* Light gray background */
+      background-color: #f3f4f6; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
     }
     .header-bg {
-      background-color: #1a73e8; /* Google Blue */
+      background-color: #1a73e8; /* গুগল ব্লু */
     }
     .nav-bg {
       background-color: #333;
@@ -26,35 +26,35 @@
       box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     }
     .receive-button {
-      background-color: #28a745; /* Green */
+      background-color: #28a745; /* সবুজ */
       transition: background-color 0.2s ease-in-out;
     }
     .receive-button:hover {
       background-color: #218838;
     }
     .pagination-button {
-      background-color: #4a5568; /* Dark gray */
+      background-color: #4a5568; /* গাঢ় ধূসর */
       transition: background-color 0.2s ease-in-out;
     }
     .pagination-button:hover {
       background-color: #2d3748;
     }
-    /* Ad containers - to collapse when empty */
+    /* Ad containers - বিজ্ঞাপনের জন্য কন্টেইনার - খালি থাকলে সংকুচিত হবে */
     .ad-slot {
       display: flex;
       justify-content: center;
       align-items: flex-start;
       text-align: center;
       width: 100%;
-      /* Transition for smooth collapse/expand */
+      /* মসৃণ সংকোচন/প্রসারণের জন্য ট্রানজিশন */
       transition: max-height 0.5s ease-out, opacity 0.5s ease-out, margin 0.5s ease-out;
-      overflow: hidden; /* Hide overflow during collapse */
-      max-height: 500px; /* Max height when ads are present */
+      overflow: hidden; /* সংকোচনের সময় ওভারফ্লো লুকান */
+      max-height: 500px; /* বিজ্ঞাপন উপস্থিত থাকলে সর্বোচ্চ উচ্চতা */
       opacity: 1;
       margin-top: 20px;
       margin-bottom: 20px;
     }
-    /* State for collapsed ad slot */
+    /* সংকুচিত বিজ্ঞাপনের স্লটের অবস্থা */
     .ad-slot.collapsed {
       max-height: 0;
       margin-top: 0;
@@ -64,28 +64,28 @@
 
     .ad-slot iframe {
       border: none;
-      display: block; /* Ensure it behaves like a block element */
-      overflow: hidden; /* Hide overflow within iframe */
-      /* Initial state for iframe, will be adjusted by JS */
+      display: block; /* এটি একটি ব্লক উপাদান হিসাবে কাজ করে তা নিশ্চিত করুন */
+      overflow: hidden; /* আইফ্রেমের মধ্যে ওভারফ্লো লুকান */
+      /* আইফ্রেমের প্রাথমিক অবস্থা, JS দ্বারা সামঞ্জস্য করা হবে */
       width: 1px;
       height: 1px;
       opacity: 0;
       transition: width 0.5s ease-out, height 0.5s ease-out, opacity 0.5s ease-out;
     }
 
-    /* Specific styling for the native ad grid container */
+    /* নেটিভ বিজ্ঞাপন গ্রিড কন্টেইনারের জন্য নির্দিষ্ট স্টাইলিং */
     #native-ad-slot.grid-container {
       display: grid;
-      /* Adjusted to support a single ad, but can still flex for multiple if needed */
+      /* একক বিজ্ঞাপনকে সমর্থন করার জন্য সামঞ্জস্য করা হয়েছে, তবে প্রয়োজনে একাধিকের জন্য ফ্লেক্স করতে পারে */
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem; /* Space between ads */
-      justify-items: center; /* Center ads within their grid cells */
+      gap: 1rem; /* বিজ্ঞাপনের মধ্যে স্থান */
+      justify-items: center; /* তাদের গ্রিড সেলের মধ্যে বিজ্ঞাপনগুলিকে কেন্দ্র করুন */
       align-items: flex-start;
     }
-    /* For native ad iframes within the grid */
+    /* গ্রিডের মধ্যে নেটিভ বিজ্ঞাপন আইফ্রেমের জন্য */
     #native-ad-slot.grid-container iframe {
-        width: 1px; /* Initial small width */
-        height: 1px; /* Initial small height */
+        width: 1px; /* প্রাথমিক ছোট প্রস্থ */
+        height: 1px; /* প্রাথমিক ছোট উচ্চতা */
         opacity: 0;
     }
 
@@ -116,9 +116,9 @@
     }
   </style>
 
-  <!-- Popunder Adsterra Code (Moved to head for quicker loading) -->
+  <!-- Popunder Adsterra Code (দ্রুত লোডিংয়ের জন্য হেডে স্থানান্তরিত) -->
   <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
-  <!-- End Popunder Adsterra Code -->
+  <!-- Popunder Adsterra Code শেষ -->
 
 </head>
 <body class="min-h-screen flex flex-col">
@@ -136,75 +136,70 @@
   </nav>
 
   <main class="flex-grow container mx-auto p-6">
-    <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">📱 Choose a Temporary Number for UK</h3>
+    <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">📱 ইউকের জন্য একটি অস্থায়ী নম্বর নির্বাচন করুন</h3>
 
-    <!-- Adsterra Native Banner (Above the numbers container) -->
-    <!-- This slot is now configured to load the specific Adsterra ad provided by the user. -->
+    <!-- Adsterra Native Banner (নম্বর কন্টেইনারের উপরে) -->
+    <!-- এই স্লটটি এখন ব্যবহারকারী দ্বারা প্রদত্ত নির্দিষ্ট Adsterra বিজ্ঞাপন লোড করার জন্য কনফিগার করা হয়েছে। -->
     <div id="native-ad-slot" class="ad-slot mx-auto grid-container">
-      <!-- Ad Code will be inserted here by JavaScript -->
+      <!-- বিজ্ঞাপন কোড এখানে জাভাস্ক্রিপ্ট দ্বারা সন্নিবেশিত হবে -->
     </div>
-    <!-- End Adsterra Native Banner -->
+    <!-- Adsterra Native Banner শেষ -->
 
     <!-- Numbers Container -->
     <div id="numbers-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 my-10">
-      <!-- Numbers will be rendered here by JavaScript -->
+      <!-- নম্বরগুলি এখানে জাভাস্ক্রিপ্ট দ্বারা রেন্ডার করা হবে -->
     </div>
 
-    <!-- Gemini API Feature: SMS Content Suggestion -->
+    <!-- Gemini API Feature: SMS বিষয়বস্তু প্রস্তাবনা -->
     <div class="bg-white p-6 rounded-xl shadow-lg my-10">
-      <h4 class="text-2xl font-bold text-gray-800 mb-4 text-center">✨ Draft SMS (AI-Powered)</h4>
-      <p class="text-gray-600 mb-4 text-center">Write an idea for your SMS message and let AI draft it.</p>
-      <textarea id="smsPrompt" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" rows="3" placeholder="e.g., 'Need verification code', 'Meeting reminder', 'Quick reply'"></textarea>
+      <h4 class="text-2xl font-bold text-gray-800 mb-4 text-center">✨ SMS ড্রাফ্ট করুন (AI-চালিত)</h4>
+      <p class="text-gray-600 mb-4 text-center">আপনার SMS বার্তার জন্য একটি ধারণা লিখুন এবং AI কে এটি ড্রাফ্ট করতে দিন।</p>
+      <textarea id="smsPrompt" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" rows="3" placeholder="যেমন, 'যাচাইকরণ কোড প্রয়োজন', 'মিটিং রিমাইন্ডার', 'দ্রুত উত্তর'"></textarea>
       <button onclick="generateSmsDraft()" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition-colors flex items-center justify-center">
-        <span id="generateButtonText">✨ Draft SMS</span>
+        <span id="generateButtonText">✨ SMS ড্রাফ্ট করুন</span>
         <span id="loadingSpinner" class="loading-spinner hidden"></span>
       </button>
       <div id="smsOutput" class="mt-6 p-4 bg-gray-100 rounded-md text-gray-800 border border-gray-200 hidden">
-        <p class="font-semibold mb-2">Generated SMS:</p>
+        <p class="font-semibold mb-2">জেনারেট করা SMS:</p>
         <p id="smsContent"></p>
       </div>
       <div id="errorMessage" class="mt-4 p-3 bg-red-100 text-red-700 rounded-md hidden"></div>
     </div>
 
-    <!-- Adsterra Banner 300x250 (Below the numbers) -->
-    <div id="banner-300x250-ad-slot" class="ad-slot mx-auto">
-      <!-- Iframe for Banner 300x250 Ad Code will be inserted here by JavaScript -->
-    </div>
-
-    <!-- Direct Link Text Below Banner -->
+    <!-- Direct Link Text Below Numbers -->
     <div class="direct-link-container">
       <p>
         <a href="https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6" target="_blank">
-          Click here to see our other services!
+          আমাদের অন্যান্য পরিষেবা দেখতে এখানে ক্লিক করুন!
         </a>
       </p>
     </div>
 
     <!-- Pagination Buttons -->
     <div class="flex justify-center space-x-4 mt-10">
-      <button onclick="prevPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Previous</button>
-      <button onclick="nextPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Next</button>
+      <button onclick="prevPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">পূর্ববর্তী</button>
+      <button onclick="nextPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">পরবর্তী</button>
     </div>
   </main>
 
   <!-- Footer Section -->
   <footer class="bg-gray-800 text-white p-6 text-center text-sm mt-10 rounded-t-lg shadow-md">
-    &copy; 2025 Free SMS Box. All rights reserved.
+    &copy; 2025 Free SMS Box. সর্বস্বত্ব সংরক্ষিত।
   </footer>
 
   <script>
     const numbers = [];
-    // Generate 60 dummy UK numbers to ensure 5 pages (60 / 12 = 5)
+    // 5টি পৃষ্ঠা নিশ্চিত করতে 60টি ডামি UK নম্বর তৈরি করুন (60 / 12 = 5)
     for (let i = 1; i <= 60; i++) {
       numbers.push({ num: `+44 7537-150-${100 + i}`, flagUrl: 'https://flagcdn.com/gb.svg', country: 'UK' });
     }
 
     let currentPage = 1;
-    const numbersPerPage = 12; // Display 12 numbers per page
+    const numbersPerPage = 12; // প্রতি পৃষ্ঠায় 12টি নম্বর প্রদর্শন করুন
 
-    // Define ad configurations
+    // বিজ্ঞাপনের কনফিগারেশন সংজ্ঞায়িত করুন
     const adConfigs = {
-      // Updated native ad configuration to use the specific ad code provided by the user
+      // ব্যবহারকারী দ্বারা প্রদত্ত নির্দিষ্ট বিজ্ঞাপন কোড ব্যবহার করার জন্য নেটিভ বিজ্ঞাপনের কনফিগারেশন আপডেট করা হয়েছে
       native: {
         scripts: [
           { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' }
@@ -212,47 +207,37 @@
         divs: [
           { id: 'container-36c71a4fca369dbf689c31baada8259d' }
         ],
-        // These dimensions are approximate; the ad itself will determine its final size.
-        height: 250,
-        width: 300
-      },
-      banner728x90: { // Consolidated 728x90 banner (used on pages other than the first)
-        key: 'dba9c0c7da688537036a970dd8eb8984',
-        height: 90,
-        width: 728
-      },
-      banner300x250: { // Consistent 300x250 banner (at the bottom)
-        key: 'a9e0e31759b1f80164727452baf12b70',
+        // এই মাত্রাগুলি আনুমানিক; বিজ্ঞাপন নিজেই তার চূড়ান্ত আকার নির্ধারণ করবে।
         height: 250,
         width: 300
       }
     };
 
     /**
-     * Loads an advertisement within an iframe to isolate its scripts and prevent layout shifts.
-     * @param {string} containerId - The ID of the HTML element where the iframe will be appended.
-     * @param {object} adConfig - Configuration object for the ad (contains scripts/divs for native, or key/dimensions for others).
+     * একটি আইফ্রেমের মধ্যে একটি বিজ্ঞাপন লোড করে এর স্ক্রিপ্টগুলিকে আলাদা করতে এবং লেআউট শিফট প্রতিরোধ করতে।
+     * @param {string} containerId - HTML উপাদানের আইডি যেখানে আইফ্রেম যুক্ত করা হবে।
+     * @param {object} adConfig - বিজ্ঞাপনের জন্য কনফিগারেশন অবজেক্ট (নেটিভের জন্য স্ক্রিপ্ট/ডিভ বা অন্যগুলির জন্য কী/মাত্রা রয়েছে)।
      */
     function loadAdInIframe(containerId, adConfig) {
       const container = document.getElementById(containerId);
       if (!container) return;
 
-      // Ensure the parent container is not collapsed initially
+      // নিশ্চিত করুন যে প্যারেন্ট কন্টেইনার প্রাথমিকভাবে সংকুচিত নয়
       container.classList.remove('collapsed');
 
-      // Clear existing iframe if any to ensure a fresh load
+      // একটি নতুন লোড নিশ্চিত করতে বিদ্যমান আইফ্রেম (যদি থাকে) সাফ করুন
       container.innerHTML = '';
 
-      const iframes = []; // Keep track of created iframes
+      const iframes = []; // তৈরি করা আইফ্রেমগুলির ট্র্যাক রাখুন
 
-      // For native ads, we need to create multiple iframes, one for each ad
-      // This loop will now run only once for the 'native' adConfig as it has only one script/div.
+      // নেটিভ বিজ্ঞাপনের জন্য, আমাদের একাধিক আইফ্রেম তৈরি করতে হবে, প্রতিটি বিজ্ঞাপনের জন্য একটি।
+      // এই লুপটি এখন 'native' adConfig-এর জন্য শুধুমাত্র একবার চলবে কারণ এতে শুধুমাত্র একটি স্ক্রিপ্ট/ডিভ রয়েছে।
       if (adConfig.scripts && adConfig.divs && containerId === 'native-ad-slot') {
         adConfig.divs.forEach((divData, index) => {
           const iframe = document.createElement('iframe');
-          iframe.style.width = '1px'; // Start with minimal size
+          iframe.style.width = '1px'; // ন্যূনতম আকার দিয়ে শুরু করুন
           iframe.style.height = '1px';
-          iframe.style.opacity = '0'; // Hide initially
+          iframe.style.opacity = '0'; // প্রাথমিকভাবে লুকান
           iframe.style.border = 'none';
           iframe.style.overflow = 'hidden';
           iframe.scrolling = 'no';
@@ -260,7 +245,7 @@
           iframe.classList.add('native-ad-iframe');
 
           container.appendChild(iframe);
-          iframes.push(iframe); // Add to tracking array
+          iframes.push(iframe); // ট্র্যাকিং অ্যারেতে যোগ করুন
 
           const iframeDoc = iframe.contentWindow.document;
           iframeDoc.open();
@@ -279,7 +264,7 @@
 
           const adDiv = iframeDoc.getElementById(divData.id);
 
-          // Append the corresponding script for this native ad
+          // এই নেটিভ বিজ্ঞাপনের জন্য সংশ্লিষ্ট স্ক্রিপ্ট যুক্ত করুন
           const scriptData = adConfig.scripts[index];
           if (scriptData) {
             const script = iframeDoc.createElement('script');
@@ -294,18 +279,18 @@
             iframeDoc.body.appendChild(script);
           }
         });
-      } else { // For single banner ads (728x90, 300x250)
+      } else { // একক ব্যানার বিজ্ঞাপনের জন্য (যেমন 728x90, 300x250) - এই অংশটি এখন ব্যবহৃত হবে না
         const iframe = document.createElement('iframe');
-        iframe.style.width = '1px'; // Start with minimal size
+        iframe.style.width = '1px'; // ন্যূনতম আকার দিয়ে শুরু করুন
         iframe.style.height = '1px';
-        iframe.style.opacity = '0'; // Hide initially
+        iframe.style.opacity = '0'; // প্রাথমিকভাবে লুকান
         iframe.style.border = 'none';
         iframe.style.overflow = 'hidden';
         iframe.scrolling = 'no';
         iframe.setAttribute('loading', 'lazy');
 
         container.appendChild(iframe);
-        iframes.push(iframe); // Add to tracking array
+        iframes.push(iframe); // ট্র্যাকিং অ্যারেতে যোগ করুন
 
         const iframeDoc = iframe.contentWindow.document;
         iframeDoc.open();
@@ -324,7 +309,7 @@
 
         const adContentWrapper = iframeDoc.getElementById('ad-content-wrapper');
 
-        if (adConfig.key) { // For banners with key-based script
+        if (adConfig.key) { // কী-ভিত্তিক স্ক্রিপ্ট সহ ব্যানারগুলির জন্য
           const scriptOptions = iframeDoc.createElement('script');
           scriptOptions.type = 'text/javascript';
           scriptOptions.textContent = "atOptions = {" +
@@ -343,126 +328,110 @@
         }
       }
 
-      // Check if ads have loaded after a delay
+      // একটি বিলম্বের পরে বিজ্ঞাপন লোড হয়েছে কিনা তা পরীক্ষা করুন
       setTimeout(() => {
         let anyAdLoaded = false;
         iframes.forEach(iframe => {
           try {
-            // Check if the iframe has gained significant height
-            // A common ad size is 250px or 90px. If scrollHeight is very small, it's likely blocked.
-            // We use contentWindow.document.body.scrollHeight to check content height within the iframe
-            if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body.scrollHeight > 50) { // Threshold for a loaded ad
+            // আইফ্রেম উল্লেখযোগ্য উচ্চতা লাভ করেছে কিনা তা পরীক্ষা করুন
+            // একটি সাধারণ বিজ্ঞাপনের আকার 250px বা 90px। যদি scrollHeight খুব ছোট হয়, তবে এটি সম্ভবত ব্লক করা হয়েছে।
+            // আমরা আইফ্রেমের মধ্যে বিষয়বস্তুর উচ্চতা পরীক্ষা করতে contentWindow.document.body.scrollHeight ব্যবহার করি
+            if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body.scrollHeight > 50) { // লোড হওয়া বিজ্ঞাপনের জন্য থ্রেশহোল্ড
               iframe.style.width = `${adConfig.width}px`;
               iframe.style.height = `${adConfig.height}px`;
-              iframe.style.opacity = '1'; // Make visible
+              iframe.style.opacity = '1'; // দৃশ্যমান করুন
               anyAdLoaded = true;
             } else {
-              // Ad blocked or failed to load, collapse this specific iframe
+              // বিজ্ঞাপন ব্লক করা হয়েছে বা লোড হতে ব্যর্থ হয়েছে, এই নির্দিষ্ট আইফ্রেমটি সংকুচিত করুন
               iframe.style.width = '0px';
               iframe.style.height = '0px';
               iframe.style.opacity = '0';
             }
           } catch (e) {
-            // Cross-origin error, likely ad blocked or failed to load
+            // ক্রস-অরিজিন ত্রুটি, সম্ভবত বিজ্ঞাপন ব্লক করা হয়েছে বা লোড হতে ব্যর্থ হয়েছে
             iframe.style.width = '0px';
             iframe.style.height = '0px';
             iframe.style.opacity = '0';
           }
         });
 
-        // If no ads loaded in this container, collapse the container itself
+        // যদি এই কন্টেইনারে কোনো বিজ্ঞাপন লোড না হয়, তবে কন্টেইনারটি নিজেই সংকুচিত করুন
         if (!anyAdLoaded) {
           container.classList.add('collapsed');
         } else {
           container.classList.remove('collapsed');
         }
-      }, 1500); // Give ads 1.5 seconds to load
+      }, 1500); // বিজ্ঞাপন লোড হওয়ার জন্য 1.5 সেকেন্ড সময় দিন
     }
 
     /**
-     * Loads advertisements into their respective containers based on the current page.
+     * বর্তমান পৃষ্ঠার উপর ভিত্তি করে বিজ্ঞাপনগুলিকে তাদের সংশ্লিষ্ট কন্টেইনারগুলিতে লোড করে।
      */
     function loadAds() {
       const nativeAdSlotContainer = document.getElementById('native-ad-slot');
-      const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
 
-      // Clear existing content in both slots to prepare for new ads
+      // নতুন বিজ্ঞাপনের জন্য প্রস্তুত করতে নেটিভ স্লটের বিদ্যমান বিষয়বস্তু সাফ করুন
       if (nativeAdSlotContainer) {
         nativeAdSlotContainer.innerHTML = '';
-        nativeAdSlotContainer.classList.add('collapsed'); // Collapse initially
-      }
-      if (banner300x250AdSlotContainer) {
-        banner300x250AdSlotContainer.innerHTML = '';
-        banner300x250AdSlotContainer.classList.add('collapsed'); // Collapse initially
+        nativeAdSlotContainer.classList.add('collapsed'); // প্রাথমিকভাবে সংকুচিত করুন
       }
 
-      // Logic for the top ad slot (native-ad-slot)
+      // উপরের বিজ্ঞাপন স্লটের জন্য যুক্তি (native-ad-slot) - সর্বদা নির্দিষ্ট নেটিভ বিজ্ঞাপন লোড করুন
       if (nativeAdSlotContainer) {
-        if (currentPage === 1) {
-          // For the first page, load the specific Native Banner provided by the user
-          loadAdInIframe('native-ad-slot', adConfigs.native);
-        } else {
-          // For all other pages, load the 728x90 banner
-          loadAdInIframe('native-ad-slot', adConfigs.banner728x90);
-        }
-      }
-
-      // Logic for the consistent 300x250 banner ad (bottom ad)
-      if (banner300x250AdSlotContainer) {
-        loadAdInIframe('banner-300x250-ad-slot', adConfigs.banner300x250);
+        loadAdInIframe('native-ad-slot', adConfigs.native);
       }
     }
 
     /**
-     * Renders the numbers for the current page in the numbers container.
+     * নম্বর কন্টেইনারে বর্তমান পৃষ্ঠার জন্য নম্বরগুলি রেন্ডার করে।
      */
     function renderNumbers() {
-      const start = (currentPage - 1) * numbersPerPage; // Starting index for slicing the numbers array
-      const end = start + numbersPerPage; // Ending index for slicing
+      const start = (currentPage - 1) * numbersPerPage; // নম্বর অ্যারে স্লাইস করার জন্য শুরুর সূচক
+      const end = start + numbersPerPage; // স্লাইস করার জন্য শেষের সূচক
       const currentNumbers = numbers.slice(start, end);
 
       const numbersContainer = document.getElementById('numbers-container');
-      // Generate HTML for each number box and join them
+      // প্রতিটি নম্বর বক্সের জন্য HTML তৈরি করুন এবং সেগুলিকে একত্রিত করুন
       numbersContainer.innerHTML = currentNumbers.map(item => `
         <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
           <div class="flex items-center mb-4">
-            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
+            <img src="${item.flagUrl}" alt="${item.country} এর পতাকা" class="w-10 h-6 rounded-md mr-3 shadow-sm">
             <span class="text-lg font-bold text-gray-800">${item.country}</span>
           </div>
           <div class="text-lg text-gray-600 mb-6">${item.num}</div>
-          <!-- Link to the new receive SMS page -->
-          <a href="receive_sms_uk.html" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Receive SMS</a>
+          <!-- নতুন SMS গ্রহণ পৃষ্ঠার লিঙ্ক -->
+          <a href="receive_sms_uk.html" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">SMS গ্রহণ করুন</a>
         </div>
       `).join('');
     }
 
     /**
-     * Navigates to the next page of numbers and reloads ads.
+     * নম্বরগুলির পরবর্তী পৃষ্ঠায় নেভিগেট করে এবং বিজ্ঞাপনগুলি পুনরায় লোড করে।
      */
     function nextPage() {
       if (currentPage < Math.ceil(numbers.length / numbersPerPage)) {
         currentPage++;
         renderNumbers();
-        loadAds(); // Reload ads on page change
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
+        loadAds(); // পৃষ্ঠা পরিবর্তনের সময় বিজ্ঞাপন পুনরায় লোড করুন
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // পৃষ্ঠা পরিবর্তনের সময় উপরে স্ক্রোল করুন
       }
     }
 
     /**
-     * Navigates to the previous page of numbers and reloads ads.
+     * নম্বরগুলির পূর্ববর্তী পৃষ্ঠায় নেভিগেট করে এবং বিজ্ঞাপনগুলি পুনরায় লোড করে।
      */
     function prevPage() {
       if (currentPage > 1) {
         currentPage--;
         renderNumbers();
-        loadAds(); // Reload ads on page change
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
+        loadAds(); // পৃষ্ঠা পরিবর্তনের সময় বিজ্ঞাপন পুনরায় লোড করুন
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // পৃষ্ঠা পরিবর্তনের সময় উপরে স্ক্রোল করুন
       }
     }
 
     /**
-     * Gemini API Integration for SMS Drafting.
-     * Generates an SMS draft based on user prompt using Google's Gemini API.
+     * SMS ড্রাফ্টিংয়ের জন্য Gemini API ইন্টিগ্রেশন।
+     * Google এর Gemini API ব্যবহার করে ব্যবহারকারীর প্রম্পটের উপর ভিত্তি করে একটি SMS ড্রাফ্ট তৈরি করে।
      */
     async function generateSmsDraft() {
       const smsPrompt = document.getElementById('smsPrompt').value;
@@ -472,27 +441,27 @@
       const generateButtonText = document.getElementById('generateButtonText');
       const loadingSpinner = document.getElementById('loadingSpinner');
 
-      // Clear previous output and errors
+      // পূর্ববর্তী আউটপুট এবং ত্রুটিগুলি সাফ করুন
       smsOutputDiv.classList.add('hidden');
       smsContentP.textContent = '';
       errorMessageDiv.classList.add('hidden');
       errorMessageDiv.textContent = '';
 
       if (!smsPrompt.trim()) {
-        errorMessageDiv.textContent = 'Please enter an idea for the SMS message.';
+        errorMessageDiv.textContent = 'অনুগ্রহ করে SMS বার্তার জন্য একটি ধারণা লিখুন।';
         errorMessageDiv.classList.remove('hidden');
         return;
       }
 
-      // Show loading indicator
-      generateButtonText.textContent = 'Generating...';
+      // লোডিং সূচক দেখান
+      generateButtonText.textContent = 'তৈরি হচ্ছে...';
       loadingSpinner.classList.remove('hidden');
 
       try {
         let chatHistory = [];
-        chatHistory.push({ role: "user", parts: [{ text: `Draft a concise SMS message based on the following idea: "${smsPrompt}". Provide only the SMS message, no additional explanations or introductions.` }] });
+        chatHistory.push({ role: "user", parts: [{ text: `নিম্নলিখিত ধারণার উপর ভিত্তি করে একটি সংক্ষিপ্ত SMS বার্তা ড্রাফ্ট করুন: "${smsPrompt}"। শুধুমাত্র SMS বার্তাটি প্রদান করুন, কোনো অতিরিক্ত ব্যাখ্যা বা ভূমিকা নয়।` }] });
         const payload = { contents: chatHistory };
-        const apiKey = ""; // Canvas will automatically provide the API key
+        const apiKey = ""; // ক্যানভাস স্বয়ংক্রিয়ভাবে API কী প্রদান করবে
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(apiUrl, {
@@ -510,31 +479,31 @@
           smsContentP.textContent = text;
           smsOutputDiv.classList.remove('hidden');
         } else {
-          errorMessageDiv.textContent = 'Failed to generate SMS draft. Please try again.';
+          errorMessageDiv.textContent = 'SMS ড্রাফ্ট তৈরি করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
           errorMessageDiv.classList.remove('hidden');
-          console.error("Gemini API response structure unexpected:", result);
+          console.error("Gemini API প্রতিক্রিয়ার কাঠামো অপ্রত্যাশিত:", result);
         }
       } catch (error) {
-        errorMessageDiv.textContent = 'Error calling API: ' + error.message;
+        errorMessageDiv.textContent = 'API কল করতে ত্রুটি: ' + error.message;
         errorMessageDiv.classList.remove('hidden');
-        console.error("Error calling Gemini API:", error);
+        console.error("Gemini API কল করতে ত্রুটি:", error);
       } finally {
-        // Hide loading indicator
-        generateButtonText.textContent = '✨ Draft SMS';
+        // লোডিং সূচক লুকান
+        generateButtonText.textContent = '✨ SMS ড্রাফ্ট করুন';
         loadingSpinner.classList.add('hidden');
       }
     }
 
-    // Initial render when the page loads
+    // পৃষ্ঠা লোড হওয়ার সময় প্রাথমিক রেন্ডার
     document.addEventListener('DOMContentLoaded', () => {
       renderNumbers();
-      loadAds(); // Load ads initially
+      loadAds(); // প্রাথমিকভাবে বিজ্ঞাপন লোড করুন
     });
   </script>
 
-  <!-- Social Bar Adsterra Code (usually placed at the end of body) -->
+  <!-- Social Bar Adsterra Code (সাধারণত বডির শেষে স্থাপন করা হয়) -->
   <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
-  <!-- End Social Bar Adsterra Code -->
+  <!-- Social Bar Adsterra Code শেষ -->
 
 </body>
 </html>
