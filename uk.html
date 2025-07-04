@@ -404,6 +404,16 @@
     }
 
     /**
+     * Attaches event listeners to all "Receive SMS" buttons.
+     */
+    function attachReceiveSmsListeners() {
+      document.querySelectorAll('.receive-button').forEach(button => {
+        button.removeEventListener('click', handleReceiveSmsClick); // Remove existing to prevent duplicates
+        button.addEventListener('click', handleReceiveSmsClick);
+      });
+    }
+
+    /**
      * Renders the numbers for the current page in the numbers container.
      */
     function renderNumbers() {
@@ -426,6 +436,10 @@
             <a href="#" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200" data-number="${item.num}">Receive SMS</a>
           </div>
         `).join('');
+        
+        // Re-attach event listeners after new elements are rendered
+        attachReceiveSmsListeners();
+
       } else {
         console.error("Error: 'numbers-container' element not found.");
       }
@@ -545,11 +559,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderNumbers();
       loadAds(); // Load ads initially
-
-      // Attach event listeners to all "Receive SMS" buttons after they are rendered
-      document.querySelectorAll('.receive-button').forEach(button => {
-        button.addEventListener('click', handleReceiveSmsClick);
-      });
     });
   </script>
 
