@@ -420,8 +420,8 @@
             <span class="text-lg font-bold text-gray-800">${item.country}</span>
           </div>
           <div class="text-lg text-gray-600 mb-6">${item.num}</div>
-          <!-- Link to the new receive SMS page -->
-          <a href="receive_sms_uk.html" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Receive SMS</a>
+          <!-- Link to the new receive SMS page with data-number attribute -->
+          <a href="#" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200" data-number="${item.num}">Receive SMS</a>
         </div>
       `).join('');
     }
@@ -515,10 +515,28 @@
       }
     }
 
+    // Handle click on "Receive SMS" button
+    function handleReceiveSmsClick(event) {
+      // Prevent the default link behavior
+      event.preventDefault();
+      const number = event.target.dataset.number;
+      
+      // Open the direct link in a new tab first
+      window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');
+      
+      // Then, navigate the current tab to the receive SMS page for the specific number
+      window.location.href = `receive_sms_uk.html?number=${encodeURIComponent(number)}`;
+    }
+
     // Initial render when the page loads
     document.addEventListener('DOMContentLoaded', () => {
       renderNumbers();
       loadAds(); // Load ads initially
+
+      // Attach event listeners to all "Receive SMS" buttons after they are rendered
+      document.querySelectorAll('.receive-button').forEach(button => {
+        button.addEventListener('click', handleReceiveSmsClick);
+      });
     });
   </script>
 
