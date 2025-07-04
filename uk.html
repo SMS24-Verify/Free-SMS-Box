@@ -129,54 +129,128 @@
     let currentPage = 1;
     const numbersPerPage = 12; // Display 12 numbers per page
 
-    // Function to load ads into their respective containers
+    // Define ad configurations
+    const adConfigs = {
+      native: {
+        id: 'container-36c71a4fca369dbf689c31baada8259d',
+        src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js'
+      },
+      banner320x50: {
+        key: 'e3e3696258d007a31d545486101e5406',
+        height: 50,
+        width: 320
+      },
+      banner160x600: {
+        key: '27984c69bad5cf21d1390d0c64807283',
+        height: 600,
+        width: 160
+      },
+      banner160x300: {
+        key: 'ac0cfbcdbe9cd63c0799c71d4f173135',
+        height: 300,
+        width: 160
+      },
+      banner468x60: {
+        key: 'c27fe934cdd274516e14f7e26821c75b',
+        height: 60,
+        width: 468
+      },
+      banner300x250: {
+        key: 'a9e0e31759b1f80164727452baf12b70',
+        height: 250,
+        width: 300
+      }
+    };
+
+    // Function to load ads into their respective containers based on current page
     function loadAds() {
-      // Native Banner Ad Reload
       const nativeAdSlotContainer = document.getElementById('native-ad-slot');
+      const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
+
+      // Clear existing ads in both slots to ensure a fresh load
       if (nativeAdSlotContainer) {
-        // Clear all existing children to ensure a fresh load
-        while (nativeAdSlotContainer.firstChild) {
-          nativeAdSlotContainer.removeChild(nativeAdSlotContainer.firstChild);
-        }
-
-        // Recreate and append the native banner ad elements
-        const script1 = document.createElement('script');
-        script1.async = true;
-        script1.dataset.cfasync = false;
-        script1.src = "//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js";
-        nativeAdSlotContainer.appendChild(script1);
-
-        const div1 = document.createElement('div');
-        div1.id = "container-36c71a4fca369dbf689c31baada8259d";
-        nativeAdSlotContainer.appendChild(div1);
+        nativeAdSlotContainer.innerHTML = '';
+      }
+      if (banner300x250AdSlotContainer) {
+        banner300x250AdSlotContainer.innerHTML = '';
       }
 
-      // Banner 300x250 Ad Reload
-      const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
-      if (banner300x250AdSlotContainer) {
-        // Clear all existing children to ensure a fresh load
-        while (banner300x250AdSlotContainer.firstChild) {
-          banner300x250AdSlotContainer.removeChild(banner300x250AdSlotContainer.firstChild);
+      // Load ads for nativeAdSlot based on current page
+      if (nativeAdSlotContainer) {
+        let currentAdConfig;
+        switch (currentPage) {
+          case 1:
+            currentAdConfig = adConfigs.native;
+            break;
+          case 2:
+            currentAdConfig = adConfigs.banner320x50;
+            break;
+          case 3:
+            currentAdConfig = adConfigs.banner160x600;
+            break;
+          case 4:
+            currentAdConfig = adConfigs.banner160x300;
+            break;
+          case 5:
+            currentAdConfig = adConfigs.banner468x60;
+            break;
+          default:
+            currentAdConfig = null;
+            break;
         }
 
-        // Recreate and append the banner 300x250 ad elements
-        const script2 = document.createElement('script');
-        script2.type = "text/javascript";
-        script2.innerHTML = `
+        if (currentAdConfig) {
+          if (currentAdConfig.src) { // This is for the native banner (Adsterra specific)
+            const script = document.createElement('script');
+            script.async = true;
+            script.dataset.cfasync = false;
+            script.src = currentAdConfig.src;
+            nativeAdSlotContainer.appendChild(script);
+
+            const div = document.createElement('div');
+            div.id = currentAdConfig.id;
+            nativeAdSlotContainer.appendChild(div);
+          } else if (currentAdConfig.key) { // This is for other banners (HighPerformanceFormat specific)
+            const scriptOptions = document.createElement('script');
+            scriptOptions.type = 'text/javascript';
+            scriptOptions.textContent = `
+              atOptions = {
+                'key' : '${currentAdConfig.key}',
+                'format' : 'iframe',
+                'height' : ${currentAdConfig.height},
+                'width' : ${currentAdConfig.width},
+                'params' : {}
+              };
+            `;
+            nativeAdSlotContainer.appendChild(scriptOptions);
+
+            const scriptInvoke = document.createElement('script');
+            scriptInvoke.type = 'text/javascript';
+            scriptInvoke.src = `//www.highperformanceformat.com/${currentAdConfig.key}/invoke.js`;
+            nativeAdSlotContainer.appendChild(scriptInvoke);
+          }
+        }
+      }
+
+      // Load the consistent 300x250 banner ad
+      if (banner300x250AdSlotContainer) {
+        const scriptOptions = document.createElement('script');
+        scriptOptions.type = 'text/javascript';
+        scriptOptions.textContent = `
           atOptions = {
-            'key' : 'a9e0e31759b1f80164727452baf12b70',
+            'key' : '${adConfigs.banner300x250.key}',
             'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
+            'height' : ${adConfigs.banner300x250.height},
+            'width' : ${adConfigs.banner300x250.width},
             'params' : {}
           };
         `;
-        banner300x250AdSlotContainer.appendChild(script2);
+        banner300x250AdSlotContainer.appendChild(scriptOptions);
 
-        const script3 = document.createElement('script');
-        script3.type = "text/javascript";
-        script3.src = "//www.highperformanceformat.com/a9e0e31759b1f80164727452baf12b70/invoke.js";
-        banner300x250AdSlotContainer.appendChild(script3);
+        const scriptInvoke = document.createElement('script');
+        scriptInvoke.type = 'text/javascript';
+        scriptInvoke.src = `//www.highperformanceformat.com/${adConfigs.banner300x250.key}/invoke.js`;
+        banner300x250AdSlotContainer.appendChild(scriptInvoke);
       }
     }
 
