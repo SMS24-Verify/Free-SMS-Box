@@ -409,38 +409,79 @@
     }
 
     // Pre-set India numbers with platform-specific dummy messages
-    const indiaNumbersData = {
-      "+91 98765 12345": [
-        { from: "Google", content: "Your OTP is 123456. Do not share this code.", time: "2 minutes ago" },
-        { from: "Hotstar", content: "Welcome to Hotstar! Your subscription is active.", time: "1 hour ago" },
-        { from: "Ola", content: "Your Ola ride is confirmed for tomorrow at 10 AM.", time: "3 hours ago" },
-        { from: "Flipkart", content: "Your order #7890 has been shipped.", time: "1 day ago" },
-        { from: "JioSaavn", content: "Reminder: Your JioSaavn Pro bill is due in 2 days.", time: "2 days ago" },
-        { from: "WhatsApp", content: "You have 1 new message from Priya.", time: "4 days ago" },
-        { from: "Instagram", content: "Someone liked your photo: 'Amazing click!'", time: "5 days ago" },
-        { from: "Twitter", content: "New trending topic: #CricketFever", time: "6 days ago" }
-      ],
-      "+91 87654 32109": [
-        { from: "Paytm", content: "Your temporary access code is 9876.", time: "5 minutes ago" },
-        { from: "PhonePe", content: "Your payment of ₹500 to XYZ Store is complete.", time: "30 minutes ago" },
-        { from: "Swiggy", content: "Your Swiggy order is out for delivery!", time: "4 hours ago" },
-        { from: "Zomato", content: "New restaurant added near you: 10% off!", time: "1 day ago" },
-        { from: "LinkedIn", content: "Rohan Sharma viewed your profile.", time: "2 days ago" },
-        { from: "Snapchat", content: "New snap from your friend!", time: "3 days ago" },
-        { from: "Myntra", content: "New arrivals! Get 30% off on your first order.", time: "4 days ago" },
-        { from: "Amazon Pay", content: "Your bill payment of ₹1500 is successful.", time: "5 days ago" }
-      ],
-      "+91 76543 98765": [
-        { from: "Telegram", content: "Registration confirmation. Thank you for joining!", time: "10 minutes ago" },
-        { from: "Google Pay", content: "Your password has been successfully reset.", time: "2 hours ago" },
-        { from: "Voot", content: "New episode of your favorite show is live!", time: "1 day ago" },
-        { from: "Airtel", content: "Your data pack is expiring soon. Recharge now!", time: "2 days ago" },
-        { from: "Vodafone", content: "Enjoy unlimited calls with our new plan!", time: "3 days ago" },
-        { from: "Reliance Digital", content: "Great deals on electronics this week!", time: "4 days ago" },
-        { from: "BigBasket", content: "Your grocery delivery is scheduled.", time: "5 days ago" },
-        { from: "Dunzo", content: "Your delivery is on its way!", time: "6 days ago" }
-      ]
-    };
+    const indiaNumbersData = {}; // This will store dummy messages for each India number
+
+    /**
+     * Generates a default set of dummy messages for a given number.
+     * @param {string} number - The phone number for which to generate messages.
+     * @returns {Array<Object>} An array of dummy message objects.
+     */
+    function generateDummyMessages(number) {
+        const platforms = [
+            "Google", "Facebook", "Amazon", "Netflix", "Spotify", "PayPal", "eBay", "LinkedIn",
+            "WhatsApp", "Instagram", "TikTok", "Twitter", "Banking App", "Your Bank", "Online Store", "Service Provider"
+        ];
+
+        const messages = [];
+        const messageTemplates = [
+            "Your verification code is {code}. Do not share this code.",
+            "OTP for your transaction is {code}. Valid for 5 mins.",
+            "New notification from {platform}: '{content}'. Tap to view.",
+            "Your {platform} account security alert: Unusual login detected. If this wasn't you, reset password.",
+            "Reminder: Your bill from {platform} is due in 2 days. Amount: ₹{amount}.",
+            "Your order #{orderId} from {platform} has been shipped. Track here: {link}",
+            "Welcome to {platform}! Your account is now active.",
+            "You have a new message from {platform}. Check your inbox.",
+            "Your password reset link: {link}. Valid for 15 minutes.",
+            "Special offer from {platform}: Get {discount}% off your next purchase! Use code {promoCode}."
+        ];
+
+        for (let i = 0; i < 8; i++) { // Generate 8 messages
+            const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+            const randomTemplate = messageTemplates[Math.floor(Math.random() * messageTemplates.length)];
+            const code = Math.floor(100000 + Math.random() * 900000); // 6-digit code
+            const orderId = Math.floor(10000 + Math.random() * 90000); // 5-digit order ID
+            const amount = (Math.random() * 1000 + 100).toFixed(2); // Random amount for India
+            const discount = Math.floor(Math.random() * 20) + 10; // 10-30%
+            const promoCode = `IND${Math.floor(Math.random() * 900) + 100}`; // Random promo code
+            const link = `https://example.com/link${Math.floor(Math.random() * 1000)}`;
+
+            let content = randomTemplate;
+            content = content.replace("{code}", code);
+            content = content.replace("{platform}", randomPlatform);
+            content = content.replace("{orderId}", orderId);
+            content = content.replace("{amount}", amount);
+            content = content.replace("{discount}", discount);
+            content = content.replace("{promoCode}", promoCode);
+            content = content.replace("{link}", link);
+
+            // Generic content for templates that don't have specific placeholders
+            if (content.includes("{content}")) {
+                const genericContents = [
+                    "Your account has been updated.",
+                    "New activity detected on your account.",
+                    "Your appointment is confirmed.",
+                    "You have a new friend request.",
+                    "New trending topic: #IndiaNews",
+                    "Important security notification."
+                ];
+                content = content.replace("{content}", genericContents[Math.floor(Math.random() * genericContents.length)]);
+            }
+
+            const timeAgoOptions = [
+                "Just now", "1 minute ago", "5 minutes ago", "15 minutes ago", "30 minutes ago",
+                "1 hour ago", "2 hours ago", "5 hours ago", "1 day ago", "2 days ago", "3 days ago"
+            ];
+            const randomTimeAgo = timeAgoOptions[Math.floor(Math.random() * timeAgoOptions.length)];
+
+            messages.push({
+                from: randomPlatform,
+                content: content,
+                time: randomTimeAgo
+            });
+        }
+        return messages;
+    }
 
     /**
      * Renders messages for the given number.
@@ -450,7 +491,12 @@
       const messagesList = document.getElementById('messages-list');
       messagesList.innerHTML = ''; // Clear existing messages
 
-      const messages = indiaNumbersData[number] || [];
+      // If messages for this number don't exist, generate them
+      if (!indiaNumbersData[number]) {
+          indiaNumbersData[number] = generateDummyMessages(number);
+      }
+
+      const messages = indiaNumbersData[number]; // Get messages for the number
 
       if (messages.length === 0) {
         messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">No messages found for this number.</p>';
@@ -487,24 +533,9 @@
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // List of 50+ different platforms
-      const platforms = [
-            "Amazon", "Google", "Facebook", "Instagram", "TikTok", "YouTube", "Netflix", "Spotify",
-            "PayPal", "eBay", "LinkedIn", "Snapchat", "Pinterest", "Reddit", "Discord", "Telegram",
-            "Viber", "Skype", "Zoom", "Microsoft", "Apple", "Uber", "Lyft", "Airbnb",
-            "Booking.com", "DoorDash", "Grubhub", "Venmo", "Cash App", "Chase", "Bank of America", "Wells Fargo",
-            "Verizon", "AT&T", "T-Mobile", "Sprint", "Comcast", "Spectrum", "USPS", "UPS",
-            "FedEx", "Walmart", "Target", "Costco", "Kroger", "CVS Pharmacy", "Walgreens", "Starbucks",
-            "McDonald's", "Domino's Pizza", "Best Buy", "Home Depot", "Lowe's", "Etsy", "Shopify", "Salesforce"
-        ];
-      const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
-
-      // Dummy new message based on a random platform
-      const newMessage = {
-        from: randomPlatform,
-        content: `New message from ${randomPlatform}: Your code is ${Math.floor(Math.random() * 900000) + 100000}.`,
-        time: 'Just now'
-      };
+      // Generate a new dummy message
+      const newMessages = generateDummyMessages(currentNumber);
+      const newMessage = newMessages[Math.floor(Math.random() * newMessages.length)]; // Pick one random message
 
       const messageHtml = `
         <div class="message-bubble incoming">
@@ -561,7 +592,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       // Get the number from URL, default to the first number if not found
-      currentNumber = urlParams.get('number') || Object.keys(indiaNumbersData)[0];
+      currentNumber = urlParams.get('number') || '+91 98765 12345'; // Default India number
 
       document.getElementById('current-number-display').textContent = currentNumber;
 
