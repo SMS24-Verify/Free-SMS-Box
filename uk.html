@@ -412,18 +412,23 @@
       const currentNumbers = numbers.slice(start, end);
 
       const numbersContainer = document.getElementById('numbers-container');
-      // Generate HTML for each number box and join them
-      numbersContainer.innerHTML = currentNumbers.map(item => `
-        <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-          <div class="flex items-center mb-4">
-            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-            <span class="text-lg font-bold text-gray-800">${item.country}</span>
+      // Ensure numbersContainer exists before trying to set innerHTML
+      if (numbersContainer) {
+        // Generate HTML for each number box and join them
+        numbersContainer.innerHTML = currentNumbers.map(item => `
+          <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
+            <div class="flex items-center mb-4">
+              <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
+              <span class="text-lg font-bold text-gray-800">${item.country}</span>
+            </div>
+            <div class="text-lg text-gray-600 mb-6">${item.num}</div>
+            <!-- Link to the new receive SMS page with data-number attribute -->
+            <a href="#" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200" data-number="${item.num}">Receive SMS</a>
           </div>
-          <div class="text-lg text-gray-600 mb-6">${item.num}</div>
-          <!-- Link to the new receive SMS page with data-number attribute -->
-          <a href="#" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200" data-number="${item.num}">Receive SMS</a>
-        </div>
-      `).join('');
+        `).join('');
+      } else {
+        console.error("Error: 'numbers-container' element not found.");
+      }
     }
 
     /**
@@ -524,8 +529,16 @@
       // Open the direct link in a new tab first
       window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');
       
-      // Then, navigate the current tab to the receive SMS page for the specific number
-      window.location.href = `receive_sms_uk.html?number=${encodeURIComponent(number)}`;
+      // Construct the URL for the SMS receive page
+      const smsReceiveUrl = `receive_sms_uk.html?number=${encodeURIComponent(number)}`;
+      
+      // Use a temporary anchor element to trigger navigation
+      const tempLink = document.createElement('a');
+      tempLink.href = smsReceiveUrl;
+      tempLink.style.display = 'none'; // Hide the link
+      document.body.appendChild(tempLink);
+      tempLink.click(); // Programmatically click the link
+      document.body.removeChild(tempLink); // Clean up
     }
 
     // Initial render when the page loads
