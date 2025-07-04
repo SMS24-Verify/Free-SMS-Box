@@ -39,30 +39,56 @@
     .pagination-button:hover {
       background-color: #2d3748;
     }
-    /* Ad containers - no visual placeholder when ads are blocked */
+    /* Ad containers - to collapse when empty */
     .ad-slot {
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       text-align: center;
+      width: 100%;
+      /* Transition for smooth collapse/expand */
+      transition: max-height 0.5s ease-out, opacity 0.5s ease-out, margin 0.5s ease-out;
+      overflow: hidden; /* Hide overflow during collapse */
+      max-height: 500px; /* Max height when ads are present */
+      opacity: 1;
       margin-top: 20px;
       margin-bottom: 20px;
-      width: 100%; /* Make ad slot flexible */
-      height: auto; /* Height will be determined by iframe content or min-height */
     }
+    /* State for collapsed ad slot */
+    .ad-slot.collapsed {
+      max-height: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      opacity: 0;
+    }
+
     .ad-slot iframe {
       border: none;
-      /* Width and height will be set dynamically by JS based on adConfig */
-      /* Default height for the main ad slot, will be overridden by specific ad sizes */
+      display: block; /* Ensure it behaves like a block element */
+      overflow: hidden; /* Hide overflow within iframe */
+      /* Initial state for iframe, will be adjusted by JS */
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      transition: width 0.5s ease-out, height 0.5s ease-out, opacity 0.5s ease-out;
     }
+
     /* Specific styling for the native ad grid container */
     #native-ad-slot.grid-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid for ads */
+      /* Adjusted to support a single ad, but can still flex for multiple if needed */
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1rem; /* Space between ads */
       justify-items: center; /* Center ads within their grid cells */
-      align-items: center;
+      align-items: flex-start;
     }
+    /* For native ad iframes within the grid */
+    #native-ad-slot.grid-container iframe {
+        width: 1px; /* Initial small width */
+        height: 1px; /* Initial small height */
+        opacity: 0;
+    }
+
     .direct-link-container {
       margin-top: 15px;
       margin-bottom: 30px;
@@ -113,7 +139,7 @@
     <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">📱 Choose a Temporary Number for UK</h3>
 
     <!-- Adsterra Native Banner (Above the numbers container) -->
-    <!-- Added grid-container class for responsive layout of multiple ads -->
+    <!-- This slot is now configured to load the specific Adsterra ad provided by the user. -->
     <div id="native-ad-slot" class="ad-slot mx-auto grid-container">
       <!-- Ad Code will be inserted here by JavaScript -->
     </div>
@@ -178,29 +204,24 @@
 
     // Define ad configurations
     const adConfigs = {
+      // Updated native ad configuration to use the specific ad code provided by the user
       native: {
-        // Replicated scripts and divs for four native ads
         scripts: [
-          { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' },
-          { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' },
-          { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' },
           { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' }
         ],
         divs: [
-          { id: 'container-native-ad-1' },
-          { id: 'container-native-ad-2' },
-          { id: 'container-native-ad-3' },
-          { id: 'container-native-ad-4' }
+          { id: 'container-36c71a4fca369dbf689c31baada8259d' }
         ],
-        height: 250, // Approximate height for native banner
-        width: 300 // Approximate width for native banner
+        // These dimensions are approximate; the ad itself will determine its final size.
+        height: 250,
+        width: 300
       },
-      banner728x90: { // Consolidated 728x90 banner
+      banner728x90: { // Consolidated 728x90 banner (used on pages other than the first)
         key: 'dba9c0c7da688537036a970dd8eb8984',
         height: 90,
         width: 728
       },
-      banner300x250: {
+      banner300x250: { // Consistent 300x250 banner (at the bottom)
         key: 'a9e0e31759b1f80164727452baf12b70',
         height: 250,
         width: 300
@@ -216,22 +237,30 @@
       const container = document.getElementById(containerId);
       if (!container) return;
 
+      // Ensure the parent container is not collapsed initially
+      container.classList.remove('collapsed');
+
       // Clear existing iframe if any to ensure a fresh load
       container.innerHTML = '';
 
+      const iframes = []; // Keep track of created iframes
+
       // For native ads, we need to create multiple iframes, one for each ad
+      // This loop will now run only once for the 'native' adConfig as it has only one script/div.
       if (adConfig.scripts && adConfig.divs && containerId === 'native-ad-slot') {
         adConfig.divs.forEach((divData, index) => {
           const iframe = document.createElement('iframe');
-          iframe.style.width = `${adConfig.width}px`; // Set specific width for the iframe
-          iframe.style.height = `${adConfig.height}px`; // Set specific height for the iframe
+          iframe.style.width = '1px'; // Start with minimal size
+          iframe.style.height = '1px';
+          iframe.style.opacity = '0'; // Hide initially
           iframe.style.border = 'none';
           iframe.style.overflow = 'hidden';
-          iframe.scrolling = 'no'; // Disable scrolling inside iframe
-          iframe.setAttribute('loading', 'lazy'); // Add lazy loading for better performance
-          iframe.classList.add('native-ad-iframe'); // Add a class for potential styling if needed
+          iframe.scrolling = 'no';
+          iframe.setAttribute('loading', 'lazy');
+          iframe.classList.add('native-ad-iframe');
 
           container.appendChild(iframe);
+          iframes.push(iframe); // Add to tracking array
 
           const iframeDoc = iframe.contentWindow.document;
           iframeDoc.open();
@@ -267,14 +296,16 @@
         });
       } else { // For single banner ads (728x90, 300x250)
         const iframe = document.createElement('iframe');
-        iframe.style.width = `${adConfig.width}px`;
-        iframe.style.height = `${adConfig.height}px`;
+        iframe.style.width = '1px'; // Start with minimal size
+        iframe.style.height = '1px';
+        iframe.style.opacity = '0'; // Hide initially
         iframe.style.border = 'none';
         iframe.style.overflow = 'hidden';
         iframe.scrolling = 'no';
         iframe.setAttribute('loading', 'lazy');
 
         container.appendChild(iframe);
+        iframes.push(iframe); // Add to tracking array
 
         const iframeDoc = iframe.contentWindow.document;
         iframeDoc.open();
@@ -311,6 +342,41 @@
           adContentWrapper.appendChild(scriptInvoke);
         }
       }
+
+      // Check if ads have loaded after a delay
+      setTimeout(() => {
+        let anyAdLoaded = false;
+        iframes.forEach(iframe => {
+          try {
+            // Check if the iframe has gained significant height
+            // A common ad size is 250px or 90px. If scrollHeight is very small, it's likely blocked.
+            // We use contentWindow.document.body.scrollHeight to check content height within the iframe
+            if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body.scrollHeight > 50) { // Threshold for a loaded ad
+              iframe.style.width = `${adConfig.width}px`;
+              iframe.style.height = `${adConfig.height}px`;
+              iframe.style.opacity = '1'; // Make visible
+              anyAdLoaded = true;
+            } else {
+              // Ad blocked or failed to load, collapse this specific iframe
+              iframe.style.width = '0px';
+              iframe.style.height = '0px';
+              iframe.style.opacity = '0';
+            }
+          } catch (e) {
+            // Cross-origin error, likely ad blocked or failed to load
+            iframe.style.width = '0px';
+            iframe.style.height = '0px';
+            iframe.style.opacity = '0';
+          }
+        });
+
+        // If no ads loaded in this container, collapse the container itself
+        if (!anyAdLoaded) {
+          container.classList.add('collapsed');
+        } else {
+          container.classList.remove('collapsed');
+        }
+      }, 1500); // Give ads 1.5 seconds to load
     }
 
     /**
@@ -323,15 +389,17 @@
       // Clear existing content in both slots to prepare for new ads
       if (nativeAdSlotContainer) {
         nativeAdSlotContainer.innerHTML = '';
+        nativeAdSlotContainer.classList.add('collapsed'); // Collapse initially
       }
       if (banner300x250AdSlotContainer) {
         banner300x250AdSlotContainer.innerHTML = '';
+        banner300x250AdSlotContainer.classList.add('collapsed'); // Collapse initially
       }
 
       // Logic for the top ad slot (native-ad-slot)
       if (nativeAdSlotContainer) {
         if (currentPage === 1) {
-          // For the first page, load the Native Banner (now four of them)
+          // For the first page, load the specific Native Banner provided by the user
           loadAdInIframe('native-ad-slot', adConfigs.native);
         } else {
           // For all other pages, load the 728x90 banner
