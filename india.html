@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free SMS Box - Choose Country</title>
+  <title>India Free SMS Numbers</title>
   <!-- Tailwind CSS CDN for quick styling -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -18,47 +18,114 @@
     .nav-bg {
       background-color: #333;
     }
-    .country-card {
+    .number-box {
       transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     }
-    .country-card:hover {
+    .number-box:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     }
-    .view-button {
-      background-color: #1a73e8;
+    .receive-button {
+      background-color: #28a745; /* Green */
       transition: background-color 0.2s ease-in-out;
     }
-    .view-button:hover {
-      background-color: #155bb5;
+    .receive-button:hover {
+      background-color: #218838;
     }
-    /* Ad containers for better layout */
-    .ad-container {
+    .pagination-button {
+      background-color: #4a5568; /* Dark gray */
+      transition: background-color 0.2s ease-in-out;
+    }
+    .pagination-button:hover {
+      background-color: #2d3748;
+    }
+    /* Ad containers - to collapse when empty */
+    .ad-slot {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      align-items: flex-start;
+      text-align: center;
+      width: 100%;
+      /* Transition for smooth collapse/expand */
+      transition: max-height 0.5s ease-out, opacity 0.5s ease-out, margin 0.5s ease-out;
+      overflow: hidden; /* Hide overflow during collapse */
+      max-height: 500px; /* Max height when ads are present */
+      opacity: 1;
+      margin-top: 20px;
       margin-bottom: 20px;
     }
-    .ad-slot {
-      background-color: #e0e0e0;
-      border: 1px dashed #a0a0a0;
-      padding: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    /* State for collapsed ad slot */
+    .ad-slot.collapsed {
+      max-height: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      opacity: 0;
+    }
+
+    .ad-slot iframe {
+      border: none;
+      display: block; /* Ensure it behaves like a block element */
+      overflow: hidden; /* Hide overflow within iframe */
+      /* Initial state for iframe, will be adjusted by JS */
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      transition: width 0.5s ease-out, height 0.5s ease-out, opacity 0.5s ease-out;
+    }
+
+    /* Specific styling for the native ad grid container */
+    #native-ad-slot.grid-container {
+      display: grid;
+      /* Adjusted to support a single ad, but can still flex for multiple if needed */
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem; /* Space between ads */
+      justify-items: center; /* Center ads within their grid cells */
+      align-items: flex-start;
+    }
+    /* For native ad iframes within the grid */
+    #native-ad-slot.grid-container iframe {
+        width: 1px; /* Initial small width */
+        height: 1px; /* Initial small height */
+        opacity: 0;
+    }
+
+    .direct-link-container {
+      margin-top: 15px;
+      margin-bottom: 30px;
       text-align: center;
-      color: #666;
-      font-size: 0.9rem;
-      min-height: 60px; /* Minimum height for ad visibility */
+    }
+    .direct-link-container a {
+      color: #1a73e8;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
+
+  <!-- Popunder Adsterra Code (Moved to head for quicker loading) -->
+  <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
+  <!-- End Popunder Adsterra Code -->
+
 </head>
 <body class="min-h-screen flex flex-col">
 
   <!-- Header Section -->
   <header class="header-bg text-white p-6 text-center text-3xl font-bold rounded-b-lg shadow-md">
-    Free SMS Box
+    India Free SMS Box
   </header>
 
   <!-- Navigation Bar -->
@@ -69,588 +136,54 @@
   </nav>
 
   <main class="flex-grow container mx-auto p-6">
-    <h2 class="text-4xl font-extrabold text-gray-800 mb-4 text-center">Welcome to SMS Receiving Platform</h2>
-    <p class="text-lg text-gray-600 mb-8 text-center">Use free temporary numbers from 30 countries to receive SMS online instantly.</p>
+    <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">📱 Choose a Temporary Number for India</h3>
 
-    <!-- Adsterra Banner 320x50 (Placed prominently at the top) -->
-    <div class="ad-slot mx-auto mb-10" style="width: 320px; height: 50px;">
-      <!-- Banner 320x50 Ad Code -->
-      <script type="text/javascript">
-        atOptions = {
-          'key' : 'e3e3696258d007a31d545486101e5406',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/e3e3696258d007a31d545486101e5406/invoke.js"></script>
-      <!-- End Banner 320x50 Ad Code -->
+    <!-- Adsterra Native Banner (Above the numbers container) -->
+    <!-- This slot is configured to load the specific Adsterra native ad. -->
+    <div id="native-ad-slot" class="ad-slot mx-auto grid-container">
+      <!-- Ad Code will be inserted here by JavaScript -->
+    </div>
+    <!-- End Adsterra Native Banner -->
+
+    <!-- Numbers Container -->
+    <div id="numbers-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 my-10">
+      <!-- Numbers will be rendered here by JavaScript -->
     </div>
 
-    <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">🌐 Choose a Temporary Number</h3>
-    <h4 class="text-2xl font-semibold text-gray-700 mb-8 text-center">🌐 Receive SMS Online – Choose a Country</h4>
-
-    <!-- Adsterra Native Banner (Can be placed between sections or at the top) -->
-    <div class="ad-slot mx-auto mb-10" style="min-width: 300px; min-height: 250px;">
-      <!-- Native Banner Ad Code -->
-      <script async="async" data-cfasync="false" src="//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js"></script>
-      <div id="container-36c71a4fca369dbf689c31baada8259d"></div>
-      <!-- End Native Banner Ad Code -->
+    <!-- Gemini API Feature: SMS Content Suggestion -->
+    <div class="bg-white p-6 rounded-xl shadow-lg my-10">
+      <h4 class="text-2xl font-bold text-gray-800 mb-4 text-center">✨ Draft SMS (AI-Powered)</h4>
+      <p class="text-gray-600 mb-4 text-center">Write an idea for your SMS message and let AI draft it.</p>
+      <textarea id="smsPrompt" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" rows="3" placeholder="e.g., 'Need verification code', 'Meeting reminder', 'Quick reply'"></textarea>
+      <button onclick="generateSmsDraft()" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition-colors flex items-center justify-center">
+        <span id="generateButtonText">✨ Draft SMS</span>
+        <span id="loadingSpinner" class="loading-spinner hidden"></span>
+      </button>
+      <div id="smsOutput" class="mt-6 p-4 bg-gray-100 rounded-md text-gray-800 border border-gray-200 hidden">
+        <p class="font-semibold mb-2">Generated SMS:</p>
+        <p id="smsContent"></p>
+      </div>
+      <div id="errorMessage" class="mt-4 p-3 bg-red-100 text-red-700 rounded-md hidden"></div>
     </div>
 
-    <!-- Country Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- USA Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/us.svg" alt="Flag of USA" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">USA</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+1 702-940-2689</div>
-        <!-- Onclick opens direct link, href navigates to usa.html -->
-        <a href="usa.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
+    <!-- Adsterra Banner 300x250 (Above the direct link) -->
+    <div id="banner-300x250-ad-slot" class="ad-slot mx-auto">
+      <!-- Iframe for Banner 300x250 Ad Code will be inserted here by JavaScript -->
+    </div>
 
-      <!-- Canada Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ca.svg" alt="Flag of Canada" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Canada</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+1 604-000-1001</div>
-        <a href="canada.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
+    <!-- Direct Link Text Below Banner -->
+    <div class="direct-link-container">
+      <p>
+        <a href="https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6" target="_blank">
+          Click here to see our other services!
+        </a>
+      </p>
+    </div>
 
-      <!-- UK Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/gb.svg" alt="Flag of UK" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">UK</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+44 7537 150994</div>
-        <a href="uk.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- India Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/in.svg" alt="Flag of India" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">India</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+91 88800 12345</div>
-        <a href="india.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Germany Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/de.svg" alt="Flag of Germany" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Germany</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+49 1512 3456789</div>
-        <a href="germany.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- France Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/fr.svg" alt="Flag of France" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">France</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+33 612 345678</div>
-        <a href="france.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Australia Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/au.svg" alt="Flag of Australia" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Australia</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+61 412 345 678</div>
-        <a href="australia.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Japan Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/jp.svg" alt="Flag of Japan" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Japan</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+81 612 345678</div>
-        <a href="japan.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Brazil Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/br.svg" alt="Flag of Brazil" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Brazil</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+55 91234 5678</div>
-        <a href="brazil.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Spain Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/es.svg" alt="Flag of Spain" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Spain</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+34 612 345678</div>
-        <a href="spain.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- China Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/cn.svg" alt="Flag of China" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">China</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+86 131 2345 6789</div>
-        <a href="china.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Italy Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/it.svg" alt="Flag of Italy" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Italy</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+39 612 345678</div>
-        <a href="italy.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- South Korea Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/kr.svg" alt="Flag of South Korea" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">South Korea</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+82 10-1234-5678</div>
-        <a href="southkorea.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Saudi Arabia Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/sa.svg" alt="Flag of Saudi Arabia" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Saudi Arabia</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+966 501234567</div>
-        <a href="saudiarabia.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Nigeria Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ng.svg" alt="Flag of Nigeria" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Nigeria</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+234 7012345678</div>
-        <a href="nigeria.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Argentina Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ar.svg" alt="Flag of Argentina" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Argentina</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+54 91123456789</div>
-        <a href="argentina.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Ukraine Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ua.svg" alt="Flag of Ukraine" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Ukraine</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+380 501234567</div>
-        <a href="ukraine.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Sweden Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/se.svg" alt="Flag of Sweden" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Sweden</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+46 701234567</div>
-        <a href="sweden.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Mexico Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/mx.svg" alt="Flag of Mexico" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Mexico</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+52 5512345678</div>
-        <a href="mexico.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Thailand Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/th.svg" alt="Flag of Thailand" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Thailand</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+66 812345678</div>
-        <a href="thailand.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Malaysia Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/my.svg" alt="Flag of Malaysia" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Malaysia</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+60 123456789</div>
-        <a href="malaysia.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Egypt Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/eg.svg" alt="Flag of Egypt" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Egypt</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+20 1012345678</div>
-        <a href="egypt.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Turkey Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/tr.svg" alt="Flag of Turkey" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Turkey</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+90 5012345678</div>
-        <a href="turkey.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Russia Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ru.svg" alt="Flag of Russia" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Russia</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+79 612 345678</div>
-        <a href="russia.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- South Africa Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/za.svg" alt="Flag of South Africa" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">South Africa</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+27 123 456 7890</div>
-        <a href="southafrica.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Indonesia Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/id.svg" alt="Flag of Indonesia" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Indonesia</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+62 812 3456 7890</div>
-        <a href="indonesia.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Pakistan Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/pk.svg" alt="Flag of Pakistan" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Pakistan</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+92 300 1234567</div>
-        <a href="pakistan.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Bangladesh Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/bd.svg" alt="Flag of Bangladesh" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Bangladesh</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+880 1712 345678</div>
-        <a href="bangladesh.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Vietnam Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/vn.svg" alt="Flag of Vietnam" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Vietnam</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+84 912 345 678</div>
-        <a href="vietnam.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Philippines Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ph.svg" alt="Flag of Philippines" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Philippines</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+63 915 123 4567</div>
-        <a href="philippines.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Ethiopia Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/et.svg" alt="Flag of Ethiopia" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Ethiopia</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+251 911 234 567</div>
-        <a href="ethiopia.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Colombia Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/co.svg" alt="Flag of Colombia" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Colombia</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+57 300 1234567</div>
-        <a href="colombia.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Kenya Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ke.svg" alt="Flag of Kenya" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Kenya</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+254 712 345678</div>
-        <a href="kenya.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Peru Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/pe.svg" alt="Flag of Peru" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Peru</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+51 912 345 678</div>
-        <a href="peru.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Venezuela Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ve.svg" alt="Flag of Venezuela" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Venezuela</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+58 412 345 6789</div>
-        <a href="venezuela.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Chile Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/cl.svg" alt="Flag of Chile" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Chile</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+56 9 1234 5678</div>
-        <a href="chile.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Romania Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ro.svg" alt="Flag of Romania" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Romania</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+40 721 234 567</div>
-        <a href="romania.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Netherlands Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/nl.svg" alt="Flag of Netherlands" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Netherlands</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+31 6 12345678</div>
-        <a href="netherlands.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Belgium Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/be.svg" alt="Flag of Belgium" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Belgium</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+32 471 23 45 67</div>
-        <a href="belgium.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Greece Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/gr.svg" alt="Flag of Greece" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Greece</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+30 691 234 5678</div>
-        <a href="greece.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Portugal Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/pt.svg" alt="Flag of Portugal" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Portugal</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+351 912 345 678</div>
-        <a href="portugal.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Austria Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/at.svg" alt="Flag of Austria" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Austria</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+43 664 1234567</div>
-        <a href="austria.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Switzerland Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ch.svg" alt="Flag of Switzerland" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Switzerland</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+41 79 123 45 67</div>
-        <a href="switzerland.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- New Zealand Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/nz.svg" alt="Flag of New Zealand" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">New Zealand</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+64 21 123 4567</div>
-        <a href="newzealand.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Ireland Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ie.svg" alt="Flag of Ireland" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Ireland</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+353 87 123 4567</div>
-        <a href="ireland.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Denmark Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/dk.svg" alt="Flag of Denmark" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Denmark</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+45 20 12 34 56</div>
-        <a href="denmark.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Norway Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/no.svg" alt="Flag of Norway" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Norway</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+47 901 23 456</div>
-        <a href="norway.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Finland Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/fi.svg" alt="Flag of Finland" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Finland</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+358 40 1234567</div>
-        <a href="finland.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Singapore Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/sg.svg" alt="Flag of Singapore" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Singapore</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+65 9123 4567</div>
-        <a href="singapore.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- UAE Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/ae.svg" alt="Flag of UAE" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">UAE</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+971 50 123 4567</div>
-        <a href="uae.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Qatar Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/qa.svg" alt="Flag of Qatar" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Qatar</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+974 5512 3456</div>
-        <a href="qatar.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Kuwait Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/kw.svg" alt="Flag of Kuwait" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Kuwait</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+965 9912 3456</div>
-        <a href="kuwait.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Bahrain Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/bh.svg" alt="Flag of Bahrain" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Bahrain</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+973 3912 3456</div>
-        <a href="bahrain.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Oman Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/om.svg" alt="Flag of Oman" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Oman</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+968 9123 4567</div>
-        <a href="oman.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
-
-      <!-- Jordan Country Card -->
-      <div class="country-card bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
-        <div class="flex items-center mb-4">
-          <img src="https://flagcdn.com/jo.svg" alt="Flag of Jordan" class="w-10 h-6 rounded-md mr-3 shadow-sm">
-          <span class="text-xl font-bold text-gray-800">Jordan</span>
-        </div>
-        <div class="text-lg text-gray-600 mb-6">+962 79 123 4567</div>
-        <a href="jordan.html" onclick="window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');" class="view-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">View Numbers</a>
-      </div>
+    <!-- Pagination Buttons -->
+    <div class="flex justify-center space-x-4 mt-10">
+      <button onclick="prevPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Previous</button>
+      <button onclick="nextPage()" class="pagination-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200">Next</button>
     </div>
   </main>
 
@@ -659,9 +192,412 @@
     &copy; 2025 Free SMS Box. All rights reserved.
   </footer>
 
-  <!-- Popunder Adsterra Code (usually placed at the end of body) -->
-  <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
-  <!-- End Popunder Adsterra Code -->
+  <script>
+    const numbers = [];
+
+    // Function to generate a random number of specified length
+    function getRandomNumber(length) {
+      let result = '';
+      const characters = '0123456789';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        // For Indian mobile numbers, the first digit is usually 6, 7, 8, or 9.
+        // For simplicity in dummy data, we'll allow any digit for now,
+        // but for real-world accuracy, this would need refinement.
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    }
+
+    // Generate 60 unique dummy Indian numbers (+91 XXXXX XXXXX format)
+    const generatedNumbers = new Set();
+    while (generatedNumbers.size < 60) {
+      const part1 = getRandomNumber(5); // First 5 digits
+      const part2 = getRandomNumber(5); // Last 5 digits
+      const fullNumber = `+91 ${part1} ${part2}`;
+      generatedNumbers.add(fullNumber);
+    }
+
+    // Convert Set to Array and populate the 'numbers' array
+    numbers.push(...Array.from(generatedNumbers).map(num => ({
+      num: num,
+      flagUrl: 'https://flagcdn.com/in.svg', // India flag
+      country: 'India'
+    })));
+
+    // Function to shuffle an array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+      }
+    }
+
+    // Shuffle the numbers array initially
+    shuffleArray(numbers);
+
+    let currentPage = 1;
+    const numbersPerPage = 12; // Display 12 numbers per page
+
+    // Define ad configurations
+    const adConfigs = {
+      // Native ad configuration for the specific ad code provided by the user
+      native: {
+        scripts: [
+          { async: true, 'data-cfasync': false, src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' }
+        ],
+        divs: [
+          { id: 'container-36c71a4fca369dbf689c31baada8259d' }
+        ],
+        // These dimensions are approximate; the ad itself will determine its final size.
+        height: 250,
+        width: 300
+      },
+      // Consistent 300x250 banner (re-added at the bottom)
+      banner300x250: {
+        key: 'a9e0e31759b1f80164727452baf12b70',
+        height: 250,
+        width: 300
+      }
+    };
+
+    /**
+     * Loads an advertisement within an iframe to isolate its scripts and prevent layout shifts.
+     * @param {string} containerId - The ID of the HTML element where the iframe will be appended.
+     * @param {object} adConfig - Configuration object for the ad (contains scripts/divs for native, or key/dimensions for others).
+     */
+    function loadAdInIframe(containerId, adConfig) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      // Ensure the parent container is not collapsed initially
+      container.classList.remove('collapsed');
+
+      // Clear existing iframe if any to ensure a fresh load
+      container.innerHTML = '';
+
+      const iframes = []; // Keep track of created iframes
+
+      // For native ads, we need to create multiple iframes, one for each ad
+      // This loop will now run only only once for the 'native' adConfig as it has only one script/div.
+      if (adConfig.scripts && adConfig.divs && containerId === 'native-ad-slot') {
+        adConfig.divs.forEach((divData, index) => {
+          const iframe = document.createElement('iframe');
+          iframe.style.width = '1px'; // Start with minimal size
+          iframe.style.height = '1px';
+          iframe.style.opacity = '0'; // Hide initially
+          iframe.style.border = 'none';
+          iframe.style.overflow = 'hidden';
+          iframe.scrolling = 'no';
+          iframe.setAttribute('loading', 'lazy');
+          iframe.classList.add('native-ad-iframe');
+
+          container.appendChild(iframe);
+          iframes.push(iframe); // Add to tracking array
+
+          const iframeDoc = iframe.contentWindow.document;
+          iframeDoc.open();
+          iframeDoc.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>body { margin: 0; overflow: hidden; }</style>
+            </head>
+            <body>
+              <div id="${divData.id}"></div>
+            </body>
+            </html>
+          `);
+          iframeDoc.close();
+
+          const adDiv = iframeDoc.getElementById(divData.id);
+
+          // Append the corresponding script for this native ad
+          const scriptData = adConfig.scripts[index];
+          if (scriptData) {
+            const script = iframeDoc.createElement('script');
+            script.type = 'text/javascript';
+            if (scriptData.src) {
+              script.src = scriptData.src;
+              if (scriptData.async !== undefined) script.async = scriptData.async;
+              if (scriptData['data-cfasync'] !== undefined) script.dataset.cfasync = scriptData['data-cfasync'];
+            } else if (scriptData.textContent) {
+              script.textContent = scriptData.textContent;
+            }
+            iframeDoc.body.appendChild(script);
+          }
+        });
+      } else { // For single banner ads (like 300x250)
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '1px'; // Start with minimal size
+        iframe.style.height = '1px';
+        iframe.style.opacity = '0'; // Hide initially
+        iframe.style.border = 'none';
+        iframe.style.overflow = 'hidden';
+        iframe.scrolling = 'no';
+        iframe.setAttribute('loading', 'lazy');
+
+        container.appendChild(iframe);
+        iframes.push(iframe); // Add to tracking array
+
+        const iframeDoc = iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>body { margin: 0; overflow: hidden; }</style>
+          </head>
+          <body>
+            <div id="ad-content-wrapper"></div>
+          </body>
+          </html>
+        `);
+        iframeDoc.close();
+
+        const adContentWrapper = iframeDoc.getElementById('ad-content-wrapper');
+
+        if (adConfig.key) { // For banners with key-based script
+          const scriptOptions = iframeDoc.createElement('script');
+          scriptOptions.type = 'text/javascript';
+          scriptOptions.textContent = "atOptions = {" +
+            "'key' : '" + adConfig.key + "'," +
+            "'format' : 'iframe'," +
+            "'height' : " + adConfig.height + "," +
+            "'width' : " + adConfig.width + "," +
+            "'params' : {}" +
+            "};";
+          adContentWrapper.appendChild(scriptOptions);
+
+          const scriptInvoke = iframeDoc.createElement('script');
+          scriptInvoke.type = 'text/javascript';
+          scriptInvoke.src = `//www.highperformanceformat.com/${adConfig.key}/invoke.js`;
+          adContentWrapper.appendChild(scriptInvoke);
+        }
+      }
+
+      // Check if ads have loaded after a delay
+      setTimeout(() => {
+        let anyAdLoaded = false;
+        iframes.forEach(iframe => {
+          try {
+            // Check if the iframe has gained significant height
+            // A common ad size is 250px or 90px. If scrollHeight is very small, it's likely blocked.
+            // We use contentWindow.document.body.scrollHeight to check content height within the iframe
+            if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body.scrollHeight > 50) { // Threshold for a loaded ad
+              iframe.style.width = `${adConfig.width}px`;
+              iframe.style.height = `${adConfig.height}px`;
+              iframe.style.opacity = '1'; // Make visible
+              anyAdLoaded = true;
+            } else {
+              // Ad blocked or failed to load, collapse this specific iframe
+              iframe.style.width = '0px';
+              iframe.style.height = '0px';
+              iframe.style.opacity = '0';
+            }
+          } catch (e) {
+            // Cross-origin error, likely ad blocked or failed to load
+            iframe.style.width = '0px';
+            iframe.style.height = '0px';
+            iframe.style.opacity = '0';
+          }
+        });
+
+        // If no ads loaded in this container, collapse the container itself
+        if (!anyAdLoaded) {
+          container.classList.add('collapsed');
+        } else {
+          container.classList.remove('collapsed');
+        }
+      }, 1500); // Give ads 1.5 seconds to load
+    }
+
+    /**
+     * Loads advertisements into their respective containers based on the current page.
+     */
+    function loadAds() {
+      const nativeAdSlotContainer = document.getElementById('native-ad-slot');
+      const banner300x250AdSlotContainer = document.getElementById('banner-300x250-ad-slot');
+
+      // Clear existing content in both slots to prepare for new ads
+      if (nativeAdSlotContainer) {
+        nativeAdSlotContainer.innerHTML = '';
+        nativeAdSlotContainer.classList.add('collapsed'); // Collapse initially
+      }
+      if (banner300x250AdSlotContainer) {
+        banner300x250AdSlotContainer.innerHTML = '';
+        banner300x250AdSlotContainer.classList.add('collapsed'); // Collapse initially
+      }
+
+      // Logic for the top ad slot (native-ad-slot) - always load the specific native ad
+      if (nativeAdSlotContainer) {
+        loadAdInIframe('native-ad-slot', adConfigs.native);
+      }
+
+      // Logic for the consistent 300x250 banner ad (bottom ad)
+      if (banner300x250AdSlotContainer) {
+        loadAdInIframe('banner-300x250-ad-slot', adConfigs.banner300x250);
+      }
+    }
+
+    /**
+     * Attaches event listeners to all "Receive SMS" buttons.
+     */
+    function attachReceiveSmsListeners() {
+      document.querySelectorAll('.receive-button').forEach(button => {
+        button.removeEventListener('click', handleReceiveSmsClick); // Remove existing to prevent duplicates
+        button.addEventListener('click', handleReceiveSmsClick);
+      });
+    }
+
+    /**
+     * Renders the numbers for the current page in the numbers container.
+     */
+    function renderNumbers() {
+      const start = (currentPage - 1) * numbersPerPage; // Starting index for slicing the numbers array
+      const end = start + numbersPerPage; // Ending index for slicing
+      const currentNumbers = numbers.slice(start, end);
+
+      const numbersContainer = document.getElementById('numbers-container');
+      // Ensure numbersContainer exists before trying to set innerHTML
+      if (numbersContainer) {
+        // Generate HTML for each number box and join them
+        numbersContainer.innerHTML = currentNumbers.map(item => `
+          <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
+            <div class="flex items-center mb-4">
+              <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
+              <span class="text-lg font-bold text-gray-800">${item.country}</span>
+            </div>
+            <div class="text-lg text-gray-600 mb-6">${item.num}</div>
+            <!-- Link to the new receive SMS page with data-number attribute -->
+            <a href="#" class="receive-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200" data-number="${item.num}">Receive SMS</a>
+          </div>
+        `).join('');
+        
+        // Re-attach event listeners after new elements are rendered
+        attachReceiveSmsListeners();
+
+      } else {
+        console.error("Error: 'numbers-container' element not found.");
+      }
+    }
+
+    /**
+     * Navigates to the next page of numbers and reloads ads.
+     */
+    function nextPage() {
+      if (currentPage < Math.ceil(numbers.length / numbersPerPage)) {
+        currentPage++;
+        renderNumbers();
+        loadAds(); // Reload ads on page change
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
+      }
+    }
+
+    /**
+     * Navigates to the previous page of numbers and reloads ads.
+     */
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderNumbers();
+        loadAds(); // Reload ads on page change
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
+      }
+    }
+
+    /**
+     * Gemini API Integration for SMS Drafting.
+     * Generates an SMS draft based on user prompt using Google's Gemini API.
+     */
+    async function generateSmsDraft() {
+      const smsPrompt = document.getElementById('smsPrompt').value;
+      const smsOutputDiv = document.getElementById('smsOutput');
+      const smsContentP = document.getElementById('smsContent');
+      const errorMessageDiv = document.getElementById('errorMessage');
+      const generateButtonText = document.getElementById('generateButtonText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+
+      // Clear previous output and errors
+      smsOutputDiv.classList.add('hidden');
+      smsContentP.textContent = '';
+      errorMessageDiv.classList.add('hidden');
+      errorMessageDiv.textContent = '';
+
+      if (!smsPrompt.trim()) {
+        errorMessageDiv.textContent = 'Please enter an idea for the SMS message.';
+        errorMessageDiv.classList.remove('hidden');
+        return;
+      }
+
+      // Show loading indicator
+      generateButtonText.textContent = 'Generating...';
+      loadingSpinner.classList.remove('hidden');
+
+      try {
+        let chatHistory = [];
+        chatHistory.push({ role: "user", parts: [{ text: `Draft a concise SMS message based on the following idea: "${smsPrompt}". Provide only the SMS message, no additional explanations or introductions.` }] });
+        const payload = { contents: chatHistory };
+        const apiKey = ""; // Canvas will automatically provide the API key
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.candidates && result.candidates.length > 0 &&
+            result.candidates[0].content && result.candidates[0].content.parts &&
+            result.candidates[0].content.parts.length > 0) {
+          const text = result.candidates[0].content.parts[0].text;
+          smsContentP.textContent = text;
+          smsOutputDiv.classList.remove('hidden');
+        } else {
+          errorMessageDiv.textContent = 'Failed to generate SMS draft. Please try again.';
+          errorMessageDiv.classList.remove('hidden');
+          console.error("Gemini API response structure unexpected:", result);
+        }
+      } catch (error) {
+        errorMessageDiv.textContent = 'Error calling API: ' + error.message;
+        errorMessageDiv.classList.remove('hidden');
+        console.error("Error calling Gemini API:", error);
+      } finally {
+        // Hide loading indicator
+        generateButtonText.textContent = '✨ Draft SMS';
+        loadingSpinner.classList.add('hidden');
+      }
+    }
+
+    // Handle click on "Receive SMS" button
+    function handleReceiveSmsClick(event) {
+      // Prevent the default link behavior
+      event.preventDefault();
+      const number = event.target.dataset.number;
+      
+      // Open the direct link in a new tab first
+      window.open('https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6', '_blank');
+      
+      // Construct the URL for the SMS receive page (changed to receive_sms_india.html)
+      const smsReceiveUrl = `receive_sms_india.html?number=${encodeURIComponent(number)}`;
+      
+      // Use a temporary anchor element to trigger navigation
+      const tempLink = document.createElement('a');
+      tempLink.href = smsReceiveUrl;
+      tempLink.style.display = 'none'; // Hide the link
+      document.body.appendChild(tempLink);
+      tempLink.click(); // Programmatically click the link
+      document.body.removeChild(tempLink); // Clean up
+    }
+
+    // Initial render when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      renderNumbers();
+      loadAds(); // Load ads initially
+    });
+  </script>
 
   <!-- Social Bar Adsterra Code (usually placed at the end of body) -->
   <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
