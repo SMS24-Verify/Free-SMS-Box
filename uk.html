@@ -39,21 +39,32 @@
     .pagination-button:hover {
       background-color: #2d3748;
     }
-    /* Ad containers for better layout */
+    /* Ad containers for better layout - Removed placeholder styles */
     .ad-slot {
-      background-color: #e0e0e0;
-      border: 1px dashed #a0a0a0;
-      padding: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
-      color: #666;
-      font-size: 0.9rem;
       margin-top: 20px;
       margin-bottom: 20px;
+      /* Removed min-width, min-height, width, height to prevent empty space */
+    }
+    .direct-link-container {
+      margin-top: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .direct-link-container a {
+      color: #1a73e8;
+      font-weight: bold;
+      text-decoration: underline;
     }
   </style>
+
+  <!-- Popunder Adsterra Code (Moved to head for quicker loading) -->
+  <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
+  <!-- End Popunder Adsterra Code -->
+
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -72,8 +83,8 @@
   <main class="flex-grow container mx-auto p-6">
     <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">📱 Choose a Temporary Number for UK</h3>
 
-    <!-- Adsterra Native Banner (Moved to be above the numbers container) -->
-    <div class="ad-slot mx-auto" style="min-width: 300px; min-height: 250px;">
+    <!-- Adsterra Native Banner (Above the numbers container) -->
+    <div class="ad-slot mx-auto">
       <script async="async" data-cfasync="false" src="//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js"></script>
       <div id="container-36c71a4fca369dbf689c31baada8259d"></div>
     </div>
@@ -84,8 +95,8 @@
       <!-- Numbers will be rendered here by JavaScript -->
     </div>
 
-    <!-- Adsterra Banner 300x250 (Placed below the numbers) -->
-    <div class="ad-slot mx-auto" style="width: 300px; height: 250px;">
+    <!-- Adsterra Banner 300x250 (Below the numbers) -->
+    <div class="ad-slot mx-auto">
       <!-- Banner 300x250 Ad Code -->
       <script type="text/javascript">
         atOptions = {
@@ -98,6 +109,15 @@
       </script>
       <script type="text/javascript" src="//www.highperformanceformat.com/a9e0e31759b1f80164727452baf12b70/invoke.js"></script>
       <!-- End Banner 300x250 Ad Code -->
+    </div>
+
+    <!-- Direct Link Text Below Banner -->
+    <div class="direct-link-container">
+      <p>
+        <a href="https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6" target="_blank">
+          Click here to see our other services!
+        </a>
+      </p>
     </div>
 
     <!-- Pagination Buttons -->
@@ -131,7 +151,7 @@
       numbersContainer.innerHTML = currentNumbers.map(item => `
         <div class="number-box bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-between">
           <div class="flex items-center mb-4">
-            <img src="${item.flagUrl}" alt="Flag of ${item.country}" class="w-10 h-6 rounded-md mr-3 shadow-sm">
+            <img src="${item.flagUrl}" alt="Flag of ${item.country}">
             <span class="text-xl font-bold text-gray-800">${item.country}</span>
           </div>
           <div class="text-lg text-gray-600 mb-6">${item.num}</div>
@@ -160,25 +180,6 @@
     // Initial render when the page loads
     document.addEventListener('DOMContentLoaded', renderNumbers);
   </script>
-
-  <!-- Banner 320x50 (Moved to the very bottom of the page) -->
-  <div class="ad-slot mx-auto" style="width: 320px; height: 50px;">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : 'e3e3696258d007a31d545486101e5406',
-        'format' : 'iframe',
-        'height' : 50,
-        'width' : 320,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/e3e3696258d007a31d545486101e5406/invoke.js"></script>
-  </div>
-  <!-- End Banner 320x50 Ad Code -->
-
-  <!-- Popunder Adsterra Code (usually placed at the end of body) -->
-  <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
-  <!-- End Popunder Adsterra Code -->
 
   <!-- Social Bar Adsterra Code (usually placed at the end of body) -->
   <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
