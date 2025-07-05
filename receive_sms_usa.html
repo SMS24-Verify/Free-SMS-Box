@@ -37,7 +37,17 @@
 
   <footer class="bg-gray-800 text-white p-6 text-center text-sm mt-10 rounded-t-lg shadow-md">&copy; 2025 Free SMS Box. All rights reserved.</footer>
 
-  <script async="async" data-cfasync="false" src="//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js"></script>
+  <!-- Proper way: call the script for each container -->
+  <script>
+    const adContainers = ['container-1', 'container-2', 'container-3', 'container-4'];
+    adContainers.forEach(id => {
+      const s = document.createElement('script');
+      s.async = true;
+      s.setAttribute('data-cfasync', 'false');
+      s.src = '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js';
+      document.getElementById(id).appendChild(s);
+    });
+  </script>
 
 </body>
 </html>
