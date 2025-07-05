@@ -15,8 +15,8 @@
   <meta property="og:title" content="Free SMS Box - Receive SMS Online, Temporary Phone Numbers">
   <meta property="og:description" content="Get free temporary phone numbers from around the world to receive SMS online instantly. Perfect for online verifications, protecting your privacy, and avoiding spam.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://your-username.github.io/your-repo-name/index.html"> <!-- আপনার প্রকৃত URL দিয়ে এটি আপডেট করুন -->
-  <meta property="og:image" content="https://placehold.co/1200x630/1a73e8/ffffff?text=Free+SMS+Box"> <!-- আপনার ওয়েবসাইটের একটি লোগো বা প্রাসঙ্গিক ছবির URL দিন -->
+  <meta property="og:url" content="https://sms24-verify.github.io/Free-SMS-Box/index.html"> <!-- Updated with your actual URL -->
+  <meta property="og:image" content="https://placehold.co/1200x630/1a73e8/ffffff?text=Free+SMS+Box"> <!-- Provide a relevant image URL for your website -->
   
   <!-- Tailwind CSS CDN for quick styling -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -46,7 +46,7 @@
     .view-button:hover {
       background-color: #155bb5;
     }
-    /* Ad containers for better layout - Removed placeholder styles */
+    /* Ad containers for better layout */
     .ad-slot {
       display: flex;
       justify-content: center;
@@ -54,7 +54,34 @@
       text-align: center;
       margin-top: 20px; /* Added margin for spacing */
       margin-bottom: 20px; /* Added margin for spacing */
-      /* Removed min-width, min-height, width, height to prevent empty space */
+    }
+    .ad-slot.collapsed {
+      max-height: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    .ad-slot iframe {
+      border: none;
+      display: block;
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      transition: width 0.5s ease-out, height 0.5s ease-out, opacity 0.5s ease-out;
+    }
+    #native-ad-slot.grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+      align-items: flex-start;
+    }
+    #native-ad-slot.grid-container iframe {
+        width: 1px;
+        height: 1px;
+        opacity: 0;
     }
     .direct-link-container {
       margin-top: 15px;
@@ -669,16 +696,12 @@
     &copy; 2025 Free SMS Box. All rights reserved.
   </footer>
 
-  <!-- Popunder Adsterra Code (usually placed at the end of body) -->
+  <!-- Adsterra Popunder and Social Bar scripts (ensure these are loaded at the end of body) -->
   <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
-  <!-- End Popunder Adsterra Code -->
-
-  <!-- Social Bar Adsterra Code (usually placed at the end of body) -->
   <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
-  <!-- End Social Bar Adsterra Code -->
 
   <script>
-    // Define ad configurations
+    // Adsterra Ad Configurations
     const adConfigs = {
       native: {
         scripts: [
@@ -687,10 +710,10 @@
         divs: [
           { id: 'container-36c71a4fca369dbf689c31baada8259d' }
         ],
-        height: 250,
-        width: 300
+        height: 250, // Default or flexible height for native ads
+        width: 300   // Default or flexible width for native ads
       },
-      banner300x250: {
+      banner300x250: { // Configuration for 300x250 banner
         key: 'a9e0e31759b1f80164727452baf12b70',
         height: 250,
         width: 300
