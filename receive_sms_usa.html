@@ -19,7 +19,12 @@
     <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">Messages for <span id="current-number-display">+1 201-555-0123</span></h3>
 
     <!-- Native Ads Slot -->
-    <div id="native-ad-slot" class="ad-slot mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+    <div id="native-ad-slot" class="ad-slot mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div id="container-1"></div>
+      <div id="container-2"></div>
+      <div id="container-3"></div>
+      <div id="container-4"></div>
+    </div>
 
     <!-- Messages -->
     <div id="messages-list" class="bg-white shadow-lg rounded-xl p-6 mt-6 max-h-96 overflow-y-auto"></div>
@@ -32,58 +37,7 @@
 
   <footer class="bg-gray-800 text-white p-6 text-center text-sm mt-10 rounded-t-lg shadow-md">&copy; 2025 Free SMS Box. All rights reserved.</footer>
 
-  <script>
-    const adConfigs = {
-      native: {
-        scripts: [
-          { src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' },
-          { src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' },
-          { src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' },
-          { src: '//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js' }
-        ],
-        divs: [
-          { id: 'container-1' },
-          { id: 'container-2' },
-          { id: 'container-3' },
-          { id: 'container-4' }
-        ],
-        height: 250,
-        width: 300
-      }
-    };
-
-    function loadAdInIframe(containerId, adConfig) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-
-      adConfig.divs.forEach((divData, index) => {
-        const iframe = document.createElement('iframe');
-        iframe.style.width = '300px';
-        iframe.style.height = '250px';
-        iframe.style.border = 'none';
-        iframe.setAttribute('loading', 'lazy');
-        container.appendChild(iframe);
-
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(`<!DOCTYPE html><html><body><div id="${divData.id}"></div></body></html>`);
-        doc.close();
-
-        const script = doc.createElement('script');
-        script.src = adConfig.scripts[index].src;
-        script.async = true;
-        doc.body.appendChild(script);
-      });
-    }
-
-    function loadAds() {
-      loadAdInIframe('native-ad-slot', adConfigs.native);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      loadAds();
-    });
-  </script>
+  <script async="async" data-cfasync="false" src="//pl27076176.profitableratecpm.com/36c71a4fca369dbf689c31baada8259d/invoke.js"></script>
 
 </body>
 </html>
