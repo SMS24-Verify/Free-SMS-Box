@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Receive SMS - India Number</title>
-  <!-- Tailwind CSS CDN for quick styling -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Custom styles for the app */
@@ -115,26 +114,6 @@
         height: 1px;
         opacity: 0;
     }
-    .copy-button {
-        background: none;
-        border: none;
-        color: #1a73e8;
-        cursor: pointer;
-        font-size: 1.2rem;
-        margin-left: 0.5rem;
-        padding: 0;
-        vertical-align: middle;
-        transition: color 0.2s;
-    }
-    .copy-button:hover {
-        color: #0b5ed7;
-    }
-    .copy-button:active {
-        transform: translateY(1px);
-    }
-    .copy-button.copied {
-        color: #28a745; /* Green when copied */
-    }
     .direct-link-container {
       margin-top: 15px;
       margin-bottom: 30px;
@@ -147,25 +126,19 @@
     }
   </style>
 
-  <!-- Popunder Adsterra Code -->
   <script type='text/javascript' src='//pl27076189.profitableratecpm.com/bd/9d/a0/bd9da0ea1fb5ebaf0db6f76aa02c0300.js'></script>
-  <!-- End Popunder Adsterra Code -->
-
-</head>
+  </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- Header Section -->
   <header class="header-bg text-white p-6 text-center text-3xl font-bold rounded-b-lg shadow-md">
     <div class="flex items-center justify-center relative">
       <a href="india.html" class="absolute left-4 text-white text-xl hover:text-blue-200 transition-colors">
         &larr; Back
       </a>
       <span>Receive SMS</span>
-      <!-- The number below "Receive SMS" is removed as per request -->
     </div>
   </header>
 
-  <!-- Navigation Bar (Copied from uk.html) -->
   <nav class="nav-bg p-4 text-center shadow-sm">
     <a href="index.html" class="text-white mx-4 text-lg font-semibold hover:text-blue-200 transition-colors">Home</a>
     <a href="#" class="text-white mx-4 text-lg font-semibold hover:text-blue-200 transition-colors">About Us</a>
@@ -174,24 +147,14 @@
 
   <main class="flex-grow container mx-auto p-6">
     <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
-      Messages for <span id="current-number-display" class="mx-2">+91 98765 12345</span>
-      <button id="copy-number-button" class="copy-button" title="Copy number">
-        📋 <!-- Clipboard icon (Emoji) -->
-      </button>
+      Messages for <span id="current-number-display" class="mx-2">+91 98765-43210</span>
     </h3>
 
-    <!-- Adsterra Native Banner (Placed below the number as requested) -->
     <div id="native-ad-slot" class="ad-slot mx-auto grid-container">
-      <!-- Ad Code will be inserted here by JavaScript -->
-    </div>
-    <!-- End Adsterra Native Banner -->
-
-    <!-- Message List Container -->
+      </div>
     <div id="messages-list" class="message-container">
-      <!-- Messages will be loaded here by JavaScript -->
-    </div>
+      </div>
 
-    <!-- Refresh Button -->
     <div class="flex justify-center mt-6">
       <button onclick="refreshMessages()" class="refresh-button text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
         <span id="refreshButtonText">Refresh Messages</span>
@@ -199,13 +162,8 @@
       </button>
     </div>
 
-    <!-- Adsterra Banner 728x90 (Placed after Refresh Messages button as requested) -->
     <div id="banner-728x90-ad-slot" class="ad-slot mx-auto mt-6">
-      <!-- Iframe for Banner 728x90 Ad Code will be inserted here by JavaScript -->
-    </div>
-    <!-- End Adsterra Banner -->
-
-    <!-- Direct Link Text (Re-added as per request) -->
+      </div>
     <div class="direct-link-container">
       <p>
         <a href="https://www.profitableratecpm.com/rpyik3mwtc?key=2d55950f1a1ec397c4aa2852ea2ae6a6" target="_blank">
@@ -216,19 +174,16 @@
 
   </main>
 
-  <!-- Footer Section -->
   <footer class="bg-gray-800 text-white p-6 text-center text-sm mt-10 rounded-t-lg shadow-md">
     &copy; 2025 Free SMS Box. All rights reserved.
   </footer>
 
-  <!-- Social Bar Adsterra Code (Already present, confirming placement) -->
   <script type='text/javascript' src='//pl27076196.profitableratecpm.com/88/a6/4b/88a64b874b1a42ceee80beec24d7f611.js'></script>
-  <!-- End Social Bar Adsterra Code -->
-
   <script>
     var currentNumber = ''; // Store the currently displayed number
+    let indiaNumbersData = {}; // Object to store messages for each Indian number
 
-    // Define ad configurations
+    // Define ad configurations (unchanged)
     const adConfigs = {
       native: {
         scripts: [
@@ -237,10 +192,10 @@
         divs: [
           { id: 'container-36c71a4fca369dbf689c31baada8259d' }
         ],
-        height: 250, // Default or flexible height for native ads
-        width: 300   // Default or flexible width for native ads
+        height: 250,
+        width: 300
       },
-      banner728x90: { // Configuration for 728x90 banner
+      banner728x90: {
         key: 'dba9c0c7da688537036a970dd8eb8984',
         height: 90,
         width: 728
@@ -262,7 +217,6 @@
       const iframes = [];
 
       if (adConfig.scripts && adConfig.divs && containerId === 'native-ad-slot') {
-        // Specific handling for native ad scripts and divs
         adConfig.divs.forEach((divData, index) => {
           const iframe = document.createElement('iframe');
           iframe.style.width = '1px';
@@ -298,16 +252,15 @@
             script.type = 'text/javascript';
             if (scriptData.src) {
               script.src = scriptData.src;
-              if (scriptData.async !== undefined) script.async = scriptData.async;
+              if (scriptData.async !== undefined) script.async = script.async;
               if (scriptData['data-cfasync'] !== undefined) script.dataset.cfasync = scriptData['data-cfasync'];
             } else if (scriptData.textContent) {
-              script.textContent = scriptData.textContent;
+              script.textContent = script.textContent;
             }
             iframeDoc.body.appendChild(script);
           }
         });
       } else {
-        // Generic handling for other banner ads
         const iframe = document.createElement('iframe');
         iframe.style.width = '1px';
         iframe.style.height = '1px';
@@ -360,33 +313,29 @@
         let anyAdLoaded = false;
         iframes.forEach(iframe => {
           try {
-            // Check if iframe content has loaded and has significant height
             if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body.scrollHeight > 50) {
               iframe.style.width = `${adConfig.width}px`;
               iframe.style.height = `${adConfig.height}px`;
               iframe.style.opacity = '1';
               anyAdLoaded = true;
             } else {
-              // If ad failed to load, collapse the iframe
               iframe.style.width = '0px';
               iframe.style.height = '0px';
               iframe.style.opacity = '0';
             }
           } catch (e) {
-            // Catch cross-origin errors if content is inaccessible
             iframe.style.width = '0px';
             iframe.style.height = '0px';
             iframe.style.opacity = '0';
           }
         });
 
-        // If no ads loaded, collapse the parent container
         if (!anyAdLoaded) {
           container.classList.add('collapsed');
         } else {
           container.classList.remove('collapsed');
         }
-      }, 1500); // Give ads some time to load
+      }, 1500);
     }
 
     /**
@@ -398,18 +347,15 @@
 
       if (nativeAdSlotContainer) {
         nativeAdSlotContainer.innerHTML = '';
-        nativeAdSlotContainer.classList.add('collapsed'); // Start collapsed
+        nativeAdSlotContainer.classList.add('collapsed');
         loadAdInIframe('native-ad-slot', adConfigs.native);
       }
       if (banner728x90AdSlotContainer) {
         banner728x90AdSlotContainer.innerHTML = '';
-        banner728x90AdSlotContainer.classList.add('collapsed'); // Start collapsed
+        banner728x90AdSlotContainer.classList.add('collapsed');
         loadAdInIframe('banner-728x90-ad-slot', adConfigs.banner728x90);
       }
     }
-
-    // Pre-set India numbers with platform-specific dummy messages
-    const indiaNumbersData = {}; // This will store dummy messages for each India number
 
     /**
      * Generates a default set of dummy messages for a given number.
@@ -418,85 +364,113 @@
      */
     function generateDummyMessages(number) {
         const platforms = [
-            "Google", "Facebook", "Amazon", "Netflix", "Spotify", "PayPal", "eBay", "LinkedIn",
-            "WhatsApp", "Instagram", "TikTok", "Twitter", "Banking App", "Your Bank", "Online Store", "Service Provider"
+            "Jio", "Airtel", "Vodafone Idea", "BSNL", "Reliance Digital", "Flipkart", "Amazon India",
+            "Myntra", "Paytm", "PhonePe", "Google Pay", "BHIM UPI", "SBI", "HDFC Bank", "ICICI Bank",
+            "Axis Bank", "PNB", "IRCTC", "MakeMyTrip", "Swiggy", "Zomato", "BigBazaar", "DMart",
+            "UIDAI (Aadhaar)", "DigiLocker", "UMANG", "CoWIN", "MyGov", "Income Tax Dept",
+            "WhatsApp", "Facebook", "Instagram", "YouTube", "Twitter", "LinkedIn", "Snapchat", "Telegram",
+            "Netflix", "Hotstar", "Spotify", "JioSaavn", "Gaana", "Voot", "SonyLIV", "Zee5",
+            "Ola", "Uber", "Rapido", "Goibibo", "RedBus", "Meesho", "Nykaa", "Zivame"
         ];
 
         const messages = [];
         const messageTemplates = [
             "Your verification code is {code}. Do not share this code.",
-            "OTP for your transaction is {code}. Valid for 5 mins.",
-            "New notification from {platform}: '{content}'. Tap to view.",
-            "Your {platform} account security alert: Unusual login detected. If this wasn't you, reset password.",
-            "Reminder: Your bill from {platform} is due in 2 days. Amount: ₹{amount}.",
-            "Your order #{orderId} from {platform} has been shipped. Track here: {link}",
-            "Welcome to {platform}! Your account is now active.",
-            "You have a new message from {platform}. Check your inbox.",
-            "Your password reset link: {link}. Valid for 15 minutes.",
-            "Special offer from {platform}: Get {discount}% off your next purchase! Use code {promoCode}."
+            "New notification from {platform}: {content}. Check it now!",
+            "Your {platform} account security code is {code}. Use it to log in.",
+            "A new message from {platform}: '{content}'.",
+            "Important update from {platform}: {content}.",
+            "Your {platform} password reset code is {code}.",
+            "You have a new alert from {platform}: {content}.",
+            "Reminder from {platform}: {content}."
         ];
 
-        for (let i = 0; i < 8; i++) { // Generate 8 messages
+        // Generate 8-12 messages for variety
+        const numberOfMessages = Math.floor(Math.random() * 5) + 8; // Random between 8 and 12
+
+        for (let i = 0; i < numberOfMessages; i++) {
             const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
             const randomTemplate = messageTemplates[Math.floor(Math.random() * messageTemplates.length)];
-            const code = Math.floor(100000 + Math.random() * 900000); // 6-digit code
-            const orderId = Math.floor(10000 + Math.random() * 90000); // 5-digit order ID
-            const amount = (Math.random() * 1000 + 100).toFixed(2); // Random amount for India
-            const discount = Math.floor(Math.random() * 20) + 10; // 10-30%
-            const promoCode = `IND${Math.floor(Math.random() * 900) + 100}`; // Random promo code
-            const link = `https://example.com/link${Math.floor(Math.random() * 1000)}`;
+            const code = Math.floor(100000 + Math.random() * 900000);
+            const now = new Date();
+            // Generate a random time within the last 48 hours for initial messages
+            const randomMinutesAgo = Math.floor(Math.random() * 2880); // 2880 minutes in 48 hours
+            now.setMinutes(now.getMinutes() - randomMinutesAgo);
 
-            let content = randomTemplate;
-            content = content.replace("{code}", code);
-            content = content.replace("{platform}", randomPlatform);
-            content = content.replace("{orderId}", orderId);
-            content = content.replace("{amount}", amount);
-            content = content.replace("{discount}", discount);
-            content = content.replace("{promoCode}", promoCode);
-            content = content.replace("{link}", link);
-
-            // Generic content for templates that don't have specific placeholders
-            if (content.includes("{content}")) {
+            let content = "";
+            if (randomTemplate.includes("{code}")) {
+                content = randomTemplate.replace("{code}", code);
+            } else {
                 const genericContents = [
-                    "Your account has been updated.",
-                    "New activity detected on your account.",
-                    "Your appointment is confirmed.",
+                    "Your order has shipped.",
                     "You have a new friend request.",
-                    "New trending topic: #IndiaNews",
-                    "Important security notification."
+                    "Someone liked your post.",
+                    "New trending topic.",
+                    "Your bill is due soon.",
+                    "Security alert: unusual activity detected.",
+                    "Your appointment is confirmed.",
+                    "New video uploaded by your favorite creator."
                 ];
-                content = content.replace("{content}", genericContents[Math.floor(Math.random() * genericContents.length)]);
+                content = randomTemplate.replace("{content}", genericContents[Math.floor(Math.random() * genericContents.length)]);
             }
-
-            const timeAgoOptions = [
-                "Just now", "1 minute ago", "5 minutes ago", "15 minutes ago", "30 minutes ago",
-                "1 hour ago", "2 hours ago", "5 hours ago", "1 day ago", "2 days ago", "3 days ago"
-            ];
-            const randomTimeAgo = timeAgoOptions[Math.floor(Math.random() * timeAgoOptions.length)];
+            content = content.replace("{platform}", randomPlatform);
 
             messages.push({
                 from: randomPlatform,
                 content: content,
-                time: randomTimeAgo
+                timestamp: now.toISOString() // Store ISO string for easy date reconstruction
             });
         }
-        return messages;
+        return messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Sort by newest first
     }
 
     /**
-     * Renders messages for the given number.
+     * Formats a timestamp into a human-readable "X hours/minutes ago" string.
+     * @param {string} timestamp - ISO string of the message timestamp.
+     * @returns {string} Formatted time string.
+     */
+    function formatTimeAgo(timestamp) {
+        const messageDate = new Date(timestamp);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - messageDate) / 1000);
+
+        if (diffInSeconds < 60) {
+            return `${diffInSeconds} seconds ago`;
+        } else if (diffInSeconds < 3600) {
+            const minutes = Math.floor(diffInSeconds / 60);
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        } else if (diffInSeconds < 86400) { // Less than 24 hours
+            const hours = Math.floor(diffInSeconds / 3600);
+            const remainingMinutes = Math.floor((diffInSeconds % 3600) / 60);
+            if (hours > 0) {
+                return `${hours} hour${hours > 1 ? 's' : ''} ${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''} ago`;
+            } else {
+                return `${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''} ago`;
+            }
+        } else {
+            const days = Math.floor(diffInSeconds / 86400);
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        }
+    }
+
+    /**
+     * Renders messages for the given number from localStorage.
      * @param {string} number - The phone number for which to display messages.
      */
     function displayMessages(number) {
       const messagesList = document.getElementById('messages-list');
       messagesList.innerHTML = ''; // Clear existing messages
 
-      // If messages for this number don't exist, generate them
-      if (!indiaNumbersData[number]) {
+      // Load messages from localStorage if available, otherwise generate and save
+      let storedMessages = localStorage.getItem(`messages_${number}`);
+      if (storedMessages) {
+          indiaNumbersData[number] = JSON.parse(storedMessages);
+      } else {
           indiaNumbersData[number] = generateDummyMessages(number);
+          localStorage.setItem(`messages_${number}`, JSON.stringify(indiaNumbersData[number]));
       }
 
-      const messages = indiaNumbersData[number]; // Get messages for the number
+      const messages = indiaNumbersData[number];
 
       if (messages.length === 0) {
         messagesList.innerHTML = '<p class="text-center text-gray-500 mt-4">No messages found for this number.</p>';
@@ -504,103 +478,70 @@
       }
 
       messages.forEach(msg => {
+        const formattedTime = formatTimeAgo(msg.timestamp); // Format time
         const messageHtml = `
           <div class="message-bubble incoming">
             <p class="text-sm font-semibold text-gray-700">From: ${msg.from}</p>
             <p class="text-gray-800 mt-1">${msg.content}</p>
-            <p class="text-xs text-gray-500 text-right mt-1">${msg.time}</p>
+            <p class="text-xs text-gray-500 text-right mt-1">${formattedTime}</p>
           </div>
         `;
         messagesList.insertAdjacentHTML('beforeend', messageHtml);
       });
 
-      // Scroll to the bottom to show the latest messages
       messagesList.scrollTop = messagesList.scrollHeight;
     }
 
     /**
-     * Simulates fetching and displaying new messages for the current number.
-     * In a real application, this would involve an API call to fetch messages for the specific number.
+     * Simulates fetching and displaying a new message for the current number.
+     * This new message will also be stored in localStorage.
      */
     async function refreshMessages() {
       const messagesList = document.getElementById('messages-list');
       const refreshButtonText = document.getElementById('refreshButtonText');
       const loadingSpinner = document.getElementById('loadingSpinner');
 
-      refreshButtonText.textContent = 'Refreshing...'; // Stays in English
+      refreshButtonText.textContent = 'Refreshing...';
       loadingSpinner.classList.remove('hidden');
 
-      // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Generate a new dummy message
-      const newMessages = generateDummyMessages(currentNumber);
-      const newMessage = newMessages[Math.floor(Math.random() * newMessages.length)]; // Pick one random message
+      const platforms = [
+            "Jio", "Airtel", "Vodafone Idea", "BSNL", "Reliance Digital", "Flipkart", "Amazon India",
+            "Myntra", "Paytm", "PhonePe", "Google Pay", "BHIM UPI", "SBI", "HDFC Bank", "ICICI Bank",
+            "Axis Bank", "PNB", "IRCTC", "MakeMyTrip", "Swiggy", "Zomato", "BigBazaar", "DMart",
+            "UIDAI (Aadhaar)", "DigiLocker", "UMANG", "CoWIN", "MyGov", "Income Tax Dept",
+            "WhatsApp", "Facebook", "Instagram", "YouTube", "Twitter", "LinkedIn", "Snapchat", "Telegram",
+            "Netflix", "Hotstar", "Spotify", "JioSaavn", "Gaana", "Voot", "SonyLIV", "Zee5",
+            "Ola", "Uber", "Rapido", "Goibibo", "RedBus", "Meesho", "Nykaa", "Zivame"
+        ];
+      const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
 
-      const messageHtml = `
-        <div class="message-bubble incoming">
-          <p class="text-sm font-semibold text-gray-700">From: ${newMessage.from}</p>
-          <p class="text-gray-800 mt-1">${newMessage.content}</p>
-          <p class="text-xs text-gray-500 text-right mt-1">${newMessage.time}</p>
-        </div>
-      `;
+      const newMessage = {
+        from: randomPlatform,
+        content: `New message from ${randomPlatform}: Your code is ${Math.floor(Math.random() * 900000) + 100000}.`,
+        timestamp: new Date().toISOString()
+      };
 
-      // Add the new message to the top of the list
-      messagesList.insertAdjacentHTML('afterbegin', messageHtml);
+      indiaNumbersData[currentNumber].unshift(newMessage);
+      localStorage.setItem(`messages_${currentNumber}`, JSON.stringify(indiaNumbersData[currentNumber]));
 
-      refreshButtonText.textContent = 'Refresh Messages'; // Stays in English
+      displayMessages(currentNumber); // Re-render all messages including the new one
+
+      refreshButtonText.textContent = 'Refresh Messages';
       loadingSpinner.classList.add('hidden');
-    }
-
-    /**
-     * Copies the currently displayed phone number to the clipboard.
-     */
-    function copyNumber() {
-      const numberToCopy = document.getElementById('current-number-display').textContent;
-      const copyButton = document.getElementById('copy-number-button');
-
-      // Use document.execCommand('copy') as it's more reliable in various iframe/sandbox environments
-      const textArea = document.createElement("textarea");
-      textArea.value = numberToCopy;
-      // Position textarea off-screen to avoid visual disruption
-      textArea.style.position = "fixed";
-      textArea.style.left = "-999999px";
-      textArea.style.top = "-999999px";
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-          copyButton.classList.add('copied');
-          setTimeout(() => {
-            copyButton.classList.remove('copied');
-          }, 1500); // Remove 'copied' class after 1.5 seconds
-        } else {
-          console.error('Failed to copy text using execCommand.');
-          // Optionally, inform the user that copying failed
-        }
-      } catch (err) {
-        console.error('Error attempting to copy text:', err);
-        // Optionally, inform the user that copying failed
-      }
-      document.body.removeChild(textArea);
     }
 
 
     // When the page loads, set the number and display messages
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      // Get the number from URL, default to the first number if not found
-      currentNumber = urlParams.get('number') || '+91 98765 12345'; // Default India number
+      currentNumber = urlParams.get('number') || '+91 98765-43210'; // Default Indian number
 
       document.getElementById('current-number-display').textContent = currentNumber;
 
-      // Attach event listener for the copy button
-      document.getElementById('copy-number-button').addEventListener('click', copyNumber);
-
-      displayMessages(currentNumber); // Display messages for the initial number
-      loadAds(); // Load ads on this page as well
+      displayMessages(currentNumber);
+      loadAds();
     });
   </script>
 
